@@ -1,2 +1,2 @@
 # poso
-P(rofessional) O(ffer) S(earching) O(nline)
+P(rofessional) O(ffer) S(earch) O(rganization)
