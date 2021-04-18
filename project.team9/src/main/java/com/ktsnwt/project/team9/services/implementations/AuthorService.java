@@ -62,6 +62,9 @@ public class AuthorService implements IAuthorService {
 			throw new NotFoundException("Author with given id doesn't exist.");
 		}
 
+		if (existingAuthor.getWrittenBooks().size() > 0) {
+			throw new Error("Can't delete author with written books.");
+		}
 		fileService.deleteImageFromFile(existingAuthor.getImage());
 
 		for (CommentAuthor comment : existingAuthor.getCommentAuthors()) {
@@ -86,6 +89,8 @@ public class AuthorService implements IAuthorService {
 		}
 
 		existingAuthor.setDescription(entity.getDescription());
+		existingAuthor.setDateOfBirth(entity.getDateOfBirth());
+		existingAuthor.setDateOfDeath(entity.getDateOfDeath());
 
 		if (!newImage.isEmpty()) {
 			fileService.uploadNewImage(newImage, existingAuthor.getImage());

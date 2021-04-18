@@ -1,7 +1,9 @@
 package com.ktsnwt.project.team9.services.implementations;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ktsnwt.project.team9.helper.implementations.FileService;
+import com.ktsnwt.project.team9.model.Author;
 import com.ktsnwt.project.team9.model.Book;
 import com.ktsnwt.project.team9.model.Category;
 import com.ktsnwt.project.team9.model.CommentBook;
@@ -31,6 +34,8 @@ public class BookService implements IBookService {
 	private FileService fileService;
 
 	private CommentBookService commentBookService;
+
+	private AuthorService authorService;
 
 	public Page<Book> findAll(Pageable pageable) {
 		return bookRepository.findAll(pageable);
@@ -95,6 +100,11 @@ public class BookService implements IBookService {
 
 		existingBook.setCategory(category);
 		existingBook.setDescription(entity.getDescription());
+		existingBook.setType(entity.getType());
+
+		Set<Author> writtenBy = getAuthorsOfBook(entity);
+
+		existingBook.setWrittenBy(writtenBy);
 
 		if (!newImage.isEmpty()) {
 			fileService.uploadNewImage(newImage, existingBook.getImage());
@@ -115,6 +125,8 @@ public class BookService implements IBookService {
 
 		entity.setImage(imagePath);
 
+		entity.setWrittenBy(getAuthorsOfBook(entity));
+
 		return bookRepository.save(entity);
 
 	}
@@ -131,4 +143,18 @@ public class BookService implements IBookService {
 		return bookRepository.findByNameContainingIgnoreCase(name, pageable);
 	}
 
+	private Set<Author> getAuthorsOfBook(Book entity) throws NotFoundException {
+		Set<Author> writtenBy = new HashSet<Author>();
+
+		for (Author author : entity.getWrittenBy()) {
+			author = authorService.getById(author.getId());
+
+			if (author == null)
+				throw new NotFoundException("Author with given id doesn't exists.");
+
+			writtenBy.add(author);
+		}
+
+		return writtenBy;
+	}
 }

@@ -15,10 +15,12 @@ public class MailService {
 	@Async
 	public void sendMail(String to, String subject, String text) {
 		SimpleMailMessage message = new SimpleMailMessage();
+
 		message.setFrom("noreply.kts.l9@gmail.com");
 		message.setTo("milan_marinkovic98@hotmail.com");
 		message.setSubject(subject);
 		message.setText(text);
+
 		emailSender.send(message);
 	}
 }

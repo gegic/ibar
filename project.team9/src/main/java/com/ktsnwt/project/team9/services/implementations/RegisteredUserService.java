@@ -20,8 +20,6 @@ import com.ktsnwt.project.team9.repositories.IRegisteredUser;
 import com.ktsnwt.project.team9.repositories.IUserRepository;
 import com.ktsnwt.project.team9.services.interfaces.IRegisteredUserService;
 
-import javassist.NotFoundException;
-
 @Service
 public class RegisteredUserService implements IRegisteredUserService {
 

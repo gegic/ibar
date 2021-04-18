@@ -33,15 +33,18 @@ public class CommentBookService implements ICommentBookService {
 	@Override
 	public CommentBook getById(Long id) {
 		Optional<CommentBook> c = commentBookRepository.findById(id);
+
 		if (!c.isPresent()) {
 			return null;
 		}
+
 		return c.get();
 	}
 
 	@Transactional
 	public CommentBook create(CommentBook entity) throws Exception {
 		Book book = bookRepository.getOne(entity.getBook().getId());
+
 		if (book == null) {
 			throw new NoSuchElementException("Book doesn't exist.");
 		}
@@ -56,7 +59,7 @@ public class CommentBookService implements ICommentBookService {
 	public boolean delete(Long id) throws Exception {
 		CommentBook c = getById(id);
 		if (c == null) {
-			throw new NoSuchElementException("Comment doesn't exist");
+			throw new NoSuchElementException("Comment doesn't exist.");
 		}
 
 		commentBookRepository.delete(id);
