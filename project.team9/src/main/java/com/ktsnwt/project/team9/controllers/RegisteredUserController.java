@@ -27,14 +27,16 @@ import com.ktsnwt.project.team9.services.implementations.RegisteredUserService;
 @RequestMapping(value = "/api/registered-users", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "https://localhost:4200", maxAge = 3600, allowedHeaders = "*")
 public class RegisteredUserController {
-	
+
 	@Autowired
 	private RegisteredUserService registeredUserService;
+
+	@Autowired
 	private RegisteredUserMapper registeredUserMapper;
-	
+
 	public RegisteredUserController() {
 		registeredUserMapper = new RegisteredUserMapper();
-  }
+	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping
@@ -42,14 +44,14 @@ public class RegisteredUserController {
 		List<UserResDTO> registeredUsersDTO = registeredUserMapper.toResDTOList(registeredUserService.getAll());
 		return new ResponseEntity<>(registeredUsersDTO, HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping(value= "/by-page")
-	public ResponseEntity<Page<UserResDTO>> getAllRegisteredUsers(Pageable pageable){
+	@GetMapping(value = "/by-page")
+	public ResponseEntity<Page<UserResDTO>> getAllRegisteredUsers(Pageable pageable) {
 		Page<RegisteredUser> page = registeredUserService.findAll(pageable);
 		return new ResponseEntity<>(createCustomPage(transformListToPage(page)), HttpStatus.OK);
 	}
-	
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/search/{value}")
 	public ResponseEntity<Page<UserResDTO>> searchRegUsers(Pageable pageable, @PathVariable String value) {
@@ -66,7 +68,7 @@ public class RegisteredUserController {
 		}
 		return new ResponseEntity<>(registeredUserMapper.toResDTO(registeredUser), HttpStatus.OK);
 	}
-	
+
 	private Page<UserResDTO> transformListToPage(Page<RegisteredUser> page) {
 		List<UserResDTO> adminsResDTO = registeredUserMapper.toDTOResList(page.toList());
 		return new PageImpl<>(adminsResDTO, page.getPageable(), page.getTotalElements());
@@ -76,17 +78,5 @@ public class RegisteredUserController {
 		return new CustomPageImplementation<>(page.getContent(), page.getNumber(), page.getSize(),
 				page.getTotalElements(), null, page.isLast(), page.getTotalPages(), null, page.isFirst(),
 				page.getNumberOfElements());
-	}
-	
-	@PreAuthorize("permitAll()")
-	@PostMapping(value = "/is-subscibed/{email}/{COID}")
-	public ResponseEntity<String> isSubscribedToCulturalOffer(@PathVariable String email, @PathVariable Long COID) {
-		try {
-			Boolean isSubscribed = registeredUserService.isSubscribed(email, COID);
-			return new ResponseEntity<String>(isSubscribed.toString(), HttpStatus.OK);
-		} catch (Exception e) {
-			return new ResponseEntity<String>(HttpStatus.BAD_REQUEST);
-		}
-		
 	}
 }

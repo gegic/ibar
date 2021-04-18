@@ -38,8 +38,10 @@ public class MarkController {
 	@Autowired
 	private MarkAuthorService markAuthorService;
 
+	@Autowired
 	private MarkBookMapper markBookMapper;
 
+	@Autowired
 	private MarkAuthorMapper markAuthorMapper;
 
 	public MarkController() {

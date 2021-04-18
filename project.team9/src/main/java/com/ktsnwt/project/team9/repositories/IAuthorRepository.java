@@ -10,9 +10,5 @@ import com.ktsnwt.project.team9.model.Author;
 @Repository
 public interface IAuthorRepository extends JpaRepository<Author, Long> {
 
-	Page<Author> getByCategoryId(Long id, Pageable pageable);
-
-	Page<Author> findByCategoryIdAndNameContainingIgnoreCase(Long id, String name, Pageable pageable);
-
 	Page<Author> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }

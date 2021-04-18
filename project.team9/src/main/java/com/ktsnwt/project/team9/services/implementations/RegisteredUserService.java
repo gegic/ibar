@@ -103,11 +103,4 @@ public class RegisteredUserService implements IRegisteredUserService {
 				'%' + value.toLowerCase() + '%', pageable);
 	}
 
-	public Boolean isSubscribed(String email, Long cOID) throws NotFoundException {
-		RegisteredUser ru = registeredUserRepository.findByEmail(email);
-		if (ru == null)
-			throw new NotFoundException(email);
-		return registeredUserRepository.findByEmailAndSubscribedId(email, cOID) != null;
-	}
-
 }

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,11 +44,24 @@ public class Author {
 	@Column(unique = false, nullable = false)
 	private double averageMark;
 
+	@Column(unique = false, nullable = false)
+	private String image;
+
 	@ManyToMany
 	@JoinTable(name = "written_books", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
 	Set<Book> writtenBooks;
 
+	@OneToMany(mappedBy = "author")
+	private Set<CommentAuthor> commentAuthors;
+
 	public Author(Long id) {
 		this.id = id;
+	}
+
+	public Author(String name, String description, Long dateOfBirth, Long dateOfDeath) {
+		this.name = name;
+		this.description = description;
+		this.dateOfBirth = dateOfBirth;
+		this.dateOfDeath = dateOfDeath;
 	}
 }

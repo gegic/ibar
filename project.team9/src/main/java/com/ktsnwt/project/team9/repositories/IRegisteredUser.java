@@ -19,6 +19,4 @@ public interface IRegisteredUser extends JpaRepository<RegisteredUser, Long> {
 	Page<RegisteredUser> findByUsernameOrEmailOrFirstNameOrLastNameContainingIgnoreCase(String value,
 			Pageable pageable);
 
-	RegisteredUser findByEmailAndSubscribedId(String email, Long cOID);
-
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.ktsnwt.project.team9.model.Author;
 import com.ktsnwt.project.team9.model.CommentAuthor;
+import com.ktsnwt.project.team9.repositories.IAuthorRepository;
 import com.ktsnwt.project.team9.repositories.ICommentAuthorRepository;
 import com.ktsnwt.project.team9.services.interfaces.ICommentAuthorService;
 
@@ -22,7 +23,7 @@ public class CommentAuthorService implements ICommentAuthorService {
 	private ICommentAuthorRepository commentAuthorRepository;
 
 	@Autowired
-	private AuthorService authorService;
+	private IAuthorRepository authorRepository;
 
 	@Override
 	public Iterable<CommentAuthor> getAll() {
@@ -40,7 +41,7 @@ public class CommentAuthorService implements ICommentAuthorService {
 
 	@Transactional
 	public CommentAuthor create(CommentAuthor entity) throws Exception {
-		Author author = authorService.getById(entity.getAuthor().getId());
+		Author author = authorRepository.getOne(entity.getAuthor().getId());
 		if (author == null) {
 			throw new NoSuchElementException("Author doesn't exist.");
 		}

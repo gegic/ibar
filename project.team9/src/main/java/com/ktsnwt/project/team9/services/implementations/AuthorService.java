@@ -12,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.ktsnwt.project.team9.helper.implementations.FileService;
 import com.ktsnwt.project.team9.model.Author;
-import com.ktsnwt.project.team9.model.Category;
 import com.ktsnwt.project.team9.model.CommentAuthor;
 import com.ktsnwt.project.team9.repositories.IAuthorRepository;
 import com.ktsnwt.project.team9.services.interfaces.IAuthorService;
@@ -25,8 +24,6 @@ import lombok.AllArgsConstructor;
 public class AuthorService implements IAuthorService {
 
 	private IAuthorRepository authorRepository;
-
-	private ImageService imageService;
 
 	private FileService fileService;
 
@@ -65,7 +62,7 @@ public class AuthorService implements IAuthorService {
 			throw new NotFoundException("Author with given id doesn't exist.");
 		}
 
-		fileService.deleteImageFromFile(existingAuthor.getImage().getUrl());
+		fileService.deleteImageFromFile(existingAuthor.getImage());
 
 		for (CommentAuthor comment : existingAuthor.getCommentAuthors()) {
 			commentAuthorService.delete(comment.getId());
@@ -91,7 +88,7 @@ public class AuthorService implements IAuthorService {
 		existingAuthor.setDescription(entity.getDescription());
 
 		if (!newImage.isEmpty()) {
-			fileService.uploadNewImage(newImage, existingAuthor.getImage().getUrl());
+			fileService.uploadNewImage(newImage, existingAuthor.getImage());
 		}
 
 		return authorRepository.save(existingAuthor);
@@ -101,19 +98,10 @@ public class AuthorService implements IAuthorService {
 	public Author create(Author entity, MultipartFile file) throws Exception {
 		String imagePath = fileService.saveImage(file, entity.getName());
 
-		Image image = imageService.create(new Image(imagePath));
-		entity.setImage(image);
+		entity.setImage(imagePath);
 
 		return authorRepository.save(entity);
 
-	}
-
-	public Page<Author> getByCategoryId(Long id, Pageable pageable) {
-		return authorRepository.getByCategoryId(id, pageable);
-	}
-
-	public Page<Author> findByCategoryIdAndNameContains(Long id, String name, Pageable pageable) {
-		return authorRepository.findByCategoryIdAndNameContainingIgnoreCase(id, name, pageable);
 	}
 
 	public Page<Author> findByNameContains(String name, Pageable pageable) {

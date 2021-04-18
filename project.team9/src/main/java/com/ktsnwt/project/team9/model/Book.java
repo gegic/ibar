@@ -2,7 +2,6 @@ package com.ktsnwt.project.team9.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,7 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+
+import com.ktsnwt.project.team9.enums.BookType;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,9 +47,9 @@ public class Book {
 	@Column(unique = false, nullable = false)
 	private double averageMark;
 
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "image_id")
-	private Image image;
+	private String image;
+	
+	private BookType type;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "category_id")
@@ -60,8 +60,8 @@ public class Book {
 
 	@ManyToMany(mappedBy = "boughtBooks")
 	Set<RegisteredUser> boughtBy;
-	
-	@OneToMany(mappedBy = "culturalOffer")
+
+	@OneToMany(mappedBy = "book")
 	private Set<CommentBook> comments;
 
 	public Book(Long id) {

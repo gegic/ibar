@@ -45,8 +45,10 @@ public class CommentController {
 	@Autowired
 	private CommentAuthorService commentAuthorService;
 
+	@Autowired
 	private CommentBookMapper commentBookMapper;
 
+	@Autowired
 	private CommentAuthorMapper commentAuthorMapper;
 
 	public CommentController() {

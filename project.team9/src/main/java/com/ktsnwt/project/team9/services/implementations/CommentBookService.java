@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import com.ktsnwt.project.team9.model.Book;
 import com.ktsnwt.project.team9.model.CommentBook;
+import com.ktsnwt.project.team9.repositories.IBookRepository;
 import com.ktsnwt.project.team9.repositories.ICommentBookRepository;
 import com.ktsnwt.project.team9.services.interfaces.ICommentBookService;
 
@@ -22,7 +23,7 @@ public class CommentBookService implements ICommentBookService {
 	private ICommentBookRepository commentBookRepository;
 
 	@Autowired
-	private BookService bookService;
+	private IBookRepository bookRepository;
 
 	@Override
 	public Iterable<CommentBook> getAll() {
@@ -40,7 +41,7 @@ public class CommentBookService implements ICommentBookService {
 
 	@Transactional
 	public CommentBook create(CommentBook entity) throws Exception {
-		Book book = bookService.getById(entity.getBook().getId());
+		Book book = bookRepository.getOne(entity.getBook().getId());
 		if (book == null) {
 			throw new NoSuchElementException("Book doesn't exist.");
 		}

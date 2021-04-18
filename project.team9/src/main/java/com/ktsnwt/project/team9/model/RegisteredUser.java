@@ -33,7 +33,7 @@ public class RegisteredUser extends User {
 	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
 	private Set<CommentAuthor> commentsAuthor;
 
-	@OneToMany(mappedBy = "author", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
 	private Set<CommentBook> commentsBook;
 
 	@ManyToMany

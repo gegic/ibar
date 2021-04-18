@@ -8,6 +8,9 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.ktsnwt.project.team9.dto.BookDTO;
 import com.ktsnwt.project.team9.dto.response.BookResDTO;
 import com.ktsnwt.project.team9.helper.interfaces.IMapper;
@@ -15,8 +18,10 @@ import com.ktsnwt.project.team9.model.Author;
 import com.ktsnwt.project.team9.model.Book;
 import com.ktsnwt.project.team9.model.Category;
 
+@Component
 public class BookMapper implements IMapper<Book, BookDTO> {
 
+	@Autowired
 	private CategoryMapper categoryMapper;
 
 	@Override
@@ -27,7 +32,7 @@ public class BookMapper implements IMapper<Book, BookDTO> {
 	}
 
 	public BookResDTO toDTORes(Book entity) {
-		return new BookResDTO(entity.getId(), entity.getName(), entity.getDescription(), entity.getImage().getUrl(),
+		return new BookResDTO(entity.getId(), entity.getName(), entity.getDescription(), entity.getImage(),
 				entity.getAverageMark(), entity.getQuantity(), entity.getPrice(),
 				categoryMapper.toDto(entity.getCategory()), Optional.ofNullable(entity.getWrittenBy())
 						.orElse(new HashSet<>()).stream().map(this::transformAuthorsToId).collect(Collectors.toSet()),

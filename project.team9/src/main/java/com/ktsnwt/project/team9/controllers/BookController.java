@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -38,10 +40,13 @@ import lombok.AllArgsConstructor;
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class BookController {
 
+	@Autowired
 	private BookService bookService;
 
+	@Autowired
 	private BookMapper bookMapper;
 
+	@Autowired
 	private FileService fileService;
 
 	@PreAuthorize("permitAll()")

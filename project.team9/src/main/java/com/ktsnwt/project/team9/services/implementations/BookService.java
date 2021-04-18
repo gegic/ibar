@@ -14,7 +14,6 @@ import com.ktsnwt.project.team9.helper.implementations.FileService;
 import com.ktsnwt.project.team9.model.Book;
 import com.ktsnwt.project.team9.model.Category;
 import com.ktsnwt.project.team9.model.CommentBook;
-import com.ktsnwt.project.team9.model.Image;
 import com.ktsnwt.project.team9.repositories.IBookRepository;
 import com.ktsnwt.project.team9.services.interfaces.IBookService;
 
@@ -28,8 +27,6 @@ public class BookService implements IBookService {
 	private IBookRepository bookRepository;
 
 	private CategoryService categoryService;
-
-	private ImageService imageService;
 
 	private FileService fileService;
 
@@ -68,7 +65,7 @@ public class BookService implements IBookService {
 			throw new NotFoundException("Book with given id doesn't exist.");
 		}
 
-		fileService.deleteImageFromFile(existingBook.getImage().getUrl());
+		fileService.deleteImageFromFile(existingBook.getImage());
 
 		for (CommentBook comment : existingBook.getComments()) {
 			commentBookService.delete(comment.getId());
@@ -100,7 +97,7 @@ public class BookService implements IBookService {
 		existingBook.setDescription(entity.getDescription());
 
 		if (!newImage.isEmpty()) {
-			fileService.uploadNewImage(newImage, existingBook.getImage().getUrl());
+			fileService.uploadNewImage(newImage, existingBook.getImage());
 		}
 		return bookRepository.save(existingBook);
 	}
@@ -116,8 +113,7 @@ public class BookService implements IBookService {
 
 		String imagePath = fileService.saveImage(file, entity.getName());
 
-		Image image = imageService.create(new Image(imagePath));
-		entity.setImage(image);
+		entity.setImage(imagePath);
 
 		return bookRepository.save(entity);
 
