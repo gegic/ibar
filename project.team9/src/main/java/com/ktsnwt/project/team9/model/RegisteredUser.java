@@ -6,8 +6,10 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 
@@ -23,6 +25,10 @@ import lombok.Setter;
 public class RegisteredUser extends User {
 
 	private static final long serialVersionUID = 1L;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "title_id")
+	private Title title;
 
 	@OneToMany(mappedBy = "grader", cascade = CascadeType.ALL)
 	private Set<MarkAuthor> marksAuthor;

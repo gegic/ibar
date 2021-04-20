@@ -47,8 +47,10 @@ public class Book {
 	@Column(unique = false, nullable = false)
 	private double averageMark;
 
+	@Column(unique = false, nullable = false)
 	private String image;
-	
+
+	@Column(unique = false, nullable = false)
 	private BookType type;
 
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
