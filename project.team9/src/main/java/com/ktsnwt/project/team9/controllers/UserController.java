@@ -23,22 +23,19 @@ import com.ktsnwt.project.team9.services.implementations.UserService;
 @RequestMapping(value = "/api/users", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "https://localhost:4200", maxAge = 3600, allowedHeaders = "*")
 public class UserController {
-	
+
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private UserMapper userMapper;
-	
-	public UserController() {
-		userMapper = new UserMapper();
-	}
-	
+
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGISTERED_USER')")
-	@PutMapping(value= "/change-profile", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PutMapping(value = "/change-profile", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> changeProfile(@Valid @RequestBody UserDTO userDTO) {
 		try {
-			return new ResponseEntity<>(userMapper.toResDTO(userService.changeProfile(userMapper.toEntity(userDTO))), HttpStatus.OK);
+			return new ResponseEntity<>(userMapper.toResDTO(userService.changeProfile(userMapper.toEntity(userDTO))),
+					HttpStatus.OK);
 		} catch (NoSuchElementException e) {
 			return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
 		} catch (Exception e) {

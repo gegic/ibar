@@ -36,21 +36,17 @@ public class AdminController {
 
 	@Autowired
 	private AdminService adminService;
-	
+
 	@Autowired
 	private AdminMapper adminMapper;
-
-	public AdminController() {
-		adminMapper = new AdminMapper();
-	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping
 	public ResponseEntity<Iterable<AdminDTO>> getAllAdmins() {
 		List<AdminDTO> adminsDTO = adminMapper.toDTOList(adminService.getAll());
 		return new ResponseEntity<>(adminsDTO, HttpStatus.OK);
-  }
-  
+	}
+
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/by-page")
 	public ResponseEntity<Page<UserResDTO>> getAllAdmins(Pageable pageable) {
@@ -58,7 +54,6 @@ public class AdminController {
 		return new ResponseEntity<>(createCustomPage(transformListToPage(page)), HttpStatus.OK);
 	}
 
-	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value = "/search/{value}")
 	public ResponseEntity<Page<UserResDTO>> searchAdmins(Pageable pageable, @PathVariable String value) {
@@ -103,7 +98,7 @@ public class AdminController {
 		List<UserResDTO> adminsResDTO = adminMapper.toDTOResList(page.toList());
 		return new PageImpl<>(adminsResDTO, page.getPageable(), page.getTotalElements());
 	}
-	
+
 	private CustomPageImplementation<UserResDTO> createCustomPage(Page<UserResDTO> page) {
 		return new CustomPageImplementation<>(page.getContent(), page.getNumber(), page.getSize(),
 				page.getTotalElements(), null, page.isLast(), page.getTotalPages(), null, page.isFirst(),

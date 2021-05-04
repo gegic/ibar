@@ -1,10 +1,14 @@
 package com.ktsnwt.project.team9.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,23 +26,34 @@ public class Category {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "category_id")
 	private Long id;
-	
+
 	@Column(unique = true, nullable = false)
 	private String name;
-	
+
 	@Column(nullable = true)
 	private String description;
-	
+
 	@Column
 	private boolean active;
+
+	@ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+	private Set<Package> packages;
 
 	public Category(Long id) {
 		super();
 		this.id = id;
 	}
-	
+
 	public Category(String name, String description, boolean active) {
 		super();
+		this.name = name;
+		this.description = description;
+		this.active = active;
+	}
+
+	public Category(Long id, String name, String description, boolean active) {
+		super();
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.active = active;

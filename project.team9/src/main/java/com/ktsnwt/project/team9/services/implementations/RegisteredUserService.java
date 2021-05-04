@@ -17,8 +17,11 @@ import com.ktsnwt.project.team9.model.Authority;
 import com.ktsnwt.project.team9.model.RegisteredUser;
 import com.ktsnwt.project.team9.model.User;
 import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.repositories.IUserRepository;
 import com.ktsnwt.project.team9.services.interfaces.IRegisteredUserService;
+
+import lombok.AllArgsConstructor;
 
 @Service
 public class RegisteredUserService implements IRegisteredUserService {

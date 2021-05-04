@@ -1,5 +1,7 @@
 package com.ktsnwt.project.team9.dto;
 
+import java.util.Date;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -18,8 +20,8 @@ public class AuthorDTO {
 	private String description;
 
 	@NotNull(message = "Date of birth cannot be null.")
-	private Long dateOfBirth;
+	private String dateOfBirth;
 
-	private Long dateOfDeath;
+	private String dateOfDeath;
 
 }

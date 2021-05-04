@@ -51,11 +51,6 @@ public class CommentController {
 	@Autowired
 	private CommentAuthorMapper commentAuthorMapper;
 
-	public CommentController() {
-		commentBookMapper = new CommentBookMapper();
-		commentAuthorMapper = new CommentAuthorMapper();
-	}
-
 	@PreAuthorize("permitAll()")
 	@GetMapping(value = "/book/{id}")
 	public ResponseEntity<Page<CommentBookResDTO>> getAllCommentsForBook(@PathVariable Long id, Pageable pageable) {

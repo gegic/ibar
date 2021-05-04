@@ -26,7 +26,7 @@ public class RegisteredUser extends User {
 
 	private static final long serialVersionUID = 1L;
 
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "title_id")
 	private Title title;
 
@@ -43,8 +43,8 @@ public class RegisteredUser extends User {
 	private Set<CommentBook> commentsBook;
 
 	@ManyToMany
-	@JoinTable(name = "bought_book", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
-	Set<Book> boughtBooks;
+	@JoinTable(name = "read_book", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
+	Set<Book> readBooks;
 
 	@Column
 	private boolean verified;

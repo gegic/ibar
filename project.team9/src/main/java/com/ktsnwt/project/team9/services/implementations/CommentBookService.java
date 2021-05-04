@@ -14,7 +14,11 @@ import com.ktsnwt.project.team9.model.Book;
 import com.ktsnwt.project.team9.model.CommentBook;
 import com.ktsnwt.project.team9.repositories.IBookRepository;
 import com.ktsnwt.project.team9.repositories.ICommentBookRepository;
+import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.services.interfaces.ICommentBookService;
+
+import lombok.AllArgsConstructor;
 
 @Service
 public class CommentBookService implements ICommentBookService {

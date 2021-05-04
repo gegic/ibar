@@ -33,10 +33,6 @@ public class RegisteredUserController {
 	@Autowired
 	private RegisteredUserMapper registeredUserMapper;
 
-	public RegisteredUserController() {
-		registeredUserMapper = new RegisteredUserMapper();
-	}
-
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping
 	public ResponseEntity<Iterable<UserResDTO>> getAllRegisteredUser() {

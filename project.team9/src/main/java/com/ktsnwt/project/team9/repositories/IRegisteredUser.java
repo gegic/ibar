@@ -19,6 +19,7 @@ public interface IRegisteredUser extends JpaRepository<RegisteredUser, Long> {
 	Page<RegisteredUser> findByUsernameOrEmailOrFirstNameOrLastNameContainingIgnoreCase(String value,
 			Pageable pageable);
 
-	Iterable<RegisteredUser> findbyTitle(Long title);
+	@Query(value = "SELECT * FROM users_table a WHERE a.type='RU' AND title_id=?1", nativeQuery = true)
+	Iterable<RegisteredUser> findbyTitleId(Long titleId);
 
 }

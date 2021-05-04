@@ -12,7 +12,11 @@ import com.ktsnwt.project.team9.model.MarkAuthor;
 import com.ktsnwt.project.team9.model.RegisteredUser;
 import com.ktsnwt.project.team9.repositories.IAuthorRepository;
 import com.ktsnwt.project.team9.repositories.IMarkAuthorRepository;
+import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.services.interfaces.IMarkAuthorService;
+
+import lombok.AllArgsConstructor;
 
 @Service
 public class MarkAuthorService implements IMarkAuthorService {

@@ -12,7 +12,11 @@ import com.ktsnwt.project.team9.model.MarkBook;
 import com.ktsnwt.project.team9.model.RegisteredUser;
 import com.ktsnwt.project.team9.repositories.IBookRepository;
 import com.ktsnwt.project.team9.repositories.IMarkBookRepository;
+import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.services.interfaces.IMarkBookService;
+
+import lombok.AllArgsConstructor;
 
 @Service
 public class MarkBookService implements IMarkBookService {

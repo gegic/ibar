@@ -12,6 +12,9 @@ import com.ktsnwt.project.team9.model.Authority;
 import com.ktsnwt.project.team9.model.VerificationToken;
 import com.ktsnwt.project.team9.repositories.IAuthorityRepository;
 import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
+
+import lombok.AllArgsConstructor;
 
 @Service
 public class AuthorityService {

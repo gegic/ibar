@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -36,6 +37,7 @@ public class Book {
 	private String name;
 
 	@Column(unique = false, nullable = false)
+	@Lob
 	private String description;
 
 	@Column(unique = false, nullable = false)
@@ -47,7 +49,7 @@ public class Book {
 	@Column(unique = false, nullable = false)
 	private double averageMark;
 
-	@Column(unique = false, nullable = false)
+	@Column(unique = false, nullable = true)
 	private String image;
 
 	@Column(unique = false, nullable = false)
@@ -60,8 +62,8 @@ public class Book {
 	@ManyToMany(mappedBy = "writtenBooks", fetch = FetchType.LAZY)
 	private Set<Author> writtenBy;
 
-	@ManyToMany(mappedBy = "boughtBooks")
-	Set<RegisteredUser> boughtBy;
+	@ManyToMany(mappedBy = "readBooks")
+	private Set<RegisteredUser> readBy;
 
 	@OneToMany(mappedBy = "book")
 	private Set<CommentBook> comments;

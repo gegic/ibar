@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 
 @RestController
 @RequestMapping(value = "/api/subscriptions", produces = MediaType.APPLICATION_JSON_VALUE)
-@AllArgsConstructor
 @CrossOrigin(origins = "https://localhost:4200", maxAge = 3600)
 @PreAuthorize("hasRole('ROLE_ADMIN')")
 public class SubscriptionController {

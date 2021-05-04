@@ -67,15 +67,12 @@ public class AuthenticationController {
 
 	@Autowired
 	private MailService mailService;
-	
+
 	@Autowired
 	private VerificationTokenService verificationTokenService;
 
+	@Autowired
 	private UserMapper userMapper;
-
-	public AuthenticationController() {
-		userMapper = new UserMapper();
-	}
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody UserLoginDTO authenticationRequest) {
@@ -94,11 +91,11 @@ public class AuthenticationController {
 
 		RegisteredUser regUser = registeredUserService.findByEmail(user.getEmail());
 		if (regUser != null && !regUser.isVerified()) {
-				return new ResponseEntity<>("Account is not activated.", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("Account is not activated.", HttpStatus.BAD_REQUEST);
 		}
 		// Ubaci korisnika u trenutni security kontekst
 		SecurityContextHolder.getContext().setAuthentication(authentication);
- 
+
 		String jwt = tokenUtils.generateToken(user.getEmail(), auth.get(0).getName()); // prijavljujemo se na sistem sa
 																						// email adresom
 		int expiresIn = tokenUtils.getExpiredIn();
@@ -130,8 +127,9 @@ public class AuthenticationController {
 		vtoken.setUser(newUser);
 		verificationTokenService.saveToken(vtoken);
 		String confirmationUrl = "/confirm-registration/" + token;
-		mailService.sendMail(newUser.getEmail(), "Account activation", "Hi " + newUser.getFirstName() + ",\n\nThanks for getting started with CulturalContentTeam9! Click below to confirm your registration:\n" + 
-				"\nhttps://localhost:4200/auth" + confirmationUrl + "\n\nThanks,\nTeam 9\n");
+		mailService.sendMail(newUser.getEmail(), "Account activation", "Hi " + newUser.getFirstName()
+				+ ",\n\nThanks for getting started with CulturalContentTeam9! Click below to confirm your registration:\n"
+				+ "\nhttps://localhost:4200/auth" + confirmationUrl + "\n\nThanks,\nTeam 9\n");
 		return new ResponseEntity<>(registeredUserMapper.toResDTO(newUser), HttpStatus.CREATED);
 	}
 

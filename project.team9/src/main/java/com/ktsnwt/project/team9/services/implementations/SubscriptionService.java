@@ -1,8 +1,15 @@
 package com.ktsnwt.project.team9.services.implementations;
 
+import org.springframework.stereotype.Service;
+
 import com.ktsnwt.project.team9.model.Subscription;
+import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.services.interfaces.ISubscriptionService;
 
+import lombok.AllArgsConstructor;
+
+@Service
 public class SubscriptionService implements ISubscriptionService {
 
 	@Override

@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,15 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
 public class AuthorService implements IAuthorService {
 
+	@Autowired
 	private IAuthorRepository authorRepository;
 
+	@Autowired
 	private FileService fileService;
 
+	@Autowired
 	private CommentAuthorService commentAuthorService;
 
 	public Page<Author> findAll(Pageable pageable) {

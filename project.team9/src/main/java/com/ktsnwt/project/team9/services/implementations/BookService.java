@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,17 +25,21 @@ import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
 public class BookService implements IBookService {
 
+	@Autowired
 	private IBookRepository bookRepository;
 
+	@Autowired
 	private CategoryService categoryService;
 
+	@Autowired
 	private FileService fileService;
 
+	@Autowired
 	private CommentBookService commentBookService;
 
+	@Autowired
 	private AuthorService authorService;
 
 	public Page<Book> findAll(Pageable pageable) {

@@ -6,6 +6,7 @@ import java.util.Optional;
 import javax.persistence.EntityExistsException;
 
 import org.openqa.selenium.NotFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ktsnwt.project.team9.model.RegisteredUser;
@@ -17,11 +18,12 @@ import com.ktsnwt.project.team9.services.interfaces.ITitleService;
 import lombok.AllArgsConstructor;
 
 @Service
-@AllArgsConstructor
 public class TitleService implements ITitleService {
 
+	@Autowired
 	private ITitleRepository titleRepository;
 
+	@Autowired
 	private IRegisteredUser registeredUserRepository;
 
 	@Override
@@ -55,7 +57,7 @@ public class TitleService implements ITitleService {
 
 	@Override
 	public boolean delete(Long id) throws Exception {
-		List<RegisteredUser> usersWithTitle = (List<RegisteredUser>) registeredUserRepository.findbyTitle(id);
+		List<RegisteredUser> usersWithTitle = (List<RegisteredUser>) registeredUserRepository.findbyTitleId(id);
 
 		if (usersWithTitle.size() == 0) {
 			throw new Exception("Can't delete title while users exist with that title.");

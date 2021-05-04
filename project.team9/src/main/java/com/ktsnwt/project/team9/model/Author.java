@@ -1,5 +1,6 @@
 package com.ktsnwt.project.team9.model;
 
+import java.util.Date;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -36,15 +37,15 @@ public class Author {
 	private String description;
 
 	@Column(unique = false, nullable = true)
-	private Long dateOfBirth;
+	private String dateOfBirth;
 
 	@Column(unique = false, nullable = true)
-	private Long dateOfDeath;
+	private String dateOfDeath;
 
 	@Column(unique = false, nullable = false)
 	private double averageMark;
 
-	@Column(unique = false, nullable = false)
+	@Column(unique = false, nullable = true)
 	private String image;
 
 	@ManyToMany
@@ -58,7 +59,7 @@ public class Author {
 		this.id = id;
 	}
 
-	public Author(String name, String description, Long dateOfBirth, Long dateOfDeath) {
+	public Author(String name, String description, String dateOfBirth, String dateOfDeath) {
 		this.name = name;
 		this.description = description;
 		this.dateOfBirth = dateOfBirth;

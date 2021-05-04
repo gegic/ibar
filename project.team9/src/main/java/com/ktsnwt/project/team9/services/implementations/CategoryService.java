@@ -15,7 +15,6 @@ import lombok.AllArgsConstructor;
 
 
 @Service
-@AllArgsConstructor
 public class CategoryService implements ICategoryService {
 	
 	@Autowired

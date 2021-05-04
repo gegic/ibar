@@ -16,8 +16,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ktsnwt.project.team9.model.User;
+import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.repositories.IUserRepository;
 import com.ktsnwt.project.team9.services.interfaces.IUserService;
+
+import lombok.AllArgsConstructor;
 
 @Service
 public class UserService implements IUserService, UserDetailsService {

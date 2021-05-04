@@ -44,11 +44,6 @@ public class MarkController {
 	@Autowired
 	private MarkAuthorMapper markAuthorMapper;
 
-	public MarkController() {
-		markBookMapper = new MarkBookMapper();
-		markAuthorMapper = new MarkAuthorMapper();
-	}
-
 	@PreAuthorize("hasRole('ROLE_REGISTERED_USER')")
 	@GetMapping(value = "author/{id}")
 	public ResponseEntity<MarkAuthorDTO> getMarkForAuthor(@PathVariable Long id) {

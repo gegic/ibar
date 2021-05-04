@@ -1,5 +1,6 @@
 package com.ktsnwt.project.team9.dto.response;
 
+import java.util.Date;
 import java.util.Set;
 
 import com.ktsnwt.project.team9.model.CommentAuthor;
@@ -23,9 +24,9 @@ public class AuthorResDTO {
 
 	private double averageMark;
 
-	private Long dateOfBirth;
+	private String dateOfBirth;
 
-	private Long dateOfDeath;
+	private String dateOfDeath;
 
 	private Set<Long> writtenBooks;
 

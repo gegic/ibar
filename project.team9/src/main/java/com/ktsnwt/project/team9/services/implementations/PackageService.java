@@ -4,18 +4,27 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.ktsnwt.project.team9.model.Category;
 import com.ktsnwt.project.team9.model.Package;
 import com.ktsnwt.project.team9.repositories.ICategoryRepository;
 import com.ktsnwt.project.team9.repositories.IPackageRepository;
+import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.services.interfaces.IPackageService;
 
 import javassist.NotFoundException;
+import lombok.AllArgsConstructor;
 
+@Service
 public class PackageService implements IPackageService {
 
+	@Autowired
 	private IPackageRepository packageRepository;
 
+	@Autowired
 	private ICategoryRepository categoryRepository;
 
 	@Override

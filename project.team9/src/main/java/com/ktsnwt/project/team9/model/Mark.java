@@ -54,26 +54,6 @@ public class Mark implements Serializable {
 		this.value = value;
 		this.grader = grader;
 	}
-	
-	public RegisteredUser getGrader() {
-		return grader;
-	}
-
-	public void setGrader(RegisteredUser grader) {
-		this.grader = grader;
-	}
-
-	public int getValue() {
-		return value;
-	}
-
-	public void setValue(int value) {
-		this.value = value;
-	}
-
-	public Long getId() {
-		return id;
-	}
 
 	@Override
 	public boolean equals(Object obj) {

@@ -14,7 +14,11 @@ import com.ktsnwt.project.team9.model.Author;
 import com.ktsnwt.project.team9.model.CommentAuthor;
 import com.ktsnwt.project.team9.repositories.IAuthorRepository;
 import com.ktsnwt.project.team9.repositories.ICommentAuthorRepository;
+import com.ktsnwt.project.team9.repositories.IRegisteredUser;
+import com.ktsnwt.project.team9.repositories.ITitleRepository;
 import com.ktsnwt.project.team9.services.interfaces.ICommentAuthorService;
+
+import lombok.AllArgsConstructor;
 
 @Service
 public class CommentAuthorService implements ICommentAuthorService {
