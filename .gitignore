@@ -197,3 +197,9 @@ fabric.properties
 # Editor-based Rest Client
 .idea/httpRequests
 
+ibar/.idea/compiler.xml
+ibar/.idea/encodings.xml
+ibar/.idea/jarRepositories.xml
+ibar/.idea/misc.xml
+ibar/.idea/modules.xml
+ibar/.idea/vcs.xml
