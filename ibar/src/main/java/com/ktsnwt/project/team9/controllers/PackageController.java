@@ -11,7 +11,7 @@ import lombok.AllArgsConstructor;
 @RestController
 @RequestMapping(value = "/api/packages", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "https://localhost:4200", maxAge = 3600)
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class PackageController {
 
 }

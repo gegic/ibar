@@ -10,13 +10,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+import java.time.Instant;
+
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,20 +22,14 @@ public class Subscription {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "subscription_id")
 	private Long id;
 
-	@Column(unique = false, nullable = false)
-	private Long dateOfPurchase;
-
-	@Column(unique = false, nullable = false)
-	private double price;
+	@Column(nullable = false)
+	private Instant dateOfPurchase;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "user_id")
-	private RegisteredUser buyer;
+	private Reader buyer;
 
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, optional = false)
-	@JoinColumn(name = "package_id")
-	private Package purchasedPackage;
+	private Plan purchasedPlan;
 }

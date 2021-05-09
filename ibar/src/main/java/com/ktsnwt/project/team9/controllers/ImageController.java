@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ktsnwt.project.team9.helper.implementations.FileService;
+import com.ktsnwt.project.team9.helper.FileService;
 
 @RestController
 @RequestMapping(value = "/api/images")

@@ -18,7 +18,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import com.ktsnwt.project.team9.security.TokenUtils;
 import com.ktsnwt.project.team9.security.auth.RestAuthenticationEntryPoint;
 import com.ktsnwt.project.team9.security.auth.TokenAuthenticationFilter;
-import com.ktsnwt.project.team9.services.implementations.UserService;
+import com.ktsnwt.project.team9.services.UserService;
 
 @Configuration
 // Ukljucivanje podrske za anotacije "@Pre*" i "@Post*" koje ce aktivirati autorizacione provere za svaki pristup metodi
@@ -72,7 +72,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
 
                 // umesto anotacija iynad svake metode, moze i ovde da se proveravaju prava pristupa ya odredjeni URL
-                //.antMatchers(HttpMethod.GET, "/api/cultural-content-category").hasRole("ROLE_ADMIN")
+                //.antMatchers(HttpMethod.GET, "/api/cultural-content-category").hasAuthority("ROLE_ADMIN")
 
                 // za svaki drugi zahtev korisnik mora biti autentifikovan
                 //.anyRequest().authenticated()

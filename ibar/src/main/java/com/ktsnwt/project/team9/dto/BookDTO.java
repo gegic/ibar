@@ -6,11 +6,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class BookDTO {
 
@@ -19,16 +19,9 @@ public class BookDTO {
 
 	private String description;
 
-	private int quantity;
-
-	private double price;
+	private long quantity;
 
 	@NotNull(message = "Category cannot be null.")
 	private Long category;
 
-	private Set<Long> writtenBy;
-
-	public BookDTO() {
-		super();
-	}
 }

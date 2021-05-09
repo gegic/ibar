@@ -1,5 +1,6 @@
 package com.ktsnwt.project.team9.model;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.Set;
 
@@ -13,13 +14,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-@Getter
-@Setter
+@Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,42 +24,20 @@ public class Author {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "author_id")
 	private Long id;
 
-	@Column(unique = false, nullable = false)
+	@Column(nullable = false)
 	private String name;
 
-	@Column(unique = false, nullable = false)
+	@Column(nullable = false)
 	private String description;
 
-	@Column(unique = false, nullable = true)
-	private String dateOfBirth;
+	private Instant dateOfBirth;
 
-	@Column(unique = false, nullable = true)
-	private String dateOfDeath;
+	private Instant dateOfDeath;
 
-	@Column(unique = false, nullable = false)
-	private double averageMark;
+	@Column(nullable = false)
+	private double averageRating;
 
-	@Column(unique = false, nullable = true)
 	private String image;
-
-	@ManyToMany
-	@JoinTable(name = "written_books", joinColumns = @JoinColumn(name = "author_id"), inverseJoinColumns = @JoinColumn(name = "book_id"))
-	Set<Book> writtenBooks;
-
-	@OneToMany(mappedBy = "author")
-	private Set<CommentAuthor> commentAuthors;
-
-	public Author(Long id) {
-		this.id = id;
-	}
-
-	public Author(String name, String description, String dateOfBirth, String dateOfDeath) {
-		this.name = name;
-		this.description = description;
-		this.dateOfBirth = dateOfBirth;
-		this.dateOfDeath = dateOfDeath;
-	}
 }

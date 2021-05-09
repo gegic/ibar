@@ -1,5 +1,6 @@
 package com.ktsnwt.project.team9.dto;
 
+import java.time.Instant;
 import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
@@ -7,11 +8,13 @@ import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthorDTO {
 
 	@NotEmpty(message = "Name cannot be empty.")
@@ -20,8 +23,8 @@ public class AuthorDTO {
 	private String description;
 
 	@NotNull(message = "Date of birth cannot be null.")
-	private String dateOfBirth;
+	private Instant dateOfBirth;
 
-	private String dateOfDeath;
+	private Instant dateOfDeath;
 
 }

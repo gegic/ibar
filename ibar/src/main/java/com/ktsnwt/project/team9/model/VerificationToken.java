@@ -7,19 +7,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "verification_token")
 public class VerificationToken {
 
 	@Id
@@ -28,11 +22,11 @@ public class VerificationToken {
 
 	private String token;
 
-	@OneToOne(targetEntity = RegisteredUser.class, fetch = FetchType.LAZY)
+	@OneToOne(targetEntity = Reader.class, fetch = FetchType.LAZY)
 	@JoinColumn(nullable = false, name = "user_id")
-	private RegisteredUser user;
+	private Reader user;
 
-	public VerificationToken(String token, RegisteredUser user) {
+	public VerificationToken(String token, Reader user) {
 		this.token = token;
 		this.user = user;
 	}

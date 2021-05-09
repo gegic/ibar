@@ -1,8 +1,6 @@
 package com.ktsnwt.project.team9.controllers;
 
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.UUID;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,10 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,26 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ktsnwt.project.team9.dto.UserDTO;
 import com.ktsnwt.project.team9.dto.UserLoginDTO;
-import com.ktsnwt.project.team9.dto.response.UserResDTO;
-import com.ktsnwt.project.team9.dto.response.UserTokenStateDTO;
-import com.ktsnwt.project.team9.helper.implementations.RegisteredUserMapper;
-import com.ktsnwt.project.team9.helper.implementations.UserMapper;
-import com.ktsnwt.project.team9.model.Authority;
-import com.ktsnwt.project.team9.model.RegisteredUser;
 import com.ktsnwt.project.team9.model.User;
-import com.ktsnwt.project.team9.model.VerificationToken;
 import com.ktsnwt.project.team9.security.TokenUtils;
-import com.ktsnwt.project.team9.services.implementations.AuthorityService;
-import com.ktsnwt.project.team9.services.implementations.MailService;
-import com.ktsnwt.project.team9.services.implementations.RegisteredUserService;
-import com.ktsnwt.project.team9.services.implementations.UserService;
-import com.ktsnwt.project.team9.services.implementations.VerificationTokenService;
+import com.ktsnwt.project.team9.services.AuthorityService;
+import com.ktsnwt.project.team9.services.MailService;
+import com.ktsnwt.project.team9.services.UserService;
+import com.ktsnwt.project.team9.services.VerificationTokenService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @RestController
-@CrossOrigin(origins = "https://localhost:4200", maxAge = 3600, allowedHeaders = "*")
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthenticationController {
 
@@ -57,12 +42,6 @@ public class AuthenticationController {
 	private UserService userDetailsService;
 
 	@Autowired
-	private RegisteredUserService registeredUserService;
-
-	@Autowired
-	private RegisteredUserMapper registeredUserMapper;
-
-	@Autowired
 	private AuthorityService authorityService;
 
 	@Autowired
@@ -71,66 +50,65 @@ public class AuthenticationController {
 	@Autowired
 	private VerificationTokenService verificationTokenService;
 
-	@Autowired
-	private UserMapper userMapper;
+//	@Autowired
+//	private UserMapper userMapper;
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody UserLoginDTO authenticationRequest) {
-		Authentication authentication = null;
-		try {
-			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-					authenticationRequest.getEmail(), authenticationRequest.getPassword()));
-		} catch (Exception e) {
-			return new ResponseEntity<>("Incorrect email or password.", HttpStatus.UNAUTHORIZED);
-		}
-
-		// Kreiraj token za tog korisnika
-		User user = (User) authentication.getPrincipal();
-		@SuppressWarnings("unchecked")
-		List<Authority> auth = (List<Authority>) user.getAuthorities();
-
-		RegisteredUser regUser = registeredUserService.findByEmail(user.getEmail());
-		if (regUser != null && !regUser.isVerified()) {
-			return new ResponseEntity<>("Account is not activated.", HttpStatus.BAD_REQUEST);
-		}
-		// Ubaci korisnika u trenutni security kontekst
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-
-		String jwt = tokenUtils.generateToken(user.getEmail(), auth.get(0).getName()); // prijavljujemo se na sistem sa
-																						// email adresom
-		int expiresIn = tokenUtils.getExpiredIn();
-
-		// Vrati token kao odgovor na uspesnu autentifikaciju
-		return ResponseEntity.ok(new UserTokenStateDTO(jwt, (long) expiresIn));
+//		Authentication authentication;
+//		try {
+//			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+//					authenticationRequest.getEmail(), authenticationRequest.getPassword()));
+//		} catch (Exception e) {
+//			return new ResponseEntity<>("Incorrect email or password.", HttpStatus.UNAUTHORIZED);
+//		}
+//
+//		User user = (User) authentication.getPrincipal();
+//		List<Authority> auth = user.getAuthorities();
+//
+//		RegisteredUser regUser = registeredUserService.findByEmail(user.getEmail());
+//		if (regUser != null && !regUser.isVerified()) {
+//			return new ResponseEntity<>("Account is not activated.", HttpStatus.BAD_REQUEST);
+//		}
+//
+//		SecurityContextHolder.getContext().setAuthentication(authentication);
+//
+//		String jwt = tokenUtils.generateToken(user.getEmail(), auth.get(0).getName()); // prijavljujemo se na sistem sa
+//																						// email adresom
+//		int expiresIn = tokenUtils.getExpiredIn();
+//
+//		return ResponseEntity.ok(new AuthTokenDTO(jwt, (long) expiresIn, auth));
+		return null;
 	}
 
 	@PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<?> addUser(@Valid @RequestBody UserDTO userRequest) throws Exception {
-		User existEmail = this.userDetailsService.findByEmail(userRequest.getEmail());
-		if (existEmail != null) {
-			return new ResponseEntity<>("Email already exists.", HttpStatus.CONFLICT);
-		}
-		User existUser = this.userDetailsService.findByUsername(userRequest.getUsername());
-		if (existUser != null) {
-			return new ResponseEntity<>("Username already exists.", HttpStatus.CONFLICT);
-		}
-		RegisteredUser newUser = null;
-		try {
-			newUser = registeredUserService.create(registeredUserMapper.toEntity(userRequest));
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.toString(), HttpStatus.BAD_REQUEST);
-		}
-		String token = UUID.randomUUID().toString();
-		VerificationToken vtoken = new VerificationToken();
-		vtoken.setId(null);
-		vtoken.setToken(token);
-		vtoken.setUser(newUser);
-		verificationTokenService.saveToken(vtoken);
-		String confirmationUrl = "/confirm-registration/" + token;
-		mailService.sendMail(newUser.getEmail(), "Account activation", "Hi " + newUser.getFirstName()
-				+ ",\n\nThanks for getting started with CulturalContentTeam9! Click below to confirm your registration:\n"
-				+ "\nhttps://localhost:4200/auth" + confirmationUrl + "\n\nThanks,\nTeam 9\n");
-		return new ResponseEntity<>(registeredUserMapper.toResDTO(newUser), HttpStatus.CREATED);
+//		User existEmail = this.userDetailsService.findByEmail(userRequest.getEmail());
+//		if (existEmail != null) {
+//			return new ResponseEntity<>("Email already exists.", HttpStatus.CONFLICT);
+//		}
+//		User existUser = this.userDetailsService.findByUsername(userRequest.getUsername());
+//		if (existUser != null) {
+//			return new ResponseEntity<>("Username already exists.", HttpStatus.CONFLICT);
+//		}
+//		RegisteredUser newUser = null;
+//		try {
+//			newUser = registeredUserService.create(registeredUserMapper.toEntity(userRequest));
+//		} catch (Exception e) {
+//			return new ResponseEntity<>(e.toString(), HttpStatus.BAD_REQUEST);
+//		}
+//		String token = UUID.randomUUID().toString();
+//		VerificationToken vtoken = new VerificationToken();
+//		vtoken.setId(null);
+//		vtoken.setToken(token);
+//		vtoken.setUser(newUser);
+//		verificationTokenService.saveToken(vtoken);
+//		String confirmationUrl = "/confirm-registration/" + token;
+//		mailService.sendMail(newUser.getEmail(), "Account activation", "Hi " + newUser.getFirstName()
+//				+ ",\n\nThanks for getting started with CulturalContentTeam9! Click below to confirm your registration:\n"
+//				+ "\nhttps://localhost:4200/auth" + confirmationUrl + "\n\nThanks,\nTeam 9\n");
+//		return new ResponseEntity<>(registeredUserMapper.toResDTO(newUser), HttpStatus.CREATED);
+		return null;
 	}
 
 	@PostMapping(value = "/forgot-password", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -182,9 +160,10 @@ public class AuthenticationController {
 
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGISTERED_USER')")
 	@GetMapping(value = "/current-user")
-	public ResponseEntity<UserResDTO> currentUser() {
-		User current = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		return new ResponseEntity<>(userMapper.toResDTO(current), HttpStatus.OK);
+	public ResponseEntity<UserDTO> currentUser() {
+//		User current = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//		return new ResponseEntity<>(userMapper.toResDTO(current), HttpStatus.OK);
+		return null;
 	}
 
 }
