@@ -9,15 +9,17 @@
 		<version>2.4.0</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.ktsnwt</groupId>
-	<artifactId>project.team9</artifactId>
+	<groupId>com.sbnz</groupId>
+	<artifactId>ibar</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>project.team9</name>
-	<description>Project for KiTS and NWT Team 9</description>
+	<name>ibar</name>
+	<description>Ibar</description>
 
 	<!-- ovdje navoditi sve verzije za dependency-je -->
 	<properties>
 		<jjwt.version>0.4</jjwt.version>
+		<kie.version>7.17.0.Final</kie.version>
+
 	</properties>
 
 	<dependencies>
@@ -88,6 +90,17 @@
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-server</artifactId>
 			<version>3.141.59</version>
+		</dependency>
+		<dependency>
+			<groupId>org.kie</groupId>
+			<artifactId>kie-spring</artifactId>
+			<version>${kie.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sbnz</groupId>
+			<artifactId>drools</artifactId>
+			<type>jar</type>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 
