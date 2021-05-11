@@ -5,13 +5,11 @@ import java.util.Set;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class BookDTO {
 
 	@NotEmpty(message = "Name cannot be null or empty.")

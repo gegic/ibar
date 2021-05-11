@@ -11,7 +11,13 @@ import com.ktsnwt.project.team9.model.Author;
 public class AuthorMapper {
 
 	public Author toEntity(@Valid AuthorDTO dto) {
-		return new Author(dto.getName(), dto.getDescription(), dto.getDateOfBirth(), dto.getDateOfDeath());
+		Author a = new Author();
+		a.setName(dto.getName());
+		a.setId(dto.getId());
+		a.setAverageRating(dto.getAverageRating());
+		a.setDateOfBirth(dto.getDateOfBirth());
+		a.setDateOfDeath(dto.getDateOfDeath());
+		return a;
 	}
 
 	public AuthorDTO toDto(Author entity) {

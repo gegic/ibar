@@ -13,10 +13,8 @@ public interface IReaderRepository extends JpaRepository<Reader, Long> {
 
 	Reader findByEmail(String email);
 
-	Reader findByUsername(String username);
-
-	@Query(value = "SELECT * FROM users_table a WHERE a.type='RU' AND ((LOWER(a.username) LIKE LOWER(?1)) OR (LOWER(a.email) LIKE LOWER(?1)) OR (LOWER(a.first_name) LIKE LOWER(?1)) OR (LOWER(a.last_name) LIKE LOWER(?1)))", nativeQuery = true)
-	Page<Reader> findByUsernameOrEmailOrFirstNameOrLastNameContainingIgnoreCase(String value,
+	@Query(value = "SELECT * FROM users_table a WHERE a.type='RU' AND ((LOWER(a.email) LIKE LOWER(?1)) OR (LOWER(a.first_name) LIKE LOWER(?1)) OR (LOWER(a.last_name) LIKE LOWER(?1)))", nativeQuery = true)
+	Page<Reader> findByEmailOrFirstNameOrLastNameContainingIgnoreCase(String value,
                                                                                 Pageable pageable);
 
 	@Query(value = "SELECT * FROM users_table a WHERE a.type='RU' AND achievement_id=?1", nativeQuery = true)

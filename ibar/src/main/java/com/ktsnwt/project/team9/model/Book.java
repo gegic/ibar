@@ -1,21 +1,12 @@
 package com.ktsnwt.project.team9.model;
 
-import java.util.Set;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-
 import com.ktsnwt.project.team9.model.enums.BookType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import lombok.*;
+import javax.persistence.*;
+import java.util.Set;
 
 @Data
 @Entity
@@ -49,6 +40,6 @@ public class Book {
 	@JoinColumn(name = "category_id")
 	private Category category;
 
-	@ManyToMany(mappedBy = "writtenBooks", fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Author> authors;
 }

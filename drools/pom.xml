@@ -9,28 +9,14 @@
   <name>Drools</name>
   <packaging>jar</packaging>
 
-  <dependencies>
-    <dependency>
-      <groupId>org.kie</groupId>
-      <artifactId>kie-api</artifactId>
-      <version>6.5.0.Final</version>
-    </dependency>
-    <dependency>
-      <groupId>org.drools</groupId>
-      <artifactId>drools-compiler</artifactId>
-      <version>6.5.0.Final</version>
-    </dependency>
-
-  </dependencies>
-
-<!--  <build>-->
-<!--    <plugins>-->
-<!--      <plugin>-->
-<!--        <groupId>org.drools</groupId>-->
-<!--        <artifactId>drools-maven-plugin</artifactId>-->
-<!--        <version>6.0.0.CR5</version>-->
-<!--        <extensions>true</extensions>-->
-<!--      </plugin>-->
-<!--    </plugins>-->
-<!--  </build>-->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.kie</groupId>
+        <artifactId>kie-maven-plugin</artifactId>
+        <version>6.5.0.Final</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
 </project>

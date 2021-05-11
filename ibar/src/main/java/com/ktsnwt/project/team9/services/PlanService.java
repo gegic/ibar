@@ -40,8 +40,6 @@ public class PlanService {
 			throw new Exception("Package with given name already exists.");
 		}
 
-		entity.setCategories(setCategories(entity));
-
 		planEntity = packageRepository.save(entity);
 
 		return planEntity;
@@ -62,23 +60,10 @@ public class PlanService {
 		planEntity.setName(entity.getName());
 		planEntity.setPrice(entity.getPrice());
 		planEntity.setDuration(entity.getDuration());
-		planEntity.setBookType(entity.getBookType());
-
-		entity.setCategories(setCategories(entity));
 
 		packageRepository.save(entity);
 
 		return entity;
-	}
-
-	private Set<Category> setCategories(Plan entity) {
-		Set<Category> categories = new HashSet<>();
-
-		for (Category category : entity.getCategories()) {
-			categoryRepository.findById(category.getId()).ifPresent(categories::add);
-		}
-
-		return categories;
 	}
 
 }

@@ -44,7 +44,7 @@ public class AuthorityService {
 	public void confirmRegistration(String token) {
 		VerificationToken vt = verificationTokenService.findByToken(token);
 		if (vt != null) {
-			vt.getUser().setVerified(true);
+			vt.getUser().setEnabled(true);
 			registeredUserRepository.save(vt.getUser());
 		} else {
 			throw new NoSuchElementException("Token doesn't exist.");

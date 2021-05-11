@@ -17,6 +17,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AuthorDTO {
 
+	private Long id;
+
 	@NotEmpty(message = "Name cannot be empty.")
 	private String name;
 
@@ -27,4 +29,5 @@ public class AuthorDTO {
 
 	private Instant dateOfDeath;
 
+	private float averageRating;
 }

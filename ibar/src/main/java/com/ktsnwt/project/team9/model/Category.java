@@ -1,16 +1,10 @@
 package com.ktsnwt.project.team9.model;
 
-import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-
-import lombok.*;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor
@@ -29,8 +23,5 @@ public class Category {
 
 	@Column
 	private boolean active;
-
-	@ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
-	private Set<Plan> plans;
 
 }

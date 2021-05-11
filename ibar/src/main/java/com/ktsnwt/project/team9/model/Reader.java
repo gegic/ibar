@@ -1,13 +1,11 @@
 package com.ktsnwt.project.team9.model;
 
-import java.util.Set;
-
-import javax.persistence.*;
-
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,14 +14,10 @@ import lombok.Setter;
 public class Reader extends User {
 
 	private static final long serialVersionUID = 1L;
-
-	@ManyToMany(fetch = FetchType.LAZY)
-	private Set<Achievement> achievements;
-
-	@Id
-	@Override
-	public Long getId() {
-		return super.getId();
-	}
-
+//
+//	@ManyToMany(fetch = FetchType.LAZY)
+//	@JoinTable(name = "reader_achievements",
+//			joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+//			inverseJoinColumns = @JoinColumn(name = "achievement_id", referencedColumnName = "achievement_id"))
+//	private Set<Achievement> achievements;
 }
