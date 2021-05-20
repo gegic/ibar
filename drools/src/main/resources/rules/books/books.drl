@@ -1,0 +1,24 @@
+package rules;
+
+import com.sbnz.ibar.model.ReadingProgress;
+
+rule "Test rule - Some Rule"
+    agenda-group "books"
+
+    when
+            $rp: ReadingProgress()
+    then
+        System.out.println("Found reading progress " + $rp.getProgress());
+
+end
+
+rule "Read book - Set flag"
+	agenda-group "books"
+
+    when
+        $rp: ReadingProgress( $p: progress, $b: book, $p * $b.getQuantity() >= 80 )
+    then
+        $rp.setRead(true);
+        update($rp);
+
+end

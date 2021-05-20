@@ -1,0 +1,37 @@
+package com.sbnz.ibar.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.*;
+
+@Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+public class ReadingProgress {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    private Book book;
+
+    @ManyToOne
+    private Reader reader;
+
+    private long progress = 0;
+
+    private boolean read = false;
+
+    public ReadingProgress(Book book, Reader reader) {
+        this.book = book;
+        this.reader = reader;
+    }
+
+    public double getPercentage() {
+        return (double) this.progress / this.book.getQuantity() * 100;
+    }
+}
