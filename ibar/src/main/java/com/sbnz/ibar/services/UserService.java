@@ -6,6 +6,7 @@ import javax.transaction.Transactional;
 
 import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.model.User;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,6 +15,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,43 +24,33 @@ import com.sbnz.ibar.repositories.UserRepository;
 @Service
 public class UserService implements UserDetailsService {
 
+	private final UserRepository userRepository;
+	private final MailService mailService;
 
-	private UserRepository userRepository;
+	@Autowired
+	public UserService(UserRepository userRepository, MailService mailService) {
+		this.userRepository = userRepository;
+		this.mailService = mailService;
+	}
 
-
-	private PasswordEncoder passwordEncoder;
-
-
-	private AuthenticationManager authenticationManager;
-
-
-	private MailService mailService;
 	@Override
-	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-		User user = userRepository.findByEmail(email);
-		if (user == null) {
-			throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
-		} else {
-			return user;
-		}
+	public User loadUserByUsername(String email) throws UsernameNotFoundException {
+		return userRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("No user found with email " + email));
 	}
 
 	@Transactional
 	public void changePassword(String oldPassword, String newPassword) throws IllegalAccessException {
 		Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
-		String username = "";
+		String username;
 		try {
 			username = ((User) currentUser.getPrincipal()).getEmail();
 		} catch (Exception e) {
 			throw new IllegalAccessException("Invalid token.");
 		}
-		if (authenticationManager != null) {
-			authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, oldPassword));
-		} else {
-			return;
-		}
-		User user = (User) loadUserByUsername(username);
-		user.setPassword(passwordEncoder.encode(newPassword));
+
+		User user = loadUserByUsername(username);
+		user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
 		user.setLastPasswordResetDate(new Date().getTime());
 		userRepository.save(user);
 	}
@@ -67,8 +59,7 @@ public class UserService implements UserDetailsService {
 	public User changeProfile(User entity) throws Exception {
 		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (!entity.getEmail().equals(user.getEmail())) {
-			User usernameUser = userRepository.findByEmail(entity.getEmail());
-			if (usernameUser != null) {
+			if (userRepository.findByEmail(entity.getEmail()).isPresent()) {
 				throw new IllegalArgumentException("Username already taken");
 			}
 		}
@@ -103,26 +94,21 @@ public class UserService implements UserDetailsService {
 	}
 
 	public User findByEmail(String email) {
-		return userRepository.findByEmail(email);
-	}
-
-	public User findByUsername(String username) {
-		return userRepository.findByEmail(username);
+		return this.loadUserByUsername(email);
 	}
 
 	@Transactional
 	public void forgotPassword(String email) {
-		User user = userRepository.findByEmail(email);
-		if (user == null) {
-			throw new UsernameNotFoundException(String.format("No user found with email '%s'.", email));
-		} else {
-			String newPassword = grpService.generateRandomPassword();
-			user.setPassword(passwordEncoder.encode(newPassword));
-			user.setLastPasswordResetDate(new Date().getTime());
-			userRepository.save(user);
-			mailService.sendMail(user.getEmail(), "Password reset",
-					"Hi " + user.getFirstName() + ",\n\nYour new password is: " + newPassword + ".\n\n\nTeam 9");
-		}
-	}
+		User user = userRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("No user found with email " + email));
 
+//		TODO
+
+//		String newPassword = grpService.generateRandomPassword();
+//		user.setPassword(passwordEncoder.encode(newPassword));
+//		user.setLastPasswordResetDate(new Date().getTime());
+//		userRepository.save(user);
+//		mailService.sendMail(user.getEmail(), "Password reset",
+//				"Hi " + user.getFirstName() + ",\n\nYour new password is: " + newPassword + ".\n\n\nTeam 9");
+	}
 }

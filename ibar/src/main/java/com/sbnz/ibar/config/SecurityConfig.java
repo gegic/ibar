@@ -5,6 +5,7 @@ import com.sbnz.ibar.security.EntryPoint;
 import com.sbnz.ibar.security.AuthFilter;
 import com.sbnz.ibar.services.UserService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +26,8 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserService userService;
     private final TokenUtils tokenUtils;
+    private final UserService userService;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -34,7 +35,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

@@ -11,6 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -139,6 +140,7 @@ public class AuthenticationController {
 	public ResponseEntity<UserDto> currentUser() {
 //		User current = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //		return new ResponseEntity<>(userMapper.toResDTO(current), HttpStatus.OK);
+
 		return null;
 	}
 

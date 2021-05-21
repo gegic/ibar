@@ -10,8 +10,8 @@ insert into user_authority values (1, 1);
 
 /*------------------------admin-----------------------------------------*/
 
-insert into "user" values (1, 'admin@mail.com', true 'Admin', 'Adminic', null, 'hashedPassword');
-insert into admin values (1);
+insert into "user" values (2, 'admin@mail.com', true, 'Admin', 'Adminic', null, 'hashedPassword');
+insert into admin values (2);
 insert into user_authority values (2, 2);
 
 /*------------------------book-----------------------------------------*/
