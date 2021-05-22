@@ -1,19 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="FacetManager">
-    <facet type="jpa" name="JPA">
-      <configuration>
-        <setting name="validation-enabled" value="true" />
-        <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping>
-          <factory-entry name="entityManagerFactory" value="ee014df2-41bc-433f-841e-b0461453ab71" />
-        </datasource-mapping>
-        <naming-strategy-map />
-      </configuration>
-    </facet>
-    <facet type="Spring" name="Spring">
-      <configuration />
-    </facet>
     <facet type="web" name="Web">
       <configuration>
         <webroots />
@@ -22,6 +9,17 @@
           <root url="file://$MODULE_DIR$/src/main/resources" />
         </sourceRoots>
       </configuration>
+    </facet>
+    <facet type="jpa" name="JPA">
+      <configuration>
+        <setting name="validation-enabled" value="true" />
+        <setting name="provider-name" value="Hibernate" />
+        <datasource-mapping />
+        <naming-strategy-map />
+      </configuration>
+    </facet>
+    <facet type="Spring" name="Spring">
+      <configuration />
     </facet>
   </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
@@ -228,6 +226,14 @@
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.6.1" level="project" />
     <orderEntry type="library" name="Maven: org.drools:drools-core:7.17.0.Final" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.drools:drools-core:tests:7.17.0.Final" level="project" />
-    <orderEntry type="library" name="Maven: com.sbnz:drools:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="module" module-name="drools" />
+    <orderEntry type="library" name="Maven: org.apache.maven.plugins:maven-source-plugin:3.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven:maven-archiver:3.5.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.maven.shared:maven-shared-utils:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-archiver:4.2.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-io:3.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.19" level="project" />
+    <orderEntry type="library" name="Maven: org.iq80.snappy:snappy:0.4" level="project" />
+    <orderEntry type="library" scope="RUNTIME" name="Maven: org.tukaani:xz:1.8" level="project" />
   </component>
 </module>
