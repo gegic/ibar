@@ -2,6 +2,7 @@ package com.sbnz.ibar.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +12,7 @@ import java.time.Instant;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode
 public class Author {
 
 	@Id

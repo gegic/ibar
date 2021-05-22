@@ -1,24 +1,313 @@
 package rules;
 
-import com.sbnz.ibar.model.ReadingProgress;
+import com.sbnz.ibar.model.*;
+import com.sbnz.ibar.rto.AuthorFact;
+import com.sbnz.ibar.rto.CategoryFact;
+import com.sbnz.ibar.rto.RecommendationPoints;
+import com.sbnz.ibar.rto.BookResponse;
 
-rule "Test rule - Some Rule"
-    agenda-group "books"
+import java.util.ArrayList;
+import java.util.List;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.lang.Double;
+
+global java.lang.Long highRatingPoints;
+global java.lang.Long averageRatingPoints;
+global java.lang.Long lowRatingPoints; /* remember this is a positive value but it is deducted */
+global java.lang.Long readPoints;
+global java.lang.Long readingListPoints;
+global java.lang.Long recommendationThreshold;
+global com.sbnz.ibar.model.Reader loggedReader;
+
+declare UserCategoryRecommendation
+	activated: boolean
+end
+
+rule "Gain author info"
+
+    agenda-group "recommendations"
 
     when
-            $rp: ReadingProgress()
+        $author: Author();
+        $reviews : List() from collect(Review(reader.getId() == loggedReader.getId()));
+        $readingList: List() from collect(ReadingListItem(reader.getId() == loggedReader.getId()));
+        $readingProgressList: List() from collect(ReadingProgress(reader.getId() == loggedReader.getId()))
+        Number($numRead: longValue) from accumulate (
+            $readingProgress: ReadingProgress(getPercentage() > 80, $author memberOf book.getAuthors())
+            from $readingProgressList,
+            count($readingProgress)
+        );
+        Number($numUnread: longValue) from accumulate (
+            $readingProgress: ReadingProgress(getPercentage() < 10 &&
+                lastOpened.plus(7, ChronoUnit.DAYS).isBefore(Instant.now()), $author memberOf book.getAuthors())
+            from $readingProgressList,
+            count($readingProgress)
+        );
+        Number($averageRating: doubleValue) from accumulate (
+            $review: Review($bookRating: rating, $author memberOf book.getAuthors()) from $reviews,
+            average($bookRating)
+        );
+        Number($numReviews: longValue) from accumulate (
+            $review: Review($author memberOf book.getAuthors()) from $reviews,
+            count($review)
+        );
+        Number($numReadingList: longValue) from accumulate(
+            $readingListItem: ReadingListItem($author memberOf book.getAuthors()) from $readingList,
+            count($readingListItem)
+        );
     then
-        System.out.println("Found reading progress " + $rp.getProgress());
+
+        insert(new AuthorFact($author, $numRead, $numUnread, $numReadingList, $numReviews, $averageRating));
+        System.out.println("AUTHOR INFO");
+        System.out.printf(
+                "LOG -> AuthorFact ( authorId=%d, numRead=%d, numUnread=%d, " +
+                 "numReadingList=%d, numReviews=%d, averageRating=%f )%n",
+                $author.getId(), $numRead, $numUnread, $numReadingList, $numReviews, $averageRating);
+end
+
+
+rule "Gain category info"
+
+    agenda-group "recommendations"
+
+    when
+        $category: Category();
+        $reviews : List() from collect(Review(reader.getId() == loggedReader.getId()));
+        $readingList: List() from collect(ReadingListItem(reader.getId() == loggedReader.getId()));
+        $readingProgressList: List() from collect(ReadingProgress(reader.getId() == loggedReader.getId()))
+        Number($numRead: longValue) from accumulate (
+            $readingProgress: ReadingProgress(getPercentage() > 80, $category.getId() == book.getCategory().getId())
+            from $readingProgressList,
+            count($readingProgress)
+        );
+        Number($numUnread: longValue) from accumulate (
+            $readingProgress: ReadingProgress(getPercentage() < 10 &&
+                            lastOpened.plus(7, ChronoUnit.DAYS).isBefore(Instant.now()),
+            $category.getId() == book.getCategory().getId())
+            from $readingProgressList,
+            count($readingProgress)
+        );
+        Number($averageRating: doubleValue) from accumulate (
+            $review: Review($bookRating: rating, $category.getId() == book.getCategory().getId()) from $reviews,
+            average($bookRating)
+        );
+        Number($numReviews: longValue) from accumulate (
+            $review: Review($category.getId() == book.getCategory().getId()) from $reviews,
+            count($review)
+        );
+        Number($numReadingList: longValue) from accumulate(
+            $readingListItem: ReadingListItem($category memberOf book.getCategory().getId()) from $readingList,
+            count($readingListItem)
+        );
+    then
+
+        insert(new CategoryFact($category, $numRead, $numUnread, $numReadingList, $numReviews, $averageRating));
+        System.out.println("CATEGORY INFO");
+        System.out.printf(
+                "LOG -> CategoryFact ( categoryId=%d, numRead=%d, numUnread=%d, " +
+                 "numReadingList=%d, numReviews=%d, averageRating=%f )%n",
+                $category.getId(), $numRead, $numUnread, $numReadingList, $numReviews, $averageRating);
+end
+
+rule "Add points for authors' high rating (number of reviews is also important)"
+
+    agenda-group "recommendations"
+
+    when
+        $book: Book($authors: authors);
+        $authorFacts: List() from collect(AuthorFact());
+        Number(doubleValue >= 4.5) from accumulate (
+            AuthorFact(author memberOf $authors, $averageRating: averageRating, $averageRating > 1) from $authorFacts,
+            average($averageRating)
+        );
+        Number($revRating: doubleValue) from accumulate (
+            AuthorFact(author memberOf $authors, $factRevRating: averageRating * numReviews) from $authorFacts,
+            average($factRevRating)
+        );
+
+    then
+
+        insert(new RecommendationPoints($book, $revRating * highRatingPoints));
+        System.out.println("AUTHOR HIGH RATING");
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+                          $book.getId(), $revRating * highRatingPoints);
 
 end
 
-rule "Read book - Set flag"
-	agenda-group "books"
+rule "Add points for authors' average rating (number of reviews is also important)"
+
+    agenda-group "recommendations"
 
     when
-        $rp: ReadingProgress( $p: progress, $b: book, $p * $b.getQuantity() >= 80 )
-    then
-        $rp.setRead(true);
-        update($rp);
+        $book: Book($authors: authors);
+        $authorFacts: List() from collect(AuthorFact());
+        Number(doubleValue < 4.5 && doubleValue > 3) from accumulate (
+            AuthorFact(author memberOf $authors, $averageRating: averageRating, $averageRating > 1) from $authorFacts,
+            average($averageRating)
+        );
+        Number($revRating: doubleValue) from accumulate (
+            AuthorFact(author memberOf $authors, $factRevRating: averageRating * numReviews) from $authorFacts,
+            average($factRevRating)
+        );
 
+    then
+
+        insert(new RecommendationPoints($book, $revRating * averageRatingPoints));
+        System.out.println("AUTHOR AVERAGE RATING");
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+                          $book.getId(), $revRating * averageRatingPoints);
+
+end
+
+rule "Deduct points for authors' poor rating (number of reviews is also important)"
+
+    agenda-group "recommendations"
+
+    when
+        $book: Book($authors: authors);
+        $authorFacts: List() from collect(AuthorFact());
+        Number(doubleValue < 3) from accumulate (
+            AuthorFact(author memberOf $authors, $averageRating: averageRating, $averageRating > 1) from $authorFacts,
+            average($averageRating)
+        );
+        Number($revRating: doubleValue) from accumulate (
+            AuthorFact(author memberOf $authors, $factRevRating: averageRating * numReviews) from $authorFacts,
+            average($factRevRating)
+        );
+
+    then
+        insert(new RecommendationPoints($book, $revRating * lowRatingPoints * -1));
+        System.out.println("AUTHOR POOR RATING");
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+                          $book.getId(), $revRating * lowRatingPoints * -1);
+
+end
+
+rule "Add points for read authors"
+
+    agenda-group "recommendations"
+
+    when
+        $book: Book($authors: authors);
+        $authorFacts: List() from collect(AuthorFact());
+        Number($numRead: intValue) from accumulate (
+            AuthorFact(author memberOf $authors, numRead > 0, $factNumRead: numRead) from $authorFacts,
+            average($factNumRead)
+        );
+    then
+
+        insert(new RecommendationPoints($book, $numRead * readPoints));
+        System.out.println("AUTHOR READ");
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+            $book.getId(), Double.valueOf($numRead * readPoints));
+
+end
+
+rule "Deduct points for unread authors"
+
+    agenda-group "recommendations"
+
+    when
+        $book: Book($authors: authors);
+        $authorFacts: List() from collect(AuthorFact());
+        Number($numUnread: intValue) from accumulate (
+            AuthorFact(author memberOf $authors, numUnread > 0, $factNumUnread: numUnread) from $authorFacts,
+            average($factNumUnread)
+        );
+    then
+
+        insert(new RecommendationPoints($book, $numUnread * readPoints * -1));
+        System.out.println("AUTHOR UNREAD");
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+            $book.getId(), Double.valueOf($numUnread * readPoints * -1));
+end
+
+rule "Add points for author in reading list"
+    agenda-group "recommendations"
+
+    when
+        $book: Book($authors: authors);
+        $authorFacts: List() from collect(AuthorFact());
+        Number(intValue > 0, $numReadingList: intValue) from accumulate (
+            AuthorFact(author memberOf $authors, numReadingList > 0, $factNumReadingList: numReadingList)
+            from $authorFacts,
+            sum($factNumReadingList)
+        );
+    then
+        insert(new RecommendationPoints($book, $numReadingList * readingListPoints));
+        System.out.println("AUTHOR IN READING LIST");
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+            $book.getId(), Double.valueOf($numReadingList * readingListPoints));
+end
+
+rule "Gather all points of for a book"
+    agenda-group "recommendations"
+	salience -1
+
+    when
+    	$book : Book();
+        Number($totalPoints: doubleValue) from accumulate (
+        	RecommendationPoints(book.getId() == $book.getId(), $points: Double.valueOf(points)),
+        	sum($points)
+        );
+    then
+
+    	insert(new BookResponse($book, $totalPoints));
+    	System.out.println("GATHER ALL POINTS");
+    	System.out.printf("LOG -> BookResponse ( bookId=%d, points=%f )%n", $book.getId(), $totalPoints);
+end
+
+rule "Delete points"
+    agenda-group "recommendations"
+    salience -2
+	when
+		$br: BookResponse($book: book);
+		$rp: RecommendationPoints($book.getId() == book.getId());
+	then
+		delete($rp);
+end
+
+rule "Recommendation collection finished successfully"
+    agenda-group "recommendations"
+	salience -3
+
+    when
+    	Number(intValue >= recommendationThreshold) from accumulate(
+        	$br: BookResponse(points > 0),
+        	count($br)
+        );
+    then
+    	System.out.println("MOVIES RECOMMENDED");
+end
+
+rule "Recommendation collection finished unsuccessfully"
+    agenda-group "recommendations"
+	salience -3
+
+    when
+    	Number(intValue < 15) from accumulate(
+        	$br: BookResponse(points > 0),
+        	count($br)
+        );
+        not UserCategoryRecommendation();
+    then
+    	System.out.println("USER CATEGORY RECOMMENDATION STARTING");
+    	insert(new UserCategoryRecommendation(true));
+end
+
+rule "Reading list for readers of the same category"
+	agenda-group "recommendations"
+
+    when
+    	UserCategoryRecommendation();
+        $response : BookResponse($points: points, $book: book);
+        $readingList: List() from collect(ReadingListItem(book.getId() == $book.getId()));
+        Number(intValue > 0, $numReadingList: intValue) from accumulate (
+        	$similarReadingList: ReadingListItem(reader.getCategory().equals(loggedReader.getCategory()))
+        	from $readingList,
+        	count($similarReadingList));
+    then
+        System.out.printf("LOG -> READING LIST ADDED %d POINTS FOR BOOK %d%n", $numReadingList, $book.getId());
+        modify($response){setPoints($points + $numReadingList)}
 end

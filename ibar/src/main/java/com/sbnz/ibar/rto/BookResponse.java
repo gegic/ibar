@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class BookResponse {
     private Book book;
-    private long points = 0L;
+    private double points = 0;
 }

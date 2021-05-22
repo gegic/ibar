@@ -8,7 +8,8 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-public class ReadingList {
+@Table(name="reading_list")
+public class ReadingListItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

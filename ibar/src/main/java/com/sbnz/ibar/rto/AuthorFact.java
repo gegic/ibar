@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AuthorFact {
     private Author author;
-    private long numRead;
-    private long numUnread;
-    private long numWishList;
-    private long numReviews;
-    private float averageRating;
+    private long numRead = 0;
+    private long numUnread = 0;
+    private long numReadingList = 0;
+    private long numReviews = 0;
+    private double averageRating = 0;
 }

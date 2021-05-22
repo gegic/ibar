@@ -45,4 +45,8 @@ public class Book {
 
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Author> authors;
+
+	public void addAuthor() {
+
+	}
 }

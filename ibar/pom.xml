@@ -14,6 +14,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ibar</name>
 	<description>Ibar</description>
+	<packaging>jar</packaging>
 
 	<properties>
 		<jjwt.version>0.4</jjwt.version>
@@ -111,6 +112,11 @@
 			<artifactId>drools</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-source-plugin</artifactId>
+			<version>3.2.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -118,6 +124,20 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

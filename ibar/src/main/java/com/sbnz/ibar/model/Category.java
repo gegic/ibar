@@ -2,6 +2,7 @@ package com.sbnz.ibar.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Category {
 
 	@Id

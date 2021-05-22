@@ -3,6 +3,8 @@ package com.sbnz.ibar.dto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Instant;
+
 @Data
 @NoArgsConstructor
 public class ReadingProgressDto {
@@ -11,5 +13,5 @@ public class ReadingProgressDto {
     private long readerId;
     private long progress;
     private double percentage;
-    private boolean read;
+    private Instant lastOpened;
 }

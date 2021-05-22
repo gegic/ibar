@@ -4,6 +4,10 @@ import com.sbnz.ibar.dto.ReadingProgressDto;
 import com.sbnz.ibar.model.ReadingProgress;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
+
 @Component
 public class ReadingProgressMapper {
     public ReadingProgressDto toDto(ReadingProgress entity) {
@@ -13,7 +17,8 @@ public class ReadingProgressMapper {
         dto.setReaderId(entity.getReader().getId());
         dto.setProgress(entity.getProgress());
         dto.setPercentage(entity.getPercentage());
-        dto.setRead(entity.isRead());
+        dto.setLastOpened(entity.getLastOpened());
+        dto.getLastOpened().plus(7, ChronoUnit.DAYS);
         return dto;
     }
 }

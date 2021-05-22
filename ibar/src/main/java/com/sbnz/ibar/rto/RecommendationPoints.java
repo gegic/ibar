@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecommendationPoints {
     private Book book;
-    private long points;
+    private double points;
 }

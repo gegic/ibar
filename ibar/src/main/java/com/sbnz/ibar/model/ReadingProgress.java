@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -24,7 +25,7 @@ public class ReadingProgress {
 
     private long progress = 0;
 
-    private boolean read = false;
+    private Instant lastOpened;
 
     public ReadingProgress(Book book, Reader reader) {
         this.book = book;

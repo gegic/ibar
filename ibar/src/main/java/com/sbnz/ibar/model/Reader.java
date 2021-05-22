@@ -5,6 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
@@ -13,6 +15,15 @@ import javax.persistence.*;
 public class Reader extends User {
 
 	private static final long serialVersionUID = 1L;
+
+	@Min(13)
+	@Max(120)
+	private long age;
+
+	public String getCategory() {
+		return String.format("%d", age);
+	}
+
 //
 //	@ManyToMany(fetch = FetchType.LAZY)
 //	@JoinTable(name = "reader_achievements",

@@ -5,7 +5,7 @@ INSERT INTO authority (name) VALUES ('ROLE_ADMIN');
 /*------------------------reader-----------------------------------------*/
 
 insert into "user" values (1, 'harry.gegic@gmail.com', true, 'Haris', 'Gegic', null, 'hashedPassword');
-insert into reader values (1);
+insert into reader values (20, 1);
 insert into user_authority values (1, 1);
 
 /*------------------------admin-----------------------------------------*/
