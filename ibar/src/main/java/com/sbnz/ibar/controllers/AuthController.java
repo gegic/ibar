@@ -50,7 +50,11 @@ public class AuthController {
 				loginDto.getEmail(), loginDto.getPassword())).getPrincipal();
 
 		return ResponseEntity.ok(new AuthTokenDto(
-				this.tokenUtils.generateToken(user.getEmail()), user.getAuthorities(), user.getInitials()));
+				user.getId(),
+				this.tokenUtils.generateToken(user.getEmail()),
+				user.getAuthorities(),
+				user.getInitials())
+		);
 	}
 
 	@PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)

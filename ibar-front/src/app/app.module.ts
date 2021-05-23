@@ -23,6 +23,9 @@ import { MainFrameComponent } from './components/main-frame/main-frame.component
 import { NavbarComponent } from './components/navbar/navbar.component';
 import {AvatarModule} from 'primeng/avatar';
 import { BrowseBooksComponent } from './components/browse-books/browse-books.component';
+import {CarouselModule} from 'primeng/carousel';
+import { BookCoverComponent } from './components/book-cover/book-cover.component';
+import { TruncatePipe } from './core/pipes/truncate.pipe';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { BrowseBooksComponent } from './components/browse-books/browse-books.com
     LoginComponent,
     MainFrameComponent,
     NavbarComponent,
-    BrowseBooksComponent
+    BrowseBooksComponent,
+    BookCoverComponent,
+    TruncatePipe
   ],
   imports: [
     BrowserModule,
@@ -48,7 +53,8 @@ import { BrowseBooksComponent } from './components/browse-books/browse-books.com
     ToastModule,
     ConfirmDialogModule,
     AppRoutingModule,
-    AvatarModule
+    AvatarModule,
+    CarouselModule
   ],
   providers: [
     {

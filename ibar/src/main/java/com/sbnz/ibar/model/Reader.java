@@ -1,5 +1,6 @@
 package com.sbnz.ibar.model;
 
+import com.sbnz.ibar.utils.Utils;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,8 +21,10 @@ public class Reader extends User {
 	@Max(120)
 	private long age;
 
+	private boolean male;
+
 	public String getCategory() {
-		return String.format("%d", age);
+		return Utils.getCategory(this);
 	}
 
 //

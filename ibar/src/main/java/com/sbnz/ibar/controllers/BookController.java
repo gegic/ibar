@@ -2,62 +2,56 @@ package com.sbnz.ibar.controllers;
 
 import com.sbnz.ibar.dto.BookDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.sbnz.ibar.mapper.BookMapper;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.services.BookService;
 
 import java.io.FileNotFoundException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping(value = "/api/books", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "https://localhost:4200", maxAge = 3600)
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
-
-    @Autowired
-    private BookMapper bookMapper;
-
-
-    private FileService fileService;
+    private final BookService bookService;
+    private final FileService fileService;
 
     @PreAuthorize("permitAll()")
     @PostMapping(value = "/ratings-interval")
-    public ResponseEntity<?> getAllBooksByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO) {
-        try {
-            List<BookDto> books = bookService.findAllByRatingInterval(ratingIntervalDTO)
-                    .stream().map(book -> bookMapper.toDto(book))
-                    .collect(Collectors.toList());
+    public ResponseEntity<List<BookDto>> getAllBooksByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO)
+            throws FileNotFoundException {
 
-            return new ResponseEntity<>(books, HttpStatus.OK);
-        } catch (FileNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+            List<BookDto> books = bookService.findAllByRatingInterval(ratingIntervalDTO);
+            return ResponseEntity.ok(books);
     }
 
     @PreAuthorize("permitAll()")
     @GetMapping(value = "/{authorName}")
-    public ResponseEntity<?> getAllBooksByAuthorsName(@PathVariable String authorName) {
-        try {
-            List<BookDto> books = bookService.findAllByAuthorsName(authorName)
-                    .stream().map(book -> bookMapper.toDto(book))
-                    .collect(Collectors.toList());
-
-            return new ResponseEntity<>(books, HttpStatus.OK);
-        } catch (FileNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<List<BookDto>> getAllBooksByAuthorsName(@PathVariable String authorName)
+            throws FileNotFoundException {
+        List<BookDto> books = bookService.findAllByAuthorsName(authorName);
+        return ResponseEntity.ok(books);
     }
+
+    @PreAuthorize("hasAuthority('ROLE_READER')")
+    @GetMapping(value = "top-rated/{userId}")
+    public ResponseEntity<List<BookDto>> topRated(@PathVariable long userId) {
+        return ResponseEntity.ok(bookService.getTopRated(userId));
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_READER')")
+    @GetMapping(value = "recommended/{userId}")
+    public ResponseEntity<List<BookDto>> recommended(@PathVariable long userId) {
+        return ResponseEntity.ok(bookService.getRecommended(userId));
+    }
+
 //	@PreAuthorize("permitAll()")
 //	@GetMapping(value = "/by-page")
 //	public ResponseEntity<Page<BookResDTO>> getAllBooks(Pageable pageable) {

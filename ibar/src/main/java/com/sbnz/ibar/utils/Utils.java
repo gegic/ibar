@@ -1,6 +1,8 @@
 package com.sbnz.ibar.utils;
 
-public class Constants {
+import com.sbnz.ibar.model.Reader;
+
+public class Utils {
     public static final String KIE_GROUP_ID = "com.sbnz";
     public static final String KIE_ARTIFACT_ID = "drools";
     public static final String KIE_VERSION = "0.0.1-SNAPSHOT";
@@ -8,4 +10,8 @@ public class Constants {
 
     public static final String BOOKS_SESSION = "books-session";
     public static final String BOOKS_AGENDA = "books";
+
+    public static String getCategory(Reader r) {
+        return String.format("%s", r.isMale() ? "male" : "female");
+    }
 }

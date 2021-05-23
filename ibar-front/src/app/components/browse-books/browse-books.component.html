@@ -1,1 +1,39 @@
-<p>browse-books works!</p>
+<div>
+  <div>
+    <div class="p-mt-6 p-px-6">
+      <h2 class="p-text-normal">
+        Top rated
+      </h2>
+    </div>
+    <div class="carousel-bg">
+      <p-carousel [value]="topRated"
+                  [responsiveOptions]="responsiveOptions"
+                  [circular]="true"
+                  [showIndicators]="false"
+      >
+        <ng-template let-book pTemplate="item">
+          <app-book-cover [book]="book"></app-book-cover>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </div>
+  <div>
+    <div class="p-mt-6 p-px-6">
+      <h2 class="p-text-normal">
+        Top rated
+      </h2>
+    </div>
+    <div class="carousel-bg">
+      <p-carousel [value]="topRated"
+                  [responsiveOptions]="responsiveOptions"
+                  [circular]="true"
+                  [showIndicators]="false"
+      >
+        <ng-template let-book pTemplate="item">
+          <app-book-cover [book]="book"></app-book-cover>
+        </ng-template>
+      </p-carousel>
+    </div>
+  </div>
+
+</div>

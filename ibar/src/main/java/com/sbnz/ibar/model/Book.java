@@ -31,7 +31,7 @@ public class Book {
 	@Column(nullable = false)
 	private double averageRating;
 
-	private String image;
+	private String cover;
 
 	@Column(nullable = false)
 	private BookType type;
@@ -46,7 +46,4 @@ public class Book {
 	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Author> authors;
 
-	public void addAuthor() {
-
-	}
 }

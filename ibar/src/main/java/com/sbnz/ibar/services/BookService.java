@@ -5,16 +5,21 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
+import com.sbnz.ibar.dto.BookDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.dto.ReadingProgressDto;
+import com.sbnz.ibar.mapper.BookMapper;
 import com.sbnz.ibar.mapper.ReadingProgressMapper;
 import com.sbnz.ibar.model.*;
 import com.sbnz.ibar.repositories.*;
-import com.sbnz.ibar.utils.Constants;
+import com.sbnz.ibar.rto.BookResponse;
+import com.sbnz.ibar.rto.BookResponseFilter;
+import com.sbnz.ibar.utils.Utils;
 import lombok.AllArgsConstructor;
 
 import org.drools.template.DataProvider;
@@ -23,6 +28,7 @@ import org.drools.template.ObjectDataCompiler;
 import org.drools.template.objects.ArrayDataProvider;
 import org.kie.api.runtime.KieSession;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,8 +41,10 @@ import javassist.NotFoundException;
 @AllArgsConstructor
 public class BookService {
 
+    private final long RECOMMENDATION_THRESHOLD = 10;
+
     private final BookRepository bookRepository;
-    private final CategoryService categoryService;
+    private final CategoryRepository categoryRepository;
     private final FileService fileService;
     private final ReviewRepository reviewRepository;
     private final AuthorRepository authorRepository;
@@ -44,6 +52,9 @@ public class BookService {
     private final ReadingProgressRepository readingProgressRepository;
     private final ReadingProgressMapper readingProgressMapper;
     private final KieService kieService;
+    private final BookMapper bookMapper;
+    private final ReadingListItemRepository readingListItemRepository;
+    private final BookResponseFilter bookResponseFilter;
 
     public Page<Book> findAll(Pageable pageable) {
         return bookRepository.findAll(pageable);
@@ -59,7 +70,50 @@ public class BookService {
         return book.orElse(null);
     }
 
-    public ArrayList<Book> findAllByRatingInterval(RatingIntervalDto ratingIntervalDTO) throws FileNotFoundException {
+    public List<BookDto> getTopRated(long userId) {
+        Pageable pageLimit = PageRequest.of(0, 10);
+        return this.bookRepository.getTopRated(userId, pageLimit).stream()
+                .map(bookMapper::toBookDto).collect(Collectors.toList());
+    }
+
+    public List<BookDto> getRecommended(long userId) {
+        Reader r = (Reader) this.userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
+
+
+        KieSession kieSession = this.kieService.getSession(Utils.BOOKS_SESSION, Utils.BOOKS_AGENDA);
+
+        kieSession.setGlobal("highRatingPoints", 10L);
+        kieSession.setGlobal("averageRatingPoints", 3L);
+        kieSession.setGlobal("lowRatingPoints", 2L);
+        kieSession.setGlobal("readPoints", 2L);
+        kieSession.setGlobal("readingListPoints", 15L);
+        kieSession.setGlobal("recommendationThreshold", this.RECOMMENDATION_THRESHOLD);
+        kieSession.setGlobal("loggedReader", r);
+
+        this.authorRepository.getReadAuthors(userId).forEach(kieSession::insert);
+        this.categoryRepository.getReadCategories(userId).forEach(kieSession::insert);
+        this.reviewRepository.getReviewsByReaderIdAndReaderCategory(userId, r.isMale())
+                .forEach(kieSession::insert);
+        this.readingProgressRepository.getReadingProgressByReaderIdAndReaderCategory(userId, r.isMale())
+                .forEach(kieSession::insert);
+        this.readingListItemRepository.getReadingListByReaderIdAndReaderCategory(userId, r.isMale())
+                .forEach(kieSession::insert);
+        this.bookRepository.getUnread(userId).forEach(kieSession::insert);
+
+        kieSession.fireAllRules();
+
+        Collection<?> bookResponses = kieSession.getObjects(bookResponseFilter);
+
+        kieSession.dispose();
+
+        return bookResponses.stream().map(qm -> (BookResponse) qm)
+                .sorted(Comparator.comparingDouble(BookResponse::getPoints)).limit(this.RECOMMENDATION_THRESHOLD)
+                .map(br -> bookMapper.toBookDto(br.getBook())).collect(Collectors.toList());
+
+    }
+
+    public List<BookDto> findAllByRatingInterval(RatingIntervalDto ratingIntervalDTO) throws FileNotFoundException {
+        // TODO replace with classpath
         InputStream template = new FileInputStream("../drools/src/main/resources/rules.templates/bookRatingSearch.drt");
 
         ObjectDataCompiler converter = new ObjectDataCompiler();
@@ -70,10 +124,11 @@ public class BookService {
 
         String drl = converter.compile(data, template);
 
-        return this.fireTemplateRules(drl);
+        return this.fireTemplateRules(drl).stream().map(bookMapper::toBookDto).collect(Collectors.toList());
     }
 
-    public ArrayList<Book> findAllByAuthorsName(String authorsName) throws FileNotFoundException {
+    public List<BookDto> findAllByAuthorsName(String authorsName) throws FileNotFoundException {
+        // TODO replace with classpath
         InputStream template = new FileInputStream("../drools/src/main/resources/rules.templates/bookAuthorsNameSearch.drt");
 
         DataProviderCompiler converter = new DataProviderCompiler();
@@ -84,7 +139,7 @@ public class BookService {
 
         String drl = converter.compile(dataProvider, template);
 
-        return this.fireTemplateRules(drl);
+        return this.fireTemplateRules(drl).stream().map(bookMapper::toBookDto).collect(Collectors.toList());
     }
 
     private ArrayList<Book> fireTemplateRules(String drl) {
@@ -114,7 +169,7 @@ public class BookService {
             throw new NotFoundException("Book with given id doesn't exist.");
         }
 
-        fileService.deleteImageFromFile(existingBook.getImage());
+        fileService.deleteImageFromFile(existingBook.getCover());
 
         reviewRepository.deleteAllByBookId(id);
 
@@ -134,7 +189,7 @@ public class BookService {
             throw new NotFoundException("Book with given id doesn't exist.");
         }
 
-        Category category = categoryService.getById(entity.getCategory().getId());
+        Category category = categoryRepository.getOne(entity.getCategory().getId());
         if (category == null) {
             throw new NotFoundException("Category doesn't exist.");
         }
@@ -148,14 +203,14 @@ public class BookService {
         existingBook.setAuthors(writtenBy);
 
         if (!newImage.isEmpty()) {
-            fileService.uploadNewImage(newImage, existingBook.getImage());
+            fileService.uploadNewImage(newImage, existingBook.getCover());
         }
         return bookRepository.save(existingBook);
     }
 
     @Transactional
     public Book create(Book entity, MultipartFile file) throws Exception {
-        Category category = categoryService.getById(entity.getCategory().getId());
+        Category category = categoryRepository.getOne(entity.getCategory().getId());
         if (category == null) {
             throw new NotFoundException("Category doesn't exist.");
         }
@@ -164,7 +219,7 @@ public class BookService {
 
         String imagePath = fileService.saveImage(file, entity.getName());
 
-        entity.setImage(imagePath);
+        entity.setCover(imagePath);
 
         entity.setAuthors(getAuthorsOfBook(entity));
 
@@ -189,7 +244,7 @@ public class BookService {
 
         if (progress > readingProgress.getProgress()) {
             readingProgress.setProgress(progress);
-            KieSession kieSession = kieService.getSession(Constants.BOOKS_SESSION, Constants.BOOKS_AGENDA);
+            KieSession kieSession = kieService.getSession(Utils.BOOKS_SESSION, Utils.BOOKS_AGENDA);
             kieSession.insert(readingProgress);
             kieService.runSession(kieSession);
             readingProgress = readingProgressRepository.save(readingProgress);

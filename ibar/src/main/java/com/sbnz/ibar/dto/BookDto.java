@@ -12,6 +12,8 @@ import lombok.*;
 @NoArgsConstructor
 public class BookDto {
 
+	private Long id;
+	
 	@NotEmpty(message = "Name cannot be null or empty.")
 	private String name;
 
@@ -20,6 +22,10 @@ public class BookDto {
 	private long quantity;
 
 	@NotNull(message = "Category cannot be null.")
-	private Long category;
+	private Long categoryId;
+
+	private String categoryName;
+	private String authorName;
+	private String cover;
 
 }

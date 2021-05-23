@@ -9,7 +9,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class AuthTokenDto {
-
+    private long userId;
     private String accessToken;
     private List<Authority> authorities;
     private String userInitials;

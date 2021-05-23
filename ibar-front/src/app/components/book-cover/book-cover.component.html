@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <div class="container">
+    <div class="top"></div>
+    <div class="bottom">
+      <div class="left">
+        <div class="details">
+          <h5>{{book.name | truncate : 22 : true}}</h5>
+          <p>{{book.categoryName}}</p>
+        </div>
+        <div class="add-to-reading-list"><i class="pi pi-tag"></i></div>
+      </div>
+      <div class="right">
+        <div class="done"><i class="pi pi-check"></i></div>
+        <div class="details">
+          <h5>{{book.name | truncate : 22 : true}}</h5>
+          <p>Added to reading list</p>
+        </div>
+        <div class="remove"><i class="pi pi-times"></i></div>
+      </div>
+    </div>
+  </div>
+  <div class="inside">
+    <div class="icon"><i class="pi pi-info-circle"></i></div>
+    <div class="contents">
+      <p>{{book.description | truncate : 60 : true}}</p>
+    </div>
+  </div>
+</div>

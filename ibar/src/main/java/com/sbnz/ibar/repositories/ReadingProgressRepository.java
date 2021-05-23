@@ -1,7 +1,9 @@
 package com.sbnz.ibar.repositories;
 
 import com.sbnz.ibar.model.ReadingProgress;
+import com.sbnz.ibar.model.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,4 +17,7 @@ public interface ReadingProgressRepository extends JpaRepository<ReadingProgress
 	List<ReadingProgress> getByReaderId(long readerId);
 
 	Optional<ReadingProgress> findByBookIdAndReaderId(long bookId, long readerId);
+
+	@Query("select rp from ReadingProgress rp where rp.reader.id = :readerId or rp.reader.male = :isMale")
+	List<ReadingProgress> getReadingProgressByReaderIdAndReaderCategory(long readerId, boolean isMale);
 }
