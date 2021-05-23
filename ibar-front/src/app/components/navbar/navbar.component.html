@@ -1,0 +1,74 @@
+<div class="navbar p-grid p-justify-between p-px-3 p-mx-0">
+  <div class="p-col-4 p-p-0 p-col-align-center p-d-flex p-ai-center logo-col">
+    <a routerLink="/" class="logo p-my-0">ibar</a>
+    <span class="p-input-icon-left search-bar p-d-none p-d-md-inline-block"
+          *ngIf="!authoritiesContain('ROLE_ADMIN')"
+    >
+      <i class="pi pi-search"></i>
+      <input type="text"
+             placeholder="Search"
+             [(ngModel)]="searchQuery"
+             (keyup)="setSearchQuery($event)"
+             pInputText
+             id="search-input"
+      >
+    </span>
+  </div>
+  <div class="p-col-5 p-sm-4 p-text-center p-p-0">
+    <ng-container *ngIf="!authoritiesContain('ROLE_ADMIN'); else adminNavbar">
+      <button class="p-button-text topnav-button p-px-4"
+              routerLinkActive="activated"
+              [class.activated]="isLinkActive('')"
+              [routerLink]="'browse'"
+              icon="pi pi-globe"
+              pButton
+      ></button>
+      <button class="p-button-text topnav-button p-px-4"
+              routerLinkActive="activated"
+              [routerLink]="'personal'"
+              icon="pi pi-th-large"
+              pButton
+      ></button>
+    </ng-container>
+    <ng-template #adminNavbar>
+      <button class="p-button-text topnav-button p-px-4"
+              [routerLinkActiveOptions]="{exact: true}"
+              routerLinkActive="activated"
+              [routerLink]="'authors'"
+              icon="pi pi-pencil"
+              pButton
+      ></button>
+      <button class="p-button-text topnav-button p-px-4"
+              routerLinkActive="activated"
+              [routerLink]="'categories'"
+              icon="pi pi-th-large"
+              pButton
+      ></button>
+      <button class="p-button-text topnav-button p-px-4"
+              routerLinkActive="activated"
+              [routerLink]="'books'"
+              icon="pi pi-bookmark"
+              pButton
+      ></button>
+    </ng-template>
+  </div>
+  <div class="p-col-3 p-sm-4 p-justify-end p-col-align-center p-p-0">
+    <div *ngIf="isLoggedIn(); else signIn">
+      <p-menu class="user-menu" [model]="menuItems" [popup]="true" #menu></p-menu>
+      <p-avatar class="ng-avatar"
+                [label]="initials"
+                (click)="menu.toggle($event)"
+                shape="circle"
+                id="avatar"
+      >
+      </p-avatar>
+    </div>
+    <ng-template #signIn>
+      <button class="p-button p-d-block blue-button p-ml-auto"
+              (click)="onClickSignIn()"
+              label="Sign in"
+              pButton
+      ></button>
+    </ng-template>
+  </div>
+</div>

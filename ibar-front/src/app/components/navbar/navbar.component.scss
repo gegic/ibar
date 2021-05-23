@@ -1,0 +1,92 @@
+.navbar {
+  height: 8vh;
+  border-bottom: 1px solid rgba(0, 0, 0, .2);
+  background-color: #FCF7F8;
+  z-index: 1010;
+}
+
+::ng-deep .user-menu .p-menu {
+  position: absolute !important;
+  right: 30px !important;
+  top: 50px !important;
+}
+
+::ng-deep .navbar {
+  position: sticky;
+  top: 0;
+}
+
+::ng-deep .navbar {
+  position: sticky;
+  top: 0;
+}
+
+.logo {
+  font-size: 2.5em;
+  text-decoration:none;
+}
+
+.ng-avatar {
+  margin-top: auto;
+  margin-bottom: auto;
+  float: right;
+  cursor: pointer;
+}
+
+:host {
+  ::ng-deep .avatar-content {
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
+
+::ng-deep .topnav-button {
+  color: #584F51 !important;
+  height: 8vh;
+  max-height: 8vh;
+  width: 10vw !important;
+  max-width: 5rem !important;
+  border-bottom: 3.5px solid transparent !important;
+}
+
+::ng-deep .topnav-button span {
+  font-size: 1.5em !important;
+}
+
+@media only screen and (max-width: 576px) {
+  ::ng-deep .topnav-button span {
+    font-size: 1.3em !important;
+  }
+}
+
+@media only screen and (max-width: 340px) {
+  ::ng-deep .logo-col {
+    display: none !important;
+  }
+}
+
+
+
+::ng-deep .topnav-button:hover {
+  color: #38435d !important;
+  border-bottom: 3.5px solid rgba(39, 93, 173, .2) !important;
+}
+
+::ng-deep .activated,
+::ng-deep .activated:hover {
+  color: #275dad !important;
+  border-bottom: 3.5px solid #275dad !important;
+}
+
+.search-bar {
+  margin-left: 3vw;
+}
+
+::ng-deep .search-bar input {
+  width: 100% !important;
+}

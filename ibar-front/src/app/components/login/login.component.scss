@@ -1,0 +1,26 @@
+.centered-grid {
+  padding-top: 10rem;
+}
+
+input {
+  width: 100%;
+}
+
+.login-btn {
+  float: right;
+}
+
+.heading {
+  color: #275D5D;
+}
+
+
+:host {
+  ::ng-deep .p-card {
+    box-shadow: none !important;
+    background-color: #FCF7F8 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 1em;
+    min-height: 360px;
+  }
+}

@@ -3,6 +3,7 @@ package com.sbnz.ibar.controllers;
 import java.util.NoSuchElementException;
 import javax.validation.Valid;
 
+import com.sbnz.ibar.dto.AuthTokenDto;
 import com.sbnz.ibar.dto.UserLoginDto;
 import com.sbnz.ibar.model.User;
 import lombok.AllArgsConstructor;
@@ -11,6 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +35,7 @@ import lombok.Setter;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
-public class AuthenticationController {
+public class AuthController {
 
 	private final TokenUtils tokenUtils;
 	private final AuthenticationManager authenticationManager;
@@ -39,35 +43,14 @@ public class AuthenticationController {
 	private final AuthorityService authorityService;
 	private final MailService mailService;
 
-//
-//	private UserMapper userMapper;
-
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<?> createAuthenticationToken(@Valid @RequestBody UserLoginDto authenticationRequest) {
-//		Authentication authentication;
-//		try {
-//			authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-//					authenticationRequest.getEmail(), authenticationRequest.getPassword()));
-//		} catch (Exception e) {
-//			return new ResponseEntity<>("Incorrect email or password.", HttpStatus.UNAUTHORIZED);
-//		}
-//
-//		User user = (User) authentication.getPrincipal();
-//		List<Authority> auth = user.getAuthorities();
-//
-//		RegisteredUser regUser = registeredUserService.findByEmail(user.getEmail());
-//		if (regUser != null && !regUser.isVerified()) {
-//			return new ResponseEntity<>("Account is not activated.", HttpStatus.BAD_REQUEST);
-//		}
-//
-//		SecurityContextHolder.getContext().setAuthentication(authentication);
-//
-//		String jwt = tokenUtils.generateToken(user.getEmail(), auth.get(0).getName()); // prijavljujemo se na sistem sa
-//																						// email adresom
-//		int expiresIn = tokenUtils.getExpiredIn();
-//
-//		return ResponseEntity.ok(new AuthTokenDTO(jwt, (long) expiresIn, auth));
-		return null;
+	public ResponseEntity<AuthTokenDto> login(@Valid @RequestBody UserLoginDto loginDto)
+			throws AuthenticationException {
+		User user = (User) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+				loginDto.getEmail(), loginDto.getPassword())).getPrincipal();
+
+		return ResponseEntity.ok(new AuthTokenDto(
+				this.tokenUtils.generateToken(user.getEmail()), user.getAuthorities(), user.getInitials()));
 	}
 
 	@PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)

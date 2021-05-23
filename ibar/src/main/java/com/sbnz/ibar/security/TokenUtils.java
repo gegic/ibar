@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 @Component
@@ -18,8 +20,8 @@ public class TokenUtils {
     @Value("somesecret")
     public String SECRET;
 
-    @Value("1800000") // 5h
-    private int EXPIRES_IN;
+    @Value("300")
+    public long EXPIRES_IN;
 
     @Value("Authorization")
     private String AUTH_HEADER;
@@ -31,7 +33,7 @@ public class TokenUtils {
                 .setSubject(email)
                 .setIssuer(this.APP_NAME)
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(new Date().getTime() + this.EXPIRES_IN))
+                .setExpiration(Date.from(Instant.now().plus(this.EXPIRES_IN, ChronoUnit.MINUTES)))
                 .signWith(this.SIGNATURE_ALGORITHM, this.SECRET).compact();
     }
 

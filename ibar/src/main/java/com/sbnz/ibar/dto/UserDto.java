@@ -17,6 +17,8 @@ import java.util.List;
 @Data
 public class UserDto {
 
+	private Long id;
+
 	@NotEmpty(message = "Email cannot be null or empty.")
 	@Email(message = "Email format is not valid.")
 	private String email;
@@ -26,7 +28,6 @@ public class UserDto {
 	
 	@NotEmpty(message = "Last name cannot be null or empty.")
 	private String lastName;
-
 
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String password;

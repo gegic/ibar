@@ -79,5 +79,9 @@ public abstract class User implements UserDetails {
 	public String getUsername() {
 		return this.email;
 	}
+
+	public String getInitials() {
+		return String.format("%s%s", this.firstName.charAt(0), this.lastName.charAt(0));
+	}
 	
 }

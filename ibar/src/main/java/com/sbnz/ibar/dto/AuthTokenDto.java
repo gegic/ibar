@@ -10,8 +10,7 @@ import java.util.List;
 @Data
 public class AuthTokenDto {
 
- private String accessToken;
- private Long expiresIn;
- private List<Authority> authorities;
-
+    private String accessToken;
+    private List<Authority> authorities;
+    private String userInitials;
 }
