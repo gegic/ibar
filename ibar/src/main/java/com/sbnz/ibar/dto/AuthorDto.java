@@ -29,5 +29,5 @@ public class AuthorDto {
 
 	private Instant dateOfDeath;
 
-	private float averageRating;
+	private double averageRating;
 }

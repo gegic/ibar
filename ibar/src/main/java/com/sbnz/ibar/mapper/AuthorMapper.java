@@ -25,6 +25,7 @@ public class AuthorMapper {
 		dto.setDescription(entity.getDescription());
 		dto.setDateOfBirth(entity.getDateOfBirth());
 		dto.setDateOfDeath(entity.getDateOfDeath());
+		dto.setAverageRating(entity.getAverageRating());
 
 		return dto;
 	}
