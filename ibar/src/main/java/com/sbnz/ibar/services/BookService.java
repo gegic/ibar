@@ -80,7 +80,7 @@ public class BookService {
         Reader r = (Reader) this.userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
 
 
-        KieSession kieSession = this.kieService.getSession(Utils.BOOKS_SESSION, Utils.BOOKS_AGENDA);
+        KieSession kieSession = this.kieService.getSession(Utils.BOOKS_SESSION, Utils.RECOMMENDATIONS_AGENDA);
 
         kieSession.setGlobal("highRatingPoints", 10L);
         kieSession.setGlobal("averageRatingPoints", 3L);
@@ -244,7 +244,7 @@ public class BookService {
 
         if (progress > readingProgress.getProgress()) {
             readingProgress.setProgress(progress);
-            KieSession kieSession = kieService.getSession(Utils.BOOKS_SESSION, Utils.BOOKS_AGENDA);
+            KieSession kieSession = kieService.getSession(Utils.BOOKS_SESSION, Utils.RECOMMENDATIONS_AGENDA);
             kieSession.insert(readingProgress);
             kieService.runSession(kieSession);
             readingProgress = readingProgressRepository.save(readingProgress);

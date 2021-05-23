@@ -9,7 +9,7 @@ public class Utils {
     public static final long SCAN_INTERVAL = 10000;
 
     public static final String BOOKS_SESSION = "books-session";
-    public static final String BOOKS_AGENDA = "books";
+    public static final String RECOMMENDATIONS_AGENDA = "recommendations";
 
     public static String getCategory(Reader r) {
         return String.format("%s", r.isMale() ? "male" : "female");
