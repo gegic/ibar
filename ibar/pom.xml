@@ -102,6 +102,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.drools</groupId>
+			<artifactId>drools-templates</artifactId>
+			<version>${kie.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.drools</groupId>
 			<artifactId>drools-core</artifactId>
 			<version>${kie.version}</version>
 			<classifier>tests</classifier>

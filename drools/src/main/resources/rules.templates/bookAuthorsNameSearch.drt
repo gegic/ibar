@@ -1,0 +1,23 @@
+template header
+authorName
+
+package rules;
+
+import com.sbnz.ibar.model.*;
+
+import java.util.ArrayList;
+
+global ArrayList<Book> result;
+
+template "books-search-by-authors-name"
+
+rule "Get books by authors name @{authorName}"
+
+when
+    $book : Book()
+    Author (name.toLowerCase().contains("@{authorName}".toLowerCase())) from $book.authors
+then
+    result.add($book);
+end
+
+end template
