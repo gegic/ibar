@@ -1,8 +1,11 @@
 package com.sbnz.ibar.services;
 
 import lombok.AllArgsConstructor;
+import org.kie.api.builder.Results;
+import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
+import org.kie.internal.utils.KieHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,5 +27,13 @@ public class KieService {
         kieSession.fireAllRules();
         kieSession.dispose();
         kieSession.destroy();
+    }
+
+    public KieSession createKieSessionFromDRL(String drl) {
+        KieHelper kieHelper = new KieHelper();
+
+        kieHelper.addContent(drl, ResourceType.DRL);
+
+        return kieHelper.build().newKieSession();
     }
 }

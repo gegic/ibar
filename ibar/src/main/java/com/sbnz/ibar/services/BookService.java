@@ -1,19 +1,26 @@
 package com.sbnz.ibar.services;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.io.InputStream;
+import java.util.*;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
+import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.dto.ReadingProgressDto;
 import com.sbnz.ibar.mapper.ReadingProgressMapper;
 import com.sbnz.ibar.model.*;
 import com.sbnz.ibar.repositories.*;
 import com.sbnz.ibar.utils.Constants;
 import lombok.AllArgsConstructor;
+
+import org.drools.template.DataProvider;
+import org.drools.template.DataProviderCompiler;
+import org.drools.template.ObjectDataCompiler;
+import org.drools.template.objects.ArrayDataProvider;
 import org.kie.api.runtime.KieSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,148 +35,193 @@ import javassist.NotFoundException;
 @AllArgsConstructor
 public class BookService {
 
-	private final BookRepository bookRepository;
-	private final CategoryService categoryService;
-	private final FileService fileService;
-	private final ReviewRepository reviewRepository;
-	private final AuthorRepository authorRepository;
-	private final UserRepository userRepository;
-	private final ReadingProgressRepository readingProgressRepository;
-	private final ReadingProgressMapper readingProgressMapper;
-	private final KieService kieService;
+    private final BookRepository bookRepository;
+    private final CategoryService categoryService;
+    private final FileService fileService;
+    private final ReviewRepository reviewRepository;
+    private final AuthorRepository authorRepository;
+    private final UserRepository userRepository;
+    private final ReadingProgressRepository readingProgressRepository;
+    private final ReadingProgressMapper readingProgressMapper;
+    private final KieService kieService;
 
-	public Page<Book> findAll(Pageable pageable) {
-		return bookRepository.findAll(pageable);
-	}
+    public Page<Book> findAll(Pageable pageable) {
+        return bookRepository.findAll(pageable);
+    }
 
-	@Transactional
-	public Iterable<Book> getAll() {
-		return bookRepository.findAll();
-	}
+    @Transactional
+    public Iterable<Book> getAll() {
+        return bookRepository.findAll();
+    }
 
-	public Book getById(Long id) {
-		Optional<Book> book = bookRepository.findById(id);
-		return book.orElse(null);
-	}
+    public Book getById(Long id) {
+        Optional<Book> book = bookRepository.findById(id);
+        return book.orElse(null);
+    }
 
-	public Book create(Book entity) throws Exception {
-		return null;
-	}
+    public ArrayList<Book> findAllByRatingInterval(RatingIntervalDto ratingIntervalDTO) throws FileNotFoundException {
+        InputStream template = new FileInputStream("../drools/src/main/resources/rules.templates/bookRatingSearch.drt");
 
-	@Transactional
-	public boolean delete(Long id) throws Exception {
-		Book existingBook = getById(id);
-		if (existingBook == null) {
-			throw new NotFoundException("Book with given id doesn't exist.");
-		}
+        ObjectDataCompiler converter = new ObjectDataCompiler();
 
-		fileService.deleteImageFromFile(existingBook.getImage());
+        List<RatingIntervalDto> data = new ArrayList<>();
 
-		reviewRepository.deleteAllByBookId(id);
+        data.add(ratingIntervalDTO);
 
-		bookRepository.deleteById(id);
+        String drl = converter.compile(data, template);
 
-		return true;
-	}
+        return this.fireTemplateRules(drl);
+    }
 
-	public Book update(Long id, Book entity) throws NotFoundException {
-		return null;
-	}
+    public ArrayList<Book> findAllByAuthorsName(String authorsName) throws FileNotFoundException {
+        InputStream template = new FileInputStream("../drools/src/main/resources/rules.templates/bookAuthorsNameSearch.drt");
 
-	@Transactional
-	public Book update(Long id, Book entity, MultipartFile newImage) throws NotFoundException, IOException {
-		Book existingBook = getById(id);
-		if (existingBook == null) {
-			throw new NotFoundException("Book with given id doesn't exist.");
-		}
+        DataProviderCompiler converter = new DataProviderCompiler();
 
-		Category category = categoryService.getById(entity.getCategory().getId());
-		if (category == null) {
-			throw new NotFoundException("Category doesn't exist.");
-		}
+        DataProvider dataProvider = new ArrayDataProvider(new String[][]{
+                new String[]{authorsName}
+        });
 
-		existingBook.setCategory(category);
-		existingBook.setDescription(entity.getDescription());
-		existingBook.setType(entity.getType());
+        String drl = converter.compile(dataProvider, template);
 
-		Set<Author> writtenBy = getAuthorsOfBook(entity);
+        return this.fireTemplateRules(drl);
+    }
 
-		existingBook.setAuthors(writtenBy);
+    private ArrayList<Book> fireTemplateRules(String drl) {
+        ArrayList<Book> result = new ArrayList<>();
 
-		if (!newImage.isEmpty()) {
-			fileService.uploadNewImage(newImage, existingBook.getImage());
-		}
-		return bookRepository.save(existingBook);
-	}
+        KieSession kieSession = kieService.createKieSessionFromDRL(drl);
 
-	@Transactional
-	public Book create(Book entity, MultipartFile file) throws Exception {
-		Category category = categoryService.getById(entity.getCategory().getId());
-		if (category == null) {
-			throw new NotFoundException("Category doesn't exist.");
-		}
+        for (Book book : getAll()) {
+            kieSession.insert(book);
+        }
 
-		entity.setCategory(category);
+        kieSession.setGlobal("result", result);
 
-		String imagePath = fileService.saveImage(file, entity.getName());
+        kieSession.fireAllRules();
 
-		entity.setImage(imagePath);
+        return result;
+    }
 
-		entity.setAuthors(getAuthorsOfBook(entity));
+    public Book create(Book entity) throws Exception {
+        return null;
+    }
 
-		return bookRepository.save(entity);
-	}
+    @Transactional
+    public boolean delete(Long id) throws Exception {
+        Book existingBook = getById(id);
+        if (existingBook == null) {
+            throw new NotFoundException("Book with given id doesn't exist.");
+        }
 
-	public ReadingProgressDto setReadingProgress(long bookId, long readerId, long progress) {
-		Book book = this.bookRepository.findById(bookId)
-				.orElseThrow(() -> new EntityNotFoundException("Book with id " + bookId));
+        fileService.deleteImageFromFile(existingBook.getImage());
 
-		User user = this.userRepository.findById(readerId)
-				.orElseThrow(() -> new EntityNotFoundException("Reader with id " + readerId));
+        reviewRepository.deleteAllByBookId(id);
 
-		if (!(user instanceof Reader)) {
-			throw new IllegalArgumentException("Passed id of a non-reader user " + readerId);
-		}
+        bookRepository.deleteById(id);
 
-		Reader reader = (Reader) user;
+        return true;
+    }
 
-		ReadingProgress readingProgress = this.readingProgressRepository.findByBookIdAndReaderId(bookId, readerId)
-				.orElse(new ReadingProgress(book, reader));
+    public Book update(Long id, Book entity) throws NotFoundException {
+        return null;
+    }
 
-		if (progress > readingProgress.getProgress()) {
-			readingProgress.setProgress(progress);
-			KieSession kieSession = kieService.getSession(Constants.BOOKS_SESSION, Constants.BOOKS_AGENDA);
-			kieSession.insert(readingProgress);
-			kieService.runSession(kieSession);
-			readingProgress = readingProgressRepository.save(readingProgress);
-		}
-		return readingProgressMapper.toDto(readingProgress);
-	}
+    @Transactional
+    public Book update(Long id, Book entity, MultipartFile newImage) throws NotFoundException, IOException {
+        Book existingBook = getById(id);
+        if (existingBook == null) {
+            throw new NotFoundException("Book with given id doesn't exist.");
+        }
 
-	public Page<Book> getByCategoryId(Long id, Pageable pageable) {
-		return bookRepository.getByCategoryId(id, pageable);
-	}
+        Category category = categoryService.getById(entity.getCategory().getId());
+        if (category == null) {
+            throw new NotFoundException("Category doesn't exist.");
+        }
 
-	public Page<Book> findByCategoryIdAndNameContains(Long id, String name, Pageable pageable) {
-		return bookRepository.findByCategoryIdAndNameContainingIgnoreCase(id, name, pageable);
-	}
+        existingBook.setCategory(category);
+        existingBook.setDescription(entity.getDescription());
+        existingBook.setType(entity.getType());
 
-	public Page<Book> findByNameContains(String name, Pageable pageable) {
-		return bookRepository.findByNameContainingIgnoreCase(name, pageable);
-	}
+        Set<Author> writtenBy = getAuthorsOfBook(entity);
 
-	private Set<Author> getAuthorsOfBook(Book entity) throws NotFoundException {
-		Set<Author> writtenBy = new HashSet<Author>();
+        existingBook.setAuthors(writtenBy);
 
-		for (Author author : entity.getAuthors()) {
-			author = authorRepository.findById(author.getId()).orElse(null);
+        if (!newImage.isEmpty()) {
+            fileService.uploadNewImage(newImage, existingBook.getImage());
+        }
+        return bookRepository.save(existingBook);
+    }
 
-			if (author == null)
-				throw new NotFoundException("Author with given id doesn't exists.");
+    @Transactional
+    public Book create(Book entity, MultipartFile file) throws Exception {
+        Category category = categoryService.getById(entity.getCategory().getId());
+        if (category == null) {
+            throw new NotFoundException("Category doesn't exist.");
+        }
 
-			writtenBy.add(author);
-		}
+        entity.setCategory(category);
 
-		return writtenBy;
-	}
+        String imagePath = fileService.saveImage(file, entity.getName());
+
+        entity.setImage(imagePath);
+
+        entity.setAuthors(getAuthorsOfBook(entity));
+
+        return bookRepository.save(entity);
+    }
+
+    public ReadingProgressDto setReadingProgress(long bookId, long readerId, long progress) {
+        Book book = this.bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book with id " + bookId));
+
+        User user = this.userRepository.findById(readerId)
+                .orElseThrow(() -> new EntityNotFoundException("Reader with id " + readerId));
+
+        if (!(user instanceof Reader)) {
+            throw new IllegalArgumentException("Passed id of a non-reader user " + readerId);
+        }
+
+        Reader reader = (Reader) user;
+
+        ReadingProgress readingProgress = this.readingProgressRepository.findByBookIdAndReaderId(bookId, readerId)
+                .orElse(new ReadingProgress(book, reader));
+
+        if (progress > readingProgress.getProgress()) {
+            readingProgress.setProgress(progress);
+            KieSession kieSession = kieService.getSession(Constants.BOOKS_SESSION, Constants.BOOKS_AGENDA);
+            kieSession.insert(readingProgress);
+            kieService.runSession(kieSession);
+            readingProgress = readingProgressRepository.save(readingProgress);
+        }
+        return readingProgressMapper.toDto(readingProgress);
+    }
+
+    public Page<Book> getByCategoryId(Long id, Pageable pageable) {
+        return bookRepository.getByCategoryId(id, pageable);
+    }
+
+    public Page<Book> findByCategoryIdAndNameContains(Long id, String name, Pageable pageable) {
+        return bookRepository.findByCategoryIdAndNameContainingIgnoreCase(id, name, pageable);
+    }
+
+    public Page<Book> findByNameContains(String name, Pageable pageable) {
+        return bookRepository.findByNameContainingIgnoreCase(name, pageable);
+    }
+
+    private Set<Author> getAuthorsOfBook(Book entity) throws NotFoundException {
+        Set<Author> writtenBy = new HashSet<Author>();
+
+        for (Author author : entity.getAuthors()) {
+            author = authorRepository.findById(author.getId()).orElse(null);
+
+            if (author == null)
+                throw new NotFoundException("Author with given id doesn't exists.");
+
+            writtenBy.add(author);
+        }
+
+        return writtenBy;
+    }
+
 }
