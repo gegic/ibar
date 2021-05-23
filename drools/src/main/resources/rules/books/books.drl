@@ -244,11 +244,12 @@ end
 rule "Gather all points of for a book"
     agenda-group "recommendations"
 	salience -1
+	lock-on-active
 
     when
     	$book : Book();
         Number($totalPoints: doubleValue) from accumulate (
-        	RecommendationPoints(book.getId() == $book.getId(), $points: Double.valueOf(points)),
+        	RecommendationPoints(book.getId() == $book.getId(), $points: points),
         	sum($points)
         );
     then
@@ -256,16 +257,6 @@ rule "Gather all points of for a book"
     	insert(new BookResponse($book, $totalPoints));
     	System.out.println("GATHER ALL POINTS");
     	System.out.printf("LOG -> BookResponse ( bookId=%d, points=%f )%n", $book.getId(), $totalPoints);
-end
-
-rule "Delete points"
-    agenda-group "recommendations"
-    salience -2
-	when
-		$br: BookResponse($book: book);
-		$rp: RecommendationPoints($book.getId() == book.getId());
-	then
-		delete($rp);
 end
 
 rule "Recommendation collection finished successfully"

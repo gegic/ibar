@@ -26,6 +26,7 @@ import { BrowseBooksComponent } from './components/browse-books/browse-books.com
 import {CarouselModule} from 'primeng/carousel';
 import { BookCoverComponent } from './components/book-cover/book-cover.component';
 import { TruncatePipe } from './core/pipes/truncate.pipe';
+import {SkeletonModule} from 'primeng/skeleton';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { TruncatePipe } from './core/pipes/truncate.pipe';
     ConfirmDialogModule,
     AppRoutingModule,
     AvatarModule,
-    CarouselModule
+    CarouselModule,
+    SkeletonModule
   ],
   providers: [
     {

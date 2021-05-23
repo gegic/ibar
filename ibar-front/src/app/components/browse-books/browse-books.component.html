@@ -10,11 +10,15 @@
                   [responsiveOptions]="responsiveOptions"
                   [circular]="true"
                   [showIndicators]="false"
+                  *ngIf="!loadingRecommended; else recommendedSkeleton"
       >
         <ng-template let-book pTemplate="item">
           <app-book-cover [book]="book"></app-book-cover>
         </ng-template>
       </p-carousel>
+      <ng-template #recommendedSkeleton>
+        <p-skeleton width="100%" height="410px"></p-skeleton>
+      </ng-template>
     </div>
   </div>
   <div>
@@ -28,11 +32,15 @@
                   [responsiveOptions]="responsiveOptions"
                   [circular]="true"
                   [showIndicators]="false"
+                  *ngIf="!loadingTopRated; else topRatedSkeleton"
       >
         <ng-template let-book pTemplate="item">
           <app-book-cover [book]="book"></app-book-cover>
         </ng-template>
       </p-carousel>
+      <ng-template #topRatedSkeleton>
+        <p-skeleton width="100%" height="410px"></p-skeleton>
+      </ng-template>
     </div>
   </div>
 
