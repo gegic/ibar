@@ -52,11 +52,12 @@ export class LoginComponent {
           }
         }
       }, er => {
+        console.log(er);
         this.loading = false;
         this.messageService.add({
           severity: 'error',
           summary: 'Error',
-          detail: er?.error?.text ?? 'Please check your credentials'
+          detail: er?.error?.errorMessage ?? 'Please check your credentials'
         });
       });
   }

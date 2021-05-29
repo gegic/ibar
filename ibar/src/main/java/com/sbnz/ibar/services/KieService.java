@@ -1,17 +1,23 @@
 package com.sbnz.ibar.services;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.kie.api.builder.Results;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.utils.KieHelper;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor
 public class KieService {
     private final KieContainer kieContainer;
+
+    @Getter
+    @Qualifier("loginSession")
+    private final KieSession loginSession;
 
     public KieSession getSession() {
         return this.kieContainer.newKieSession();

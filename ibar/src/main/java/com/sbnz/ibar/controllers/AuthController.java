@@ -6,6 +6,7 @@ import javax.validation.Valid;
 import com.sbnz.ibar.dto.AuthTokenDto;
 import com.sbnz.ibar.dto.UserLoginDto;
 import com.sbnz.ibar.model.User;
+import com.sbnz.ibar.services.AuthService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,24 +38,15 @@ import lombok.Setter;
 @RequestMapping(value = "/auth", produces = MediaType.APPLICATION_JSON_VALUE)
 public class AuthController {
 
-	private final TokenUtils tokenUtils;
-	private final AuthenticationManager authenticationManager;
 	private final UserService userDetailsService;
+	private final AuthService authService;
 	private final AuthorityService authorityService;
 	private final MailService mailService;
 
 	@PostMapping(value = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<AuthTokenDto> login(@Valid @RequestBody UserLoginDto loginDto)
 			throws AuthenticationException {
-		User user = (User) authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-				loginDto.getEmail(), loginDto.getPassword())).getPrincipal();
-
-		return ResponseEntity.ok(new AuthTokenDto(
-				user.getId(),
-				this.tokenUtils.generateToken(user.getEmail()),
-				user.getAuthorities(),
-				user.getInitials())
-		);
+		return ResponseEntity.ok(this.authService.login(loginDto));
 	}
 
 	@PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)

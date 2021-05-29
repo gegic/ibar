@@ -6,7 +6,6 @@ import java.util.Optional;
 import javax.persistence.EntityExistsException;
 
 import com.sbnz.ibar.model.Achievement;
-import org.openqa.selenium.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -61,7 +60,7 @@ public class AchievementService {
 		Achievement achievement = getById(id);
 
 		if (achievement == null) {
-			throw new NotFoundException("Achievement with given id doesn't exist.");
+			throw new Exception("Achievement with given id doesn't exist."); // todo
 		}
 
 		achievement.setName(entity.getName());
