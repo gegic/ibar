@@ -1,0 +1,102 @@
+<div>
+  <div class="top-part">
+    <div class="p-grid p-px-0 p-m-0 p-py-3 p-justify-around">
+      <div class="p-col-fixed p-as-center"
+           style="width: 150px"
+      >
+        <img [src]="'https://edit.org/img/blog/m68-book-cover-templates.jpg'"
+             alt="Main photo"
+             class="main-photo"
+             *ngIf="!!book; else mainPhotoSkeleton">
+        <ng-template #mainPhotoSkeleton>
+          <p-skeleton width="150px" height="150px"></p-skeleton>
+        </ng-template>
+      </div>
+      <div class="p-col p-ml-4">
+        <h4 class="p-text-normal" *ngIf="!isLoading && !!book; else categorySkeleton">
+          {{book.categoryName}}
+        </h4>
+        <ng-template #categorySkeleton>
+          <p-skeleton></p-skeleton>
+        </ng-template>
+        <div class="p-mt-3" *ngIf="canRead">
+          <button *ngIf="!book.inReadingList; else removeFromReadingList"
+                  class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
+                  icon="pi pi-tag"
+                  label="ADD TO READING LIST"
+                  (click)="onClickAddToReadingList()"
+                  pButton
+          ></button>
+          <ng-template #removeFromReadingList>
+            <button class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
+                    icon="pi pi-tag"
+                    label="REMOVE FROM READING LIST"
+                    (click)="onClickRemoveFromReadingList()"
+                    pButton
+            ></button>
+          </ng-template>
+        </div>
+        <div class="p-d-inline-flex p-my-0">
+          <i class="pi pi-star"></i>
+          <small class="p-ml-1 p-text-light" *ngIf="!isLoading && !!book; else reviewsSkeleton">{{reviews}}</small>
+          <ng-template #reviewsSkeleton>
+            <p-skeleton class="p-ml-1"></p-skeleton>
+          </ng-template>
+        </div>
+        <h2 class="p-text-bold p-mt-0" *ngIf="!isLoading && !!book; else nameSkeleton">
+          {{book.name}}
+        </h2>
+        <ng-template #nameSkeleton>
+          <p-skeleton width="50px" height="2rem"></p-skeleton>
+        </ng-template>
+      </div>
+      <div class="p-col p-flex p-as-end p-text-right">
+        <div *ngIf="!canRead; else subscribeButton">
+          <button class="p-button p-button-danger p-mr-3 p-d-none p-d-lg-inline"
+                  icon="pi pi-trash"
+                  label="Delete"
+                  pButton
+                  (click)="onClickDelete()"
+                  id="delete-btn"
+          ></button>
+          <button class="p-button blue-button p-d-none p-d-lg-inline"
+                  icon="pi pi-pencil"
+                  label="Edit"
+                  (click)="onClickEdit()"
+                  pButton
+          ></button>
+
+          <button class="p-button p-button-danger p-button-icon p-button-rounded p-mr-3 p-d-inline p-d-lg-none"
+                  icon="pi pi-trash"
+                  pButton
+                  (click)="onClickDelete()"
+          ></button>
+          <button class="p-button blue-button p-button-icon p-button-rounded p-d-inline p-d-lg-none"
+                  icon="pi pi-pencil"
+                  (click)="onClickEdit()"
+                  pButton></button>
+        </div>
+        <ng-template #subscribeButton>
+          <button class="p-button blue-button"
+                  icon="pi pi-file-o"
+                  label="Read"
+                  (click)="onClickRead()"
+                  pButton
+                  id="read-btn"
+          ></button>
+        </ng-template>
+        <p class="p-text-light" *ngIf="!isLoading && !!book; else numSubscribedSkeleton">
+          {{book.numRead}} people have read this book.
+        </p>
+        <ng-template #numSubscribedSkeleton>
+          <p-skeleton></p-skeleton>
+        </ng-template>
+      </div>
+    </div>
+    <hr class="p-mx-5 p-mb-0">
+    <app-details-navigation [navigationItems]="navigationItems"></app-details-navigation>
+  </div>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+</div>

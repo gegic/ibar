@@ -27,6 +27,8 @@ import {CarouselModule} from 'primeng/carousel';
 import { BookCoverComponent } from './components/book-cover/book-cover.component';
 import { TruncatePipe } from './core/pipes/truncate.pipe';
 import {SkeletonModule} from 'primeng/skeleton';
+import { BookDetailsComponent } from './components/book-details/book-details.component';
+import { DetailsNavigationComponent } from './components/details-navigation/details-navigation.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +38,9 @@ import {SkeletonModule} from 'primeng/skeleton';
     NavbarComponent,
     BrowseBooksComponent,
     BookCoverComponent,
-    TruncatePipe
+    TruncatePipe,
+    BookDetailsComponent,
+    DetailsNavigationComponent
   ],
   imports: [
     BrowserModule,

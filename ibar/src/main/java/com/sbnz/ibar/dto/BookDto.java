@@ -27,5 +27,9 @@ public class BookDto {
 	private String categoryName;
 	private String authorName;
 	private String cover;
+	private Long numReviews;
+	private Double averageRating;
+	private boolean inReadingList;
+	private Long numRead;
 
 }

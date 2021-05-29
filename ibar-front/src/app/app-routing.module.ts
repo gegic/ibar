@@ -7,6 +7,7 @@ import {MainFrameComponent} from './components/main-frame/main-frame.component';
 import {ADMIN, READER} from './core/utils/consts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowseBooksComponent} from './components/browse-books/browse-books.component';
+import {BookDetailsComponent} from './components/book-details/book-details.component';
 
 const routes: Routes = [
   {
@@ -28,7 +29,11 @@ const routes: Routes = [
       },
       {
         path: 'browse',
-        component: BrowseBooksComponent,
+        component: BrowseBooksComponent
+      },
+      {
+        path: 'book/:id',
+        component: BookDetailsComponent
       }
     ]
   },

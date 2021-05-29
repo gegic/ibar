@@ -31,6 +31,8 @@ public class Book {
 	@Column(nullable = false)
 	private double averageRating;
 
+	private long numReviews;
+
 	private String cover;
 
 	@Column(nullable = false)

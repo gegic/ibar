@@ -30,6 +30,7 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,18 +66,26 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public Book getById(Long id) {
+    public BookDto getById(Long id) {
         Optional<Book> book = bookRepository.findById(id);
-        return book.orElse(null);
+        return this.toBookDto(book.orElseThrow(EntityNotFoundException::new));
     }
 
-    public List<BookDto> getTopRated(long userId) {
+    public List<BookDto> getTopRated() {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        long userId = user.getId();
+
         Pageable pageLimit = PageRequest.of(0, 10);
         return this.bookRepository.getTopRated(userId, pageLimit).stream()
-                .map(bookMapper::toBookDto).collect(Collectors.toList());
+                .map(this::toBookDto).collect(Collectors.toList());
     }
 
-    public List<BookDto> getRecommended(long userId) {
+    public List<BookDto> getRecommended() {
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        long userId = user.getId();
+
         Reader r = (Reader) this.userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
 
 
@@ -108,7 +117,7 @@ public class BookService {
 
         return bookResponses.stream().map(qm -> (BookResponse) qm)
                 .sorted(Comparator.comparingDouble(BookResponse::getPoints)).limit(this.RECOMMENDATION_THRESHOLD)
-                .map(br -> bookMapper.toBookDto(br.getBook())).collect(Collectors.toList());
+                .map(br -> this.toBookDto(br.getBook())).collect(Collectors.toList());
 
     }
 
@@ -124,7 +133,7 @@ public class BookService {
 
         String drl = converter.compile(data, template);
 
-        return this.fireTemplateRules(drl).stream().map(bookMapper::toBookDto).collect(Collectors.toList());
+        return this.fireTemplateRules(drl).stream().map(this::toBookDto).collect(Collectors.toList());
     }
 
     public List<BookDto> findAllByAuthorsName(String authorsName) throws FileNotFoundException {
@@ -139,7 +148,7 @@ public class BookService {
 
         String drl = converter.compile(dataProvider, template);
 
-        return this.fireTemplateRules(drl).stream().map(bookMapper::toBookDto).collect(Collectors.toList());
+        return this.fireTemplateRules(drl).stream().map(this::toBookDto).collect(Collectors.toList());
     }
 
     private ArrayList<Book> fireTemplateRules(String drl) {
@@ -164,7 +173,7 @@ public class BookService {
 
     @Transactional
     public boolean delete(Long id) throws Exception {
-        Book existingBook = getById(id);
+        Book existingBook = this.bookRepository.findById(id).orElse(null);
         if (existingBook == null) {
             throw new NotFoundException("Book with given id doesn't exist.");
         }
@@ -184,12 +193,12 @@ public class BookService {
 
     @Transactional
     public Book update(Long id, Book entity, MultipartFile newImage) throws NotFoundException, IOException {
-        Book existingBook = getById(id);
+        Book existingBook = this.bookRepository.findById(id).orElse(null);
         if (existingBook == null) {
             throw new NotFoundException("Book with given id doesn't exist.");
         }
 
-        Category category = categoryRepository.getOne(entity.getCategory().getId());
+        Category category = categoryRepository.findById(entity.getCategory().getId()).orElse(null);
         if (category == null) {
             throw new NotFoundException("Category doesn't exist.");
         }
@@ -210,7 +219,7 @@ public class BookService {
 
     @Transactional
     public Book create(Book entity, MultipartFile file) throws Exception {
-        Category category = categoryRepository.getOne(entity.getCategory().getId());
+        Category category = categoryRepository.findById(entity.getCategory().getId()).orElse(null);
         if (category == null) {
             throw new NotFoundException("Category doesn't exist.");
         }
@@ -279,4 +288,12 @@ public class BookService {
         return writtenBy;
     }
 
+    private BookDto toBookDto(Book entity) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        BookDto dto = bookMapper.toBookDto(entity);
+        dto.setInReadingList(readingListItemRepository
+                .findByBookIdAndReaderId(entity.getId(), user.getId()).isPresent());
+        dto.setNumRead(readingProgressRepository.countByBookId(entity.getId()));
+        return dto;
+    }
 }

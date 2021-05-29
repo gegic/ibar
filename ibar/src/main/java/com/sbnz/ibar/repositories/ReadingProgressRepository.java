@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface ReadingProgressRepository extends JpaRepository<ReadingProgress, Long> {
 
+	long countByBookId(long bookId);
+
 	List<ReadingProgress> getByBookId(long bookId);
 
 	List<ReadingProgress> getByReaderId(long readerId);

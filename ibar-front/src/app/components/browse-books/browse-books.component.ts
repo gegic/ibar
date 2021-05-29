@@ -65,7 +65,7 @@ export class BrowseBooksComponent implements OnInit {
   getTopRatedBooks(): void {
     const userId = this.tokenService.getToken().userId;
     this.loadingTopRated = true;
-    this.bookService.getTopRated(userId).subscribe((books: Book[]) => {
+    this.bookService.getTopRated().subscribe((books: Book[]) => {
       this.topRated = books;
       this.loadingTopRated = false;
     });
@@ -74,7 +74,7 @@ export class BrowseBooksComponent implements OnInit {
   getRecommendedBooks(): void {
     const userId = this.tokenService.getToken().userId;
     this.loadingRecommended = true;
-    this.bookService.getRecommended(userId).subscribe((books: Book[]) => {
+    this.bookService.getRecommended().subscribe((books: Book[]) => {
       this.recommended = books;
       this.loadingRecommended = false;
     });

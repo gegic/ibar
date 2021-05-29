@@ -12,11 +12,11 @@ export class BookService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getTopRated(userId: number): Observable<Book[]> {
-    return this.httpClient.get<Book[]>(`${this.BOOK_API}/top-rated/${userId}`);
+  getTopRated(): Observable<Book[]> {
+    return this.httpClient.get<Book[]>(`${this.BOOK_API}/top-rated`);
   }
 
-  getRecommended(userId: number): Observable<Book[]> {
-    return this.httpClient.get<Book[]>(`${this.BOOK_API}/recommended/${userId}`);
+  getRecommended(): Observable<Book[]> {
+    return this.httpClient.get<Book[]>(`${this.BOOK_API}/recommended`);
   }
 }

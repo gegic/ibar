@@ -1,0 +1,26 @@
+.top-part {
+  background-color: #EFE4E6;
+  padding-left: 15vw;
+  padding-right: 15vw;
+}
+
+::ng-deep .top-part * {
+  position: sticky;
+}
+
+.main-photo {
+  object-fit: cover;
+  border-radius: 2em;
+  width: 150px;
+  height: 150px;
+}
+
+
+::ng-deep .small-button * {
+  font-size: .8rem;
+}
+
+::ng-deep .small-button {
+  padding: 2px !important;
+  margin-bottom: .5rem;
+}

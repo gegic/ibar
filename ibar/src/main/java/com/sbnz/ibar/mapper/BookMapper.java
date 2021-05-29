@@ -12,12 +12,15 @@ public class BookMapper {
 
 	public BookDto toBookDto(Book entity) {
 		BookDto dto = new BookDto();
+		dto.setId(entity.getId());
 		dto.setName(entity.getName());
 		dto.setDescription(entity.getDescription());
 		dto.setQuantity(entity.getQuantity());
 		dto.setCategoryId(entity.getCategory().getId());
 		dto.setCategoryName(entity.getCategory().getName());
 		dto.setCover(entity.getCover());
+		dto.setNumReviews(entity.getNumReviews());
+		dto.setAverageRating(entity.getAverageRating());
 		dto.setAuthorName(entity.getAuthors().stream().map(Author::getName).collect(Collectors.joining(", ")));
 		return dto;
 	}

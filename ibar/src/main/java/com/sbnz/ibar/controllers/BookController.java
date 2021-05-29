@@ -24,6 +24,12 @@ public class BookController {
     private final FileService fileService;
 
     @PreAuthorize("permitAll()")
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<BookDto> getBook(@PathVariable Long id) {
+		return ResponseEntity.ok(bookService.getById(id));
+	}
+
+    @PreAuthorize("permitAll()")
     @PostMapping(value = "/ratings-interval")
     public ResponseEntity<List<BookDto>> getAllBooksByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO)
             throws FileNotFoundException {
@@ -33,7 +39,7 @@ public class BookController {
     }
 
     @PreAuthorize("permitAll()")
-    @GetMapping(value = "/{authorName}")
+    @GetMapping(value = "/author/{authorName}")
     public ResponseEntity<List<BookDto>> getAllBooksByAuthorsName(@PathVariable String authorName)
             throws FileNotFoundException {
         List<BookDto> books = bookService.findAllByAuthorsName(authorName);
@@ -41,15 +47,15 @@ public class BookController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_READER')")
-    @GetMapping(value = "top-rated/{userId}")
-    public ResponseEntity<List<BookDto>> topRated(@PathVariable long userId) {
-        return ResponseEntity.ok(bookService.getTopRated(userId));
+    @GetMapping(value = "top-rated")
+    public ResponseEntity<List<BookDto>> topRated() {
+        return ResponseEntity.ok(bookService.getTopRated());
     }
 
     @PreAuthorize("hasAuthority('ROLE_READER')")
-    @GetMapping(value = "recommended/{userId}")
-    public ResponseEntity<List<BookDto>> recommended(@PathVariable long userId) {
-        return ResponseEntity.ok(bookService.getRecommended(userId));
+    @GetMapping(value = "recommended")
+    public ResponseEntity<List<BookDto>> recommended() {
+        return ResponseEntity.ok(bookService.getRecommended());
     }
 
 //	@PreAuthorize("permitAll()")
@@ -83,23 +89,7 @@ public class BookController {
 //		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
 //	}
 //
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/{id}")
-//	public ResponseEntity<BookResDTO> getBook(@PathVariable Long id) {
-//
-//		Book book = bookService.getById(id);
-//		if (book == null) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//		BookResDTO bookResDTO = bookMapper.toDTORes(book);
-//		try {
-//			bookResDTO.setImage(fileService.uploadImageAsBase64(bookResDTO.getImage()));
-//		} catch (IOException e) {
-//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//
-//		return new ResponseEntity<>(bookResDTO, HttpStatus.OK);
-//	}
+
 //
 //	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //	public ResponseEntity<BookResDTO> createBook(@RequestPart("bookDTO") @Valid @NotNull BookDTO bookDTO,

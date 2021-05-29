@@ -25,30 +25,30 @@ INSERT INTO author VALUES(3, 0, '1900-08-07 00:00:00', '1969-08-07 00:00:00', 'S
 
 /*------------------------book-----------------------------------------*/
 
-insert into book values (1, 0, null, 'Some description', 'Ubistvo u Mesopotamiji', 164, 1, 1);
-insert into book values (2, 4, null, 'Some description', 'Rani slučajevi Herkula Poaroa', 336, 1, 1);
-insert into book values (3, 0, null, 'Some description', 'Kukavičje jaje', 272, 1, 1);
-insert into book values (4, 0, null, 'Some description', 'Slonovi pamte', 264, 1, 1);
-insert into book values (5, 0, null, 'Some description', 'Ubistvo Rodžera Akrojda', 288, 1, 1);
-insert into book values (6, 0, null, 'Some description', 'Smrt na Nilu', 306, 1, 1);
-insert into book values (7, 0, null, 'Some description', 'Ubistvo u Orijent Ekspresu', 254, 1, 1);
+insert into book values (1, 0, null, 'Some description', 'Ubistvo u Mesopotamiji', 0, 164, 1, 1);
+insert into book values (2, 4, null, 'Some description', 'Rani slučajevi Herkula Poaroa', 1, 336, 1, 1);
+insert into book values (3, 0, null, 'Some description', 'Kukavičje jaje', 0, 272, 1, 1);
+insert into book values (4, 0, null, 'Some description', 'Slonovi pamte', 0, 264, 1, 1);
+insert into book values (5, 0, null, 'Some description', 'Ubistvo Rodžera Akrojda', 0, 288, 1, 1);
+insert into book values (6, 0, null, 'Some description', 'Smrt na Nilu', 0, 306, 1, 1);
+insert into book values (7, 0, null, 'Some description', 'Ubistvo u Orijent Ekspresu', 0, 254, 1, 1);
 
-insert into book values (8, 5, null, 'Some description', 'Lovac na duše', 319, 1, 1);
-insert into book values (9, 5, null, 'Some description', 'Dečak od stakla', 320, 1, 1);
-insert into book values (10, 0, null, 'Some description', 'Vladar iz senke', 332, 1, 1);
-insert into book values (11, 0, null, 'Some description', 'Šaptač', 360, 1, 1);
-insert into book values (12, 0, null, 'Some description', 'Noć mi te uzima', 296, 1, 1);
-insert into book values (13, 0, null, 'Some description', 'Gospodar senki', 264, 1, 1);
+insert into book values (8, 5, null, 'Some description', 'Lovac na duše', 1, 319, 1, 1);
+insert into book values (9, 5, null, 'Some description', 'Dečak od stakla', 1, 320, 1, 1);
+insert into book values (10, 0, null, 'Some description', 'Vladar iz senke', 0, 332, 1, 1);
+insert into book values (11, 0, null, 'Some description', 'Šaptač', 0, 360, 1, 1);
+insert into book values (12, 0, null, 'Some description', 'Noć mi te uzima', 0, 296, 1, 1);
+insert into book values (13, 0, null, 'Some description', 'Gospodar senki', 0, 264, 1, 1);
 
-insert into book values (14, 0, null, 'Some description', 'Braća karamazovi I', 458, 1, 1);
-insert into book values (15, 0, null, 'Some description', 'Braća karamazovi II', 586, 1, 1);
-insert into book values (16, 0, null, 'Some description', 'Bele noći', 70, 1, 1);
-insert into book values (17, 0, null, 'Some description', 'Zapisi iz podezemlja', 194, 1, 1);
-insert into book values (18, 1, null, 'Some description', 'Idiot - I tom', 490, 1, 1);
-insert into book values (19, 0, null, 'Some description', 'Idiot - II tom', 426, 1, 1);
-insert into book values (20, 0, null, 'Some description', 'Zločin i kazna', 714, 1, 1);
-insert into book values (21, 0, null, 'Some description', 'Bedni ljudi', 159, 1, 1);
-insert into book values (22, 0, null, 'Some description', 'Kockar', 189, 1, 1);
+insert into book values (14, 0, null, 'Some description', 'Braća karamazovi I', 0, 458, 1, 1);
+insert into book values (15, 0, null, 'Some description', 'Braća karamazovi II', 0, 586, 1, 1);
+insert into book values (16, 0, null, 'Some description', 'Bele noći', 0, 70, 1, 1);
+insert into book values (17, 0, null, 'Some description', 'Zapisi iz podezemlja', 0, 194, 1, 1);
+insert into book values (18, 1, null, 'Some description', 'Idiot - I tom', 1, 490, 1, 1);
+insert into book values (19, 0, null, 'Some description', 'Idiot - II tom', 0, 426, 1, 1);
+insert into book values (20, 0, null, 'Some description', 'Zločin i kazna', 0, 714, 1, 1);
+insert into book values (21, 0, null, 'Some description', 'Bedni ljudi', 0, 159, 1, 1);
+insert into book values (22, 0, null, 'Some description', 'Kockar', 0, 189, 1, 1);
 
 /*-------------------------book_authors-------------------------*/
 INSERT INTO book_authors VALUES(1, 1);

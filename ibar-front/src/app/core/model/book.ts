@@ -6,4 +6,8 @@ export class Book {
   categoryName: string;
   authorName: string;
   cover: string;
+  numReviews: number;
+  averageRating: number;
+  inReadingList: boolean;
+  numRead: number;
 }
