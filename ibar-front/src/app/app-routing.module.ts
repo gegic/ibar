@@ -8,6 +8,7 @@ import {ADMIN, READER} from './core/utils/consts';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowseBooksComponent} from './components/browse-books/browse-books.component';
 import {BookDetailsComponent} from './components/book-details/book-details.component';
+import {BookAboutComponent} from './components/book-about/book-about.component';
 
 const routes: Routes = [
   {
@@ -33,8 +34,13 @@ const routes: Routes = [
       },
       {
         path: 'book/:id',
-        component: BookDetailsComponent
-      }
+        component: BookDetailsComponent,
+        children: [
+          { path: '', redirectTo: 'about', pathMatch: 'full'},
+          { path: 'reviews', redirectTo: 'about' },
+          { path: 'about', component: BookAboutComponent }
+        ]
+      },
     ]
   },
   {

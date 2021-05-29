@@ -1,0 +1,17 @@
+.about {
+  padding: 3vh 15vw 0 15vw;
+}
+
+::ng-deep .p-card {
+  border-radius: 1em;
+}
+
+.author-box {
+  border-right: none;
+}
+
+@media only screen and (min-width: 576px) {
+  .author-box {
+    border-right: .5px solid #584F51;
+  }
+}

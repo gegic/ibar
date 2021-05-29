@@ -29,6 +29,7 @@ import { TruncatePipe } from './core/pipes/truncate.pipe';
 import {SkeletonModule} from 'primeng/skeleton';
 import { BookDetailsComponent } from './components/book-details/book-details.component';
 import { DetailsNavigationComponent } from './components/details-navigation/details-navigation.component';
+import { BookAboutComponent } from './components/book-about/book-about.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { DetailsNavigationComponent } from './components/details-navigation/deta
     BookCoverComponent,
     TruncatePipe,
     BookDetailsComponent,
-    DetailsNavigationComponent
+    DetailsNavigationComponent,
+    BookAboutComponent
   ],
   imports: [
     BrowserModule,

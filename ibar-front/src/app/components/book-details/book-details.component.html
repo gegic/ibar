@@ -20,7 +20,7 @@
           <p-skeleton></p-skeleton>
         </ng-template>
         <div class="p-mt-3" *ngIf="canRead">
-          <button *ngIf="!book.inReadingList; else removeFromReadingList"
+          <button *ngIf="!!book && !book.inReadingList; else removeFromReadingList"
                   class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
                   icon="pi pi-tag"
                   label="ADD TO READING LIST"
