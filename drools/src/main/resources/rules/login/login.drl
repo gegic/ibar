@@ -67,7 +67,7 @@ rule "IP not blocked"
         $lcf: IpCheckFact($ipAddress: ipAddress);
         not(SuspiciousIpEvent(ipAddress.equals($ipAddress)));
     then
-    	System.out.println("LOG -> IP TEMPORARILY BLOCKED " + $ipAddress);
+    	System.out.println("LOG -> IP TEMPORARILY NOT BLOCKED " + $ipAddress);
         $lcf.setAllowed(true);
         delete($lcf);
 end
