@@ -7,12 +7,9 @@ import {BookDetailsService} from '../../core/services/book-details.service';
   templateUrl: './book-about.component.html',
   styleUrls: ['./book-about.component.scss']
 })
-export class BookAboutComponent implements OnInit {
+export class BookAboutComponent {
 
   constructor(private detailsService: BookDetailsService) { }
-
-  ngOnInit(): void {
-  }
 
   get book(): Book {
     return this.detailsService.book.getValue();

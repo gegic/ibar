@@ -1,0 +1,32 @@
+<div>
+  <div class="p-grid p-py-0 p-pr-0 p-m-0 p-pl-4" *ngIf="review">
+    <div class="p-col-6">
+      <div *ngIf="review.userFirstName && review.userLastName">
+        <h4 class="p-text-normal p-mt-0 p-mb-1">{{review.userFirstName}} {{review.userLastName}}</h4>
+      </div>
+      <div *ngIf="review.rating">
+        <p-rating [ngModel]="review.rating"
+                  [readonly]="true"
+                  [cancel]="false"
+        ></p-rating>
+      </div>
+      <div>
+        <small class="p-text-light">{{getAddedAgoString()}}</small>
+      </div>
+    </div>
+    <div class="p-col-1 p-text-right">
+      <p-menu [model]="menuItems" [popup]="true" #menu></p-menu>
+      <button *ngIf="false"
+              class="p-button-lg blue-button-text p-button-text p-button-rounded" icon="pi pi-ellipsis-h"
+              (click)="menu.toggle($event)"
+              pRipple
+              pButton
+      ></button>
+    </div>
+    <div *ngIf="review. content" class="p-col-12">
+      <p class="p-mt-2">
+        {{review.content}}
+      </p>
+    </div>
+  </div>
+</div>

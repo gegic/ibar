@@ -9,6 +9,7 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {BrowseBooksComponent} from './components/browse-books/browse-books.component';
 import {BookDetailsComponent} from './components/book-details/book-details.component';
 import {BookAboutComponent} from './components/book-about/book-about.component';
+import {BookReviewsComponent} from './components/book-reviews/book-reviews.component';
 
 const routes: Routes = [
   {
@@ -37,7 +38,7 @@ const routes: Routes = [
         component: BookDetailsComponent,
         children: [
           { path: '', redirectTo: 'about', pathMatch: 'full'},
-          { path: 'reviews', redirectTo: 'about' },
+          { path: 'reviews', component: BookReviewsComponent },
           { path: 'about', component: BookAboutComponent }
         ]
       },

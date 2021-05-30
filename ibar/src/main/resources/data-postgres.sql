@@ -85,10 +85,10 @@ INSERT INTO reading_progress VALUES(4, '2021-05-23 12:20:00', 310, 9, 1);
 INSERT INTO reading_progress VALUES(5, '2021-05-23 12:20:00', 328, 2, 1);
 
 /*-------------review---------------------------------*/
-INSERT INTO review VALUES(1, 'Mislim da je knjiga zaista sjajna. Sve preporuke!', 5, 8, 1);
-INSERT INTO review VALUES(2, 'Smeće!', 1, 18, 1);
-INSERT INTO review VALUES(3, '9/10', 5, 9, 1);
-INSERT INTO review VALUES(4, 'Jako uzbudljivo, kraj je veoma nepredvidljiv.', 4, 2, 1);
+INSERT INTO review VALUES(1, 'Mislim da je knjiga zaista sjajna. Sve preporuke!', 5, '2021-05-23 12:20:00', 8, 1);
+INSERT INTO review VALUES(2, 'Smeće!', 1, '2021-05-23 12:20:00', 18, 1);
+INSERT INTO review VALUES(3, '9/10', 5, '2021-05-23 12:20:00', 9, 1);
+INSERT INTO review VALUES(4, 'Jako uzbudljivo, kraj je veoma nepredvidljiv.', 4, '2021-05-23 12:20:00', 2, 1);
 
 /*-------------------reading_list---------------------------------*/
 INSERT INTO reading_list VALUES(1, 15, 1);

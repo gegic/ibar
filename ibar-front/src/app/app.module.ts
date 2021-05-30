@@ -30,6 +30,14 @@ import {SkeletonModule} from 'primeng/skeleton';
 import { BookDetailsComponent } from './components/book-details/book-details.component';
 import { DetailsNavigationComponent } from './components/details-navigation/details-navigation.component';
 import { BookAboutComponent } from './components/book-about/book-about.component';
+import { BookReviewsComponent } from './components/book-reviews/book-reviews.component';
+import {RatingModule} from 'primeng/rating';
+import {ProgressBarModule} from 'primeng/progressbar';
+import {InfiniteScrollModule} from 'ngx-infinite-scroll';
+import {InputTextareaModule} from 'primeng/inputtextarea';
+import {DialogModule} from 'primeng/dialog';
+import { BookReviewElementComponent } from './components/book-review-element/book-review-element.component';
+import {RippleModule} from 'primeng/ripple';
 
 @NgModule({
   declarations: [
@@ -42,7 +50,9 @@ import { BookAboutComponent } from './components/book-about/book-about.component
     TruncatePipe,
     BookDetailsComponent,
     DetailsNavigationComponent,
-    BookAboutComponent
+    BookAboutComponent,
+    BookReviewsComponent,
+    BookReviewElementComponent,
   ],
   imports: [
     BrowserModule,
@@ -62,7 +72,13 @@ import { BookAboutComponent } from './components/book-about/book-about.component
     AppRoutingModule,
     AvatarModule,
     CarouselModule,
-    SkeletonModule
+    SkeletonModule,
+    RatingModule,
+    ProgressBarModule,
+    InfiniteScrollModule,
+    InputTextareaModule,
+    DialogModule,
+    RippleModule,
   ],
   providers: [
     {

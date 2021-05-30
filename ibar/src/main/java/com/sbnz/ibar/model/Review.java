@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.time.Instant;
 
 @Data
 @Entity
@@ -28,4 +29,6 @@ public class Review {
 
     @ManyToOne
     private Reader reader;
+
+    private Instant timeAdded;
 }

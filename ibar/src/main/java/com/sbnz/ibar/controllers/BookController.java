@@ -16,7 +16,6 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api/books", produces = MediaType.APPLICATION_JSON_VALUE)
-@CrossOrigin(origins = "https://localhost:4200", maxAge = 3600)
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class BookController {
 

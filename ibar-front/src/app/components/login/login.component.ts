@@ -61,4 +61,8 @@ export class LoginComponent {
         });
       });
   }
+
+  printsomething(): void {
+    console.log('sth');
+  }
 }
