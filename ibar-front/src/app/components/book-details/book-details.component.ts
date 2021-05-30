@@ -71,6 +71,7 @@ export class BookDetailsComponent implements OnInit {
   }
 
   onClickRead(): void {
+    this.router.navigate(['reading', this.book.id]);
   }
 
   get canRead(): boolean {

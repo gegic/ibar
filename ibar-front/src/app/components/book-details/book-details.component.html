@@ -51,7 +51,7 @@
         </ng-template>
       </div>
       <div class="p-col p-flex p-as-end p-text-right">
-        <div *ngIf="!canRead; else subscribeButton">
+        <div *ngIf="!canRead; else readButton">
           <button class="p-button p-button-danger p-mr-3 p-d-none p-d-lg-inline"
                   icon="pi pi-trash"
                   label="Delete"
@@ -76,7 +76,7 @@
                   (click)="onClickEdit()"
                   pButton></button>
         </div>
-        <ng-template #subscribeButton>
+        <ng-template #readButton>
           <button class="p-button blue-button"
                   icon="pi pi-file-o"
                   label="Read"

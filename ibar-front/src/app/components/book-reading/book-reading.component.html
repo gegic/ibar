@@ -1,0 +1,35 @@
+<div>
+  <ngx-extended-pdf-viewer *ngIf="!isLoading; else bookLoading"
+                           [src]="pdfUrl"
+                           height="100%"
+                           [customToolbar]="additionalButtons"
+                           [useBrowserLocale]="true"
+                           [textLayer]="true"
+                           backgroundColor="#b8b3b4"
+  ></ngx-extended-pdf-viewer>
+
+  <ng-template #bookLoading>
+    <p-skeleton height="100%"></p-skeleton>
+  </ng-template>
+
+  <ng-template #additionalButtons>
+    <div id="toolbarViewer" style="background-color:#FCF7F8">
+      <div id="toolbarViewerLeft">
+        <button type="button"
+                class="p-button-text p-button-sm"
+                label="Back to the book"
+                icon="pi pi-chevron-left"
+                title="Book details"
+                (click)="backToBook()"
+                pButton
+                pRipple
+        ></button>
+      </div>
+      <div id="toolbarViewerRight">
+        <pdf-paging-area></pdf-paging-area>
+      </div>
+      <pdf-zoom-toolbar></pdf-zoom-toolbar>
+
+    </div>
+  </ng-template>
+</div>

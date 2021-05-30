@@ -10,6 +10,7 @@ import {BrowseBooksComponent} from './components/browse-books/browse-books.compo
 import {BookDetailsComponent} from './components/book-details/book-details.component';
 import {BookAboutComponent} from './components/book-about/book-about.component';
 import {BookReviewsComponent} from './components/book-reviews/book-reviews.component';
+import {BookReadingComponent} from './components/book-reading/book-reading.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,10 @@ const routes: Routes = [
     component: LoginComponent,
     data: {unauthorized: true},
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'reading/:id',
+    component: BookReadingComponent
   },
   {
     path: '',
@@ -41,7 +46,7 @@ const routes: Routes = [
           { path: 'reviews', component: BookReviewsComponent },
           { path: 'about', component: BookAboutComponent }
         ]
-      },
+      }
     ]
   },
   {

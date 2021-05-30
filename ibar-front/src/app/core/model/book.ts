@@ -10,4 +10,5 @@ export class Book {
   averageRating: number;
   inReadingList: boolean;
   numRead: number;
+  pdf: string;
 }

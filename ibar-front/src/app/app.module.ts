@@ -38,6 +38,8 @@ import {InputTextareaModule} from 'primeng/inputtextarea';
 import {DialogModule} from 'primeng/dialog';
 import { BookReviewElementComponent } from './components/book-review-element/book-review-element.component';
 import {RippleModule} from 'primeng/ripple';
+import { BookReadingComponent } from './components/book-reading/book-reading.component';
+import {NgxExtendedPdfViewerModule} from 'ngx-extended-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -53,6 +55,7 @@ import {RippleModule} from 'primeng/ripple';
     BookAboutComponent,
     BookReviewsComponent,
     BookReviewElementComponent,
+    BookReadingComponent,
   ],
   imports: [
     BrowserModule,
@@ -79,6 +82,7 @@ import {RippleModule} from 'primeng/ripple';
     InputTextareaModule,
     DialogModule,
     RippleModule,
+    NgxExtendedPdfViewerModule,
   ],
   providers: [
     {

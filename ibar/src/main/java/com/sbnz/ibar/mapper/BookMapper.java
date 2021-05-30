@@ -22,6 +22,7 @@ public class BookMapper {
 		dto.setNumReviews(entity.getNumReviews());
 		dto.setAverageRating(entity.getAverageRating());
 		dto.setAuthorName(entity.getAuthors().stream().map(Author::getName).collect(Collectors.joining(", ")));
+		dto.setPdf(entity.getPdf());
 		return dto;
 	}
 

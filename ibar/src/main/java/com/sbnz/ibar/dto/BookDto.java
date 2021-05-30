@@ -31,5 +31,6 @@ public class BookDto {
 	private Double averageRating;
 	private boolean inReadingList;
 	private Long numRead;
+	private String pdf;
 
 }

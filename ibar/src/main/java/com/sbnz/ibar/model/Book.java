@@ -35,6 +35,8 @@ public class Book {
 
 	private String cover;
 
+	private String pdf;
+
 	@Column(nullable = false)
 	private BookType type;
 
