@@ -241,7 +241,7 @@ rule "Add points for author in reading list"
             $book.getId(), Double.valueOf($numReadingList * readingListPoints));
 end
 
-rule "Gather all points of for a book"
+rule "Gather all points for a book"
     agenda-group "recommendations"
 	salience -1
 	lock-on-active

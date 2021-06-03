@@ -4,6 +4,7 @@ import {Book} from '../../core/model/book';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
+import {ReadingProgress} from '../../core/model/reading-progress';
 
 @Component({
   selector: 'app-book-reading',
@@ -13,6 +14,7 @@ import {Title} from '@angular/platform-browser';
 export class BookReadingComponent implements OnInit {
 
   isLoading = true;
+  currentPage = 1;
 
   constructor(private detailsService: BookDetailsService,
               private activatedRoute: ActivatedRoute,
@@ -24,6 +26,8 @@ export class BookReadingComponent implements OnInit {
       val => {
         if (!!val.id && (!this.book || (!!this.book && this.book.id !== val.id))) {
           this.getBook(val.id);
+          this.getReadingProgress(val.id);
+          setInterval(this.postProgress, 4 * 60 * 1000);
         } else {
           this.router.navigate(['']);
         }
@@ -33,13 +37,36 @@ export class BookReadingComponent implements OnInit {
   getBook(id: number): void {
     this.isLoading = true;
     this.detailsService.getBook(id).pipe(distinctUntilChanged()).subscribe(
-      data => {
+      (data: Book) => {
         this.detailsService.book.next(data);
         const newTitle = `${data.name} | ibar`;
         this.titleService.setTitle(newTitle);
         this.isLoading = false;
       }
     );
+  }
+
+  getReadingProgress(id: number): void {
+    this.isLoading = true;
+    this.detailsService.getReadingProgress(id).subscribe(
+      (data: ReadingProgress) => {
+        this.detailsService.readingProgress.next(data);
+        this.currentPage = this.readingProgress.progress;
+        this.isLoading = false;
+      }
+    );
+  }
+
+  postProgress(): void {
+    if (this.currentPage > this.readingProgress.progress) {
+      const readingProgress = this.readingProgress;
+      readingProgress.progress = this.currentPage;
+      this.detailsService.postReadingProgress(readingProgress).subscribe(
+        (data: ReadingProgress) => {
+          this.detailsService.readingProgress.next(data);
+        }
+      );
+    }
   }
 
   backToBook(): void {
@@ -49,6 +76,10 @@ export class BookReadingComponent implements OnInit {
 
   get book(): Book {
     return this.detailsService.book.getValue();
+  }
+
+  get readingProgress(): ReadingProgress {
+    return this.detailsService.readingProgress.getValue();
   }
 
   get pdfUrl(): string {

@@ -9,9 +9,7 @@ import org.junit.runners.Suite;
         AuthorRatingSearchTest.class,
         BookRatingSearchTest.class,
         BookAuthorsNameSearchTest.class,
-
         LoginTest.class,
-
         BookRecommendationTest.class
 })
 public class TestAll {

@@ -12,7 +12,9 @@ import java.time.temporal.TemporalUnit;
 public class ReadingProgressMapper {
     public ReadingProgressDto toDto(ReadingProgress entity) {
         ReadingProgressDto dto = new ReadingProgressDto();
-        dto.setId(entity.getId());
+        if (entity.getId() != null) {
+            dto.setId(entity.getId());
+        }
         dto.setBookId(entity.getBook().getId());
         dto.setReaderId(entity.getReader().getId());
         dto.setProgress(entity.getProgress());

@@ -30,6 +30,7 @@ public class ReadingProgress {
     public ReadingProgress(Book book, Reader reader) {
         this.book = book;
         this.reader = reader;
+        lastOpened = Instant.now();
     }
 
     public double getPercentage() {

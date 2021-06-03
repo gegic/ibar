@@ -56,7 +56,7 @@ public class LoginTest {
     }
 
     @Test
-    public void testCheckIsUserBlockedAfter5TimesUnsuccessfullLogin() {
+    public void testCheckIsUserBlockedAfter5TimesUnsuccessfulLogin() {
         User admin = createUserForLogin();
 
         createFact(5, admin);
@@ -80,7 +80,7 @@ public class LoginTest {
     }
 
     @Test
-    public void test10TimesUnsuccessfullLogin() {
+    public void test10TimesUnsuccessfulLogin() {
         User admin = createUserForLogin();
 
         createFact(10, admin);
@@ -91,7 +91,7 @@ public class LoginTest {
     }
 
     @Test
-    public void testCheckIsIpAddressBlockedAfter10TimesUnsuccessfullLogin() {
+    public void testCheckIsIpAddressBlockedAfter10TimesUnsuccessfulLogin() {
         User admin = createUserForLogin();
 
         createFact(10, admin);

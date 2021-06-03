@@ -24,7 +24,7 @@ export class LoginComponent {
               private formBuilder: FormBuilder,
               private router: Router) {
     this.loginForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.pattern(new RegExp('\\S'))]],
+      email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.pattern(new RegExp('\\S'))]]
     });
   }
