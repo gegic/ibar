@@ -12,19 +12,22 @@ import com.sbnz.ibar.utils.Utils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review, Long> {
+public interface ReviewRepository extends JpaRepository<Review, UUID> {
 
-	Optional<Review> findByBookIdAndReaderId(long bookId, long readerId);
+	Optional<Review> findByBookIdAndReaderId(UUID bookId, UUID readerId);
 
-	void deleteAllByBookId(long bookId);
+	boolean existsByBookIdAndReaderId(UUID bookId, UUID readerId);
+
+	void deleteAllByBookId(UUID bookId);
 
 	@Query("select review from Review review where review.reader.id = :readerId or review.reader.male = :isMale")
-	List<Review> getReviewsByReaderIdAndReaderCategory(long readerId, boolean isMale);
+	List<Review> getReviewsByReaderIdAndReaderCategory(UUID readerId, boolean isMale);
 
-	Page<Review> getAllByBookId(long bookId, Pageable p);
+	Page<Review> getAllByBookId(UUID bookId, Pageable p);
 
 	@Query("select new com.sbnz.ibar.dto.ReviewNumbersDto(r.rating, count(r)) from Review r where r.book.id = :bookId group by r.rating")
-	List<ReviewNumbersDto> findAndGroupByRating(long bookId);
+	List<ReviewNumbersDto> findAndGroupByRating(UUID bookId);
 }

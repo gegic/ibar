@@ -14,6 +14,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @AllArgsConstructor
 public class ReadingProgressService {
@@ -42,7 +44,7 @@ public class ReadingProgressService {
         return progressMapper.toDto(progressRepository.save(rp));
     }
 
-    public ReadingProgressDto get(long bookId) throws EntityDoesNotExistException {
+    public ReadingProgressDto get(UUID bookId) throws EntityDoesNotExistException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         Book b = bookRepository.findById(bookId)

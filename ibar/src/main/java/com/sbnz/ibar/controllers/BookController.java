@@ -12,6 +12,7 @@ import com.sbnz.ibar.services.BookService;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -24,7 +25,7 @@ public class BookController {
 
     @PreAuthorize("permitAll()")
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<BookDto> getBook(@PathVariable Long id) {
+	public ResponseEntity<BookDto> getBook(@PathVariable UUID id) {
 		return ResponseEntity.ok(bookService.getById(id));
 	}
 
@@ -66,14 +67,14 @@ public class BookController {
 //
 //	@PreAuthorize("permitAll()")
 //	@GetMapping(value = "/category/{id}")
-//	public ResponseEntity<Page<BookResDTO>> getBooksByCategoryId(Pageable pageable, @PathVariable Long id) {
+//	public ResponseEntity<Page<BookResDTO>> getBooksByCategoryId(Pageable pageable, @PathVariable UUID id) {
 //		Page<Book> page = bookService.getByCategoryId(id, pageable);
 //		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
 //	}
 //
 //	@PreAuthorize("permitAll()")
 //	@GetMapping(value = "/category/{id}/find-by-name/{name}")
-//	public ResponseEntity<Page<BookResDTO>> findBookByCategoryIdAndName(Pageable pageable, @PathVariable Long id,
+//	public ResponseEntity<Page<BookResDTO>> findBookByCategoryIdAndName(Pageable pageable, @PathVariable UUID id,
 //			@PathVariable String name) {
 //		Page<Book> page = bookService.findByCategoryIdAndNameContains(id, name, pageable);
 //
@@ -109,7 +110,7 @@ public class BookController {
 //	}
 //
 //	@PutMapping(value = "/{id}")
-//	public ResponseEntity<BookResDTO> updateBook(@PathVariable Long id,
+//	public ResponseEntity<BookResDTO> updateBook(@PathVariable UUID id,
 //			@RequestPart("bookDTO") @Valid @NotNull BookDTO bookDTO, @RequestPart("file") MultipartFile file) {
 //
 //		try {
@@ -124,7 +125,7 @@ public class BookController {
 //	}
 //
 //	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<Boolean> deleteBook(@PathVariable Long id) {
+//	public ResponseEntity<Boolean> deleteBook(@PathVariable UUID id) {
 //		try {
 //			return new ResponseEntity<>(bookService.delete(id), HttpStatus.OK);
 //		} catch (Exception e) {

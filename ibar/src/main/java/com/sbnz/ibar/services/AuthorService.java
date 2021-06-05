@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -29,9 +30,9 @@ import javassist.NotFoundException;
 public class AuthorService {
 
 
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
-    private FileService fileService;
+    private final FileService fileService;
 
     private final KieService kieService;
 
@@ -44,7 +45,7 @@ public class AuthorService {
         return authorRepository.findAll();
     }
 
-    public Author getById(Long id) {
+    public Author getById(UUID id) {
         Optional<Author> author = authorRepository.findById(id);
         return author.orElse(null);
 
@@ -81,7 +82,7 @@ public class AuthorService {
     }
 
     @Transactional
-    public boolean delete(Long id) throws Exception {
+    public boolean delete(UUID id) throws Exception {
         Author existingAuthor = getById(id);
         if (existingAuthor == null) {
             throw new NotFoundException("Author with given id doesn't exist.");
@@ -99,12 +100,12 @@ public class AuthorService {
         return true;
     }
 
-    public Author update(Long id, Author entity) throws NotFoundException {
+    public Author update(UUID id, Author entity) throws NotFoundException {
         return null;
     }
 
     @Transactional
-    public Author update(Long id, Author entity, MultipartFile newImage) throws NotFoundException, IOException {
+    public Author update(UUID id, Author entity, MultipartFile newImage) throws NotFoundException, IOException {
         Author existingAuthor = getById(id);
         if (existingAuthor == null) {
             throw new NotFoundException("Author with given id doesn't exist.");

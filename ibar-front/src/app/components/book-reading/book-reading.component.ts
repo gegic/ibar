@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BookDetailsService} from '../../core/services/book-details.service';
 import {Book} from '../../core/model/book';
 import {distinctUntilChanged} from 'rxjs/operators';
@@ -11,7 +11,7 @@ import {ReadingProgress} from '../../core/model/reading-progress';
   templateUrl: './book-reading.component.html',
   styleUrls: ['./book-reading.component.scss']
 })
-export class BookReadingComponent implements OnInit {
+export class BookReadingComponent implements OnInit, OnDestroy {
 
   isLoading = true;
   currentPage = 1;
@@ -34,7 +34,7 @@ export class BookReadingComponent implements OnInit {
       });
   }
 
-  getBook(id: number): void {
+  getBook(id: string): void {
     this.isLoading = true;
     this.detailsService.getBook(id).pipe(distinctUntilChanged()).subscribe(
       (data: Book) => {
@@ -46,7 +46,7 @@ export class BookReadingComponent implements OnInit {
     );
   }
 
-  getReadingProgress(id: number): void {
+  getReadingProgress(id: string): void {
     this.isLoading = true;
     this.detailsService.getReadingProgress(id).subscribe(
       (data: ReadingProgress) => {
@@ -86,4 +86,7 @@ export class BookReadingComponent implements OnInit {
     return `/pdf/${this.book.pdf}.pdf`;
   }
 
+  ngOnDestroy(): void {
+    this.titleService.setTitle('ibar');
+  }
 }

@@ -3,6 +3,7 @@ package com.sbnz.ibar.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class AuthorityService {
 
     private final ReaderRepository regsteredUserRepository;
 
-    public List<Authority> findById(Long id) {
+    public List<Authority> findById(long id) {
         Optional<Authority> auth = this.authortyRepository.findById(id);
         List<Authority> auths = new ArrayList<>();
         auth.ifPresent(auths::add);

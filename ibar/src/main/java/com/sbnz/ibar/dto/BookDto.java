@@ -1,6 +1,7 @@
 package com.sbnz.ibar.dto;
 
 import java.util.Set;
+import java.util.UUID;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -12,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor
 public class BookDto {
 
-	private Long id;
+	private UUID id;
 	
 	@NotEmpty(message = "Name cannot be null or empty.")
 	private String name;
@@ -22,7 +23,7 @@ public class BookDto {
 	private long quantity;
 
 	@NotNull(message = "Category cannot be null.")
-	private Long categoryId;
+	private UUID categoryId;
 
 	private String categoryName;
 	private String authorName;

@@ -10,6 +10,7 @@ import com.sbnz.ibar.model.enums.UserType;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 
 @AllArgsConstructor
@@ -17,7 +18,7 @@ import java.util.List;
 @Data
 public class UserDto {
 
-	private Long id;
+	private UUID id;
 
 	@NotEmpty(message = "Email cannot be null or empty.")
 	@Email(message = "Email format is not valid.")

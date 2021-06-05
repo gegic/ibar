@@ -2,6 +2,7 @@ package com.sbnz.ibar.controllers;
 
 import com.sbnz.ibar.dto.AuthorDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,23 +22,19 @@ import java.util.stream.Collectors;
 @RequestMapping(value = "/api/authors", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "https://localhost:4200", maxAge = 3600)
 @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@AllArgsConstructor
 public class AuthorController {
 
-    @Autowired
-    private AuthorService authorService;
-
-    @Autowired
-    private AuthorMapper authorMapper;
-
-
-    private FileService fileService;
+    private final AuthorService authorService;
+    private final AuthorMapper authorMapper;
+    private final FileService fileService;
 
     @PreAuthorize("permitAll()")
     @PostMapping(value = "/ratings-interval")
     public ResponseEntity<?> getAllAuthorsByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO) {
         try {
             List<AuthorDto> authors = authorService.findAllByRatingInterval(ratingIntervalDTO)
-                    .stream().map(author -> authorMapper.toDto(author))
+                    .stream().map(authorMapper::toDto)
                     .collect(Collectors.toList());
 
             return new ResponseEntity<>(authors, HttpStatus.OK);
@@ -62,7 +59,7 @@ public class AuthorController {
 //
 //	@PreAuthorize("permitAll()")
 //	@GetMapping(value = "/{id}")
-//	public ResponseEntity<AuthorResDTO> getAuthor(@PathVariable Long id) {
+//	public ResponseEntity<AuthorResDTO> getAuthor(@PathVariable UUID id) {
 //
 //		Author author = authorService.getById(id);
 //		if (author == null) {
@@ -98,7 +95,7 @@ public class AuthorController {
 //	}
 //
 //	@PutMapping(value = "/{id}")
-//	public ResponseEntity<AuthorResDTO> updateAuthor(@PathVariable Long id,
+//	public ResponseEntity<AuthorResDTO> updateAuthor(@PathVariable UUID id,
 //			@RequestPart("authorDTO") @Valid @NotNull AuthorDTO authorDTO, @RequestPart("file") MultipartFile file) {
 //
 //		try {
@@ -114,7 +111,7 @@ public class AuthorController {
 //	}
 //
 //	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<Boolean> deleteAuthor(@PathVariable Long id) {
+//	public ResponseEntity<Boolean> deleteAuthor(@PathVariable UUID id) {
 //		try {
 //			return new ResponseEntity<>(authorService.delete(id), HttpStatus.OK);
 //		} catch (Exception e) {

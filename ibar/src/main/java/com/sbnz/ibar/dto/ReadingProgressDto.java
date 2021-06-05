@@ -4,13 +4,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 public class ReadingProgressDto {
-    private long id;
-    private long bookId;
-    private long readerId;
+    private UUID id;
+    private UUID bookId;
+    private UUID readerId;
     private long progress;
     private double percentage;
     private Instant lastOpened;

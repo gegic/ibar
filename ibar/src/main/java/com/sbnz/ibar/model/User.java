@@ -3,10 +3,12 @@ package com.sbnz.ibar.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @NoArgsConstructor
@@ -19,8 +21,12 @@ public abstract class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+    		name = "UUID",
+			strategy = "org.hibernate.id.UUIDGenerator"
+	)
+	private UUID id;
 
 	@Column(unique = true, nullable = false)
 	private String email;
@@ -45,7 +51,7 @@ public abstract class User implements UserDetails {
 
     private boolean enabled;
 
-	public User(Long id) {
+	public User(UUID id) {
 		super();
 		this.id = id;
 	}

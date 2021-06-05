@@ -1,6 +1,7 @@
 package com.sbnz.ibar.services;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import com.sbnz.ibar.model.Plan;
 import com.sbnz.ibar.repositories.CategoryRepository;
@@ -23,7 +24,7 @@ public class PlanService {
 		return packageRepository.findAll();
 	}
 
-	public Plan getById(Long id) {
+	public Plan getById(UUID id) {
 		Optional<Plan> packageEntity = packageRepository.findById(id);
 
 		return packageEntity.orElse(null);
@@ -41,12 +42,12 @@ public class PlanService {
 		return planEntity;
 	}
 
-	public boolean delete(Long id) throws Exception {
+	public boolean delete(UUID id) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public Plan update(Long id, Plan entity) throws Exception {
+	public Plan update(UUID id, Plan entity) throws Exception {
 		Plan planEntity = getById(id);
 
 		if (planEntity == null) {

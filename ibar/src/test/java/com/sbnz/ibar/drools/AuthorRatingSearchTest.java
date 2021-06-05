@@ -13,6 +13,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -123,7 +124,7 @@ public class AuthorRatingSearchTest {
         List<Author> authors = new ArrayList<>();
 
         authors.add(new Author(
-                1L,
+                UUID.randomUUID(),
                 "Author 1",
                 "Some description",
                 null,
@@ -132,7 +133,7 @@ public class AuthorRatingSearchTest {
                 null));
 
         authors.add(new Author(
-                1L,
+                UUID.randomUUID(),
                 "Author 1",
                 "Some description",
                 null,

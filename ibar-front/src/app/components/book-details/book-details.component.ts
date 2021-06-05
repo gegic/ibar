@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Book} from '../../core/model/book';
 import {TokenService} from '../../core/services/token.service';
 import {READER} from '../../core/utils/consts';
@@ -12,7 +12,7 @@ import {Title} from '@angular/platform-browser';
   templateUrl: './book-details.component.html',
   styleUrls: ['./book-details.component.scss']
 })
-export class BookDetailsComponent implements OnInit {
+export class BookDetailsComponent implements OnInit, OnDestroy {
 
   readonly navigationItems = [
     {
@@ -46,7 +46,7 @@ export class BookDetailsComponent implements OnInit {
       });
   }
 
-  getBook(id: number): void {
+  getBook(id: string): void {
     this.isLoading = true;
     this.detailsService.getBook(id).pipe(distinctUntilChanged()).subscribe(
       data => {
@@ -94,5 +94,8 @@ export class BookDetailsComponent implements OnInit {
     return this.detailsService.book.getValue();
   }
 
+  ngOnDestroy(): void {
+    this.titleService.setTitle('ibar');
+  }
 
 }

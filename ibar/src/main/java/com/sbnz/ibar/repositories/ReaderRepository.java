@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 
 import com.sbnz.ibar.model.Reader;
 
+import java.util.UUID;
+
 @Repository
-public interface ReaderRepository extends JpaRepository<Reader, Long> {
+public interface ReaderRepository extends JpaRepository<Reader, UUID> {
 
 	Reader findByEmail(String email);
 
@@ -18,6 +20,6 @@ public interface ReaderRepository extends JpaRepository<Reader, Long> {
                                                                                 Pageable pageable);
 
 	@Query(value = "SELECT * FROM users_table a WHERE a.type='RU' AND achievement_id=?1", nativeQuery = true)
-	Iterable<Reader> findByAchievementId(Long titleId);
+	Iterable<Reader> findByAchievementId(UUID titleId);
 
 }

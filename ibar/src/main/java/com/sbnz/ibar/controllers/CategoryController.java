@@ -47,7 +47,7 @@ public class CategoryController {
 //	}
 //
 //	@GetMapping(value = "/{id}")
-//	public ResponseEntity<CategoryDTO> getCategory(@PathVariable Long id) {
+//	public ResponseEntity<CategoryDTO> getCategory(@PathVariable UUID id) {
 //
 //		Category category = categoryService.getById(id);
 //		if (category == null) {
@@ -70,7 +70,7 @@ public class CategoryController {
 //	}
 //
 //	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<CategoryDTO> updateCategory(@PathVariable Long id,
+//	public ResponseEntity<CategoryDTO> updateCategory(@PathVariable UUID id,
 //			@Valid @RequestBody CategoryDTO CategoryDTO) {
 //
 //		try {
@@ -84,7 +84,7 @@ public class CategoryController {
 //	}
 //
 //	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<Boolean> deleteCategory(@PathVariable Long id) {
+//	public ResponseEntity<Boolean> deleteCategory(@PathVariable UUID id) {
 //		try {
 //			return new ResponseEntity<Boolean>(categoryService.delete(id), HttpStatus.OK);
 //		} catch (Exception e) {

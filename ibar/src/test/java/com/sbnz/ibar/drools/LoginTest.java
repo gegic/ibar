@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.UUID;
 
 import static org.junit.Assert.*;
 
@@ -120,7 +121,7 @@ public class LoginTest {
 
     private User createUserForLogin() {
         return new Admin(
-                1L,
+                UUID.randomUUID(),
                 "email@gmail.com",
                 "password123",
                 "Milan",

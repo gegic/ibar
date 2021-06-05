@@ -57,7 +57,7 @@ export class BookReviewsComponent implements OnInit {
       return;
     }
     this.isReviewsLoading = true;
-    this.reviewService.getReviews(this.book?.id ?? 0, this.page++)
+    this.reviewService.getReviews(this.book?.id ?? '', this.page + 1)
       .subscribe((reviewPage: Page<Review>) => {
         const userId = this.tokenService.getToken()?.userId ?? null;
         let addedReviews: Review[];
@@ -75,7 +75,7 @@ export class BookReviewsComponent implements OnInit {
 
   getReviewNumbers(): void {
     this.isReviewsLoading = true;
-    this.reviewService.getReviewNumbers(this.book?.id ?? 0).subscribe((rn: ReviewNumber[]) => {
+    this.reviewService.getReviewNumbers(this.book?.id ?? '').subscribe((rn: ReviewNumber[]) => {
       for (const reviewNum of rn) {
         switch (reviewNum.rating) {
           case 1:
@@ -102,7 +102,8 @@ export class BookReviewsComponent implements OnInit {
 
   getUserReview(): void {
     this.isReviewsLoading = true;
-    this.reviewService.getReviewForUser(this.book?.id ?? 0).subscribe((val: Review) => {
+    this.reviewService.getReviewForUser(this.book?.id ?? '').subscribe((val: Review) => {
+      console.log(val);
       this.userReview = val;
       this.isReviewsLoading = false;
     });
@@ -130,14 +131,14 @@ export class BookReviewsComponent implements OnInit {
       return;
     }
     if (!this.userReview.id) {
-      this.reviewService.add(this.userReview).subscribe(addedReview => {
+      this.reviewService.post(this.userReview).subscribe(addedReview => {
         this.resetOffering();
         this.resetReviews();
         this.userReview = addedReview;
         this.isAddDialogOpen = false;
       });
     } else {
-      this.reviewService.edit(this.userReview).subscribe(editedReview => {
+      this.reviewService.put(this.userReview).subscribe(editedReview => {
         this.resetOffering();
         this.resetReviews();
         this.userReview = editedReview;
@@ -147,7 +148,7 @@ export class BookReviewsComponent implements OnInit {
   }
 
   resetOffering(): void {
-    this.detailsService.getBook(this.book?.id ?? 0).subscribe(
+    this.detailsService.getBook(this.book?.id ?? '').subscribe(
       val => {
         this.detailsService.book.next(val);
       }

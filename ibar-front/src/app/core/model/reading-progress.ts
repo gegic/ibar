@@ -1,7 +1,7 @@
 export class ReadingProgress {
-  id: number;
-  bookId: number;
-  readerId: number;
+  id: string;
+  bookId: string;
+  readerId: string;
   progress: number;
   percentage: number;
   lastOpened: Date;

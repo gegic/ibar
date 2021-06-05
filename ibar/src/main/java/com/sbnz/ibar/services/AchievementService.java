@@ -2,6 +2,7 @@ package com.sbnz.ibar.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.persistence.EntityExistsException;
 
@@ -26,7 +27,7 @@ public class AchievementService {
 		return achevementRepository.findAll();
 	}
 
-	public Achievement getById(Long id) {
+	public Achievement getById(UUID id) {
 		Optional<Achievement> achievement = achevementRepository.findById(id);
 
 		return achievement.orElse(null);
@@ -44,7 +45,7 @@ public class AchievementService {
 		return achievement;
 	}
 
-	public boolean delete(Long id) throws Exception {
+	public boolean delete(UUID id) throws Exception {
 		List<Reader> usersWithAchievement = (List<Reader>) regsteredUserRepository.findByAchievementId(id);
 
 		if (usersWithAchievement.size() == 0) {
@@ -56,7 +57,7 @@ public class AchievementService {
 		return true;
 	}
 
-	public Achievement update(Long id, Achievement entity) throws Exception {
+	public Achievement update(UUID id, Achievement entity) throws Exception {
 		Achievement achievement = getById(id);
 
 		if (achievement == null) {

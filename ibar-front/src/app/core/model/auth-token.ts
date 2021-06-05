@@ -1,7 +1,7 @@
 import {Authority} from './authority';
 
 export class AuthToken {
-  userId: number;
+  userId: string;
   accessToken: string;
   authorities: Authority[];
   userInitials: string;

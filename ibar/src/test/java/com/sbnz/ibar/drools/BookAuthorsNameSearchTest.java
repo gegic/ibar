@@ -17,10 +17,7 @@ import org.kie.internal.utils.KieHelper;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
@@ -134,7 +131,7 @@ public class BookAuthorsNameSearchTest {
         List<Author> authors = new ArrayList<>();
 
         authors.add(new Author(
-                1L,
+                UUID.randomUUID(),
                 "Fjodor Mihailovič Dostojevski",
                 "Some description",
                 null,
@@ -143,7 +140,7 @@ public class BookAuthorsNameSearchTest {
                 null));
 
         authors.add(new Author(
-                2L,
+                UUID.randomUUID(),
                 "Momo Kapor",
                 "Some description",
                 null,
@@ -157,7 +154,7 @@ public class BookAuthorsNameSearchTest {
     private List<Book> createBooks(List<Author> authors) {
         List<Book> books = new ArrayList<>();
 
-        Category category = new Category(1L, "Category 1", "Some description", true);
+        Category category = new Category(UUID.randomUUID(), "Category 1", "Some description", true);
         Author author1 = authors.get(0);
         Author author2 = authors.get(1);
 
@@ -169,7 +166,7 @@ public class BookAuthorsNameSearchTest {
         authors2.add(author2);
 
         books.add(new Book(
-                1L,
+                UUID.randomUUID(),
                 "Book 1",
                 "Some description",
                 3.6,
@@ -183,7 +180,7 @@ public class BookAuthorsNameSearchTest {
         ));
 
         books.add(new Book(
-                2L,
+                UUID.randomUUID(),
                 "Book 2",
                 "Some description",
                 1.8,

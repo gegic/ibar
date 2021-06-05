@@ -8,16 +8,17 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Repository
-public interface ReadingListItemRepository extends JpaRepository<ReadingListItem, Long> {
+public interface ReadingListItemRepository extends JpaRepository<ReadingListItem, UUID> {
 
-	List<ReadingListItem> getByBookId(long bookId);
+	List<ReadingListItem> getByBookId(UUID bookId);
 
-	List<ReadingListItem> getByReaderId(long readerId);
+	List<ReadingListItem> getByReaderId(UUID readerId);
 
-	Optional<ReadingListItem> findByBookIdAndReaderId(long bookId, long readerId);
+	Optional<ReadingListItem> findByBookIdAndReaderId(UUID bookId, UUID readerId);
 
 	@Query("select rl from ReadingListItem rl where rl.reader.id = :readerId or rl.reader.male = :isMale")
-	List<ReadingListItem> getReadingListByReaderIdAndReaderCategory(long readerId, boolean isMale);
+	List<ReadingListItem> getReadingListByReaderIdAndReaderCategory(UUID readerId, boolean isMale);
 }

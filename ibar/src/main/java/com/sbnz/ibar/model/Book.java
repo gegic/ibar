@@ -4,11 +4,13 @@ import com.sbnz.ibar.model.enums.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 import org.hibernate.type.TextType;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -17,8 +19,12 @@ import java.util.Set;
 public class Book {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+    		name = "UUID",
+			strategy = "org.hibernate.id.UUIDGenerator"
+	)
+	private UUID id;
 
 	@Column(nullable = false)
 	private String name;

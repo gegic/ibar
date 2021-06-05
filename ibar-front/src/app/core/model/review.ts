@@ -1,9 +1,9 @@
 export class Review {
-  id: number;
+  id: string;
   content: string;
-  rating: number;
-  bookId: number;
-  userId: number;
+  rating = 0;
+  bookId: string;
+  userId: string;
   timeAdded: Date;
   userFirstName: string;
   userLastName: string;

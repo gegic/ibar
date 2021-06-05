@@ -1,6 +1,7 @@
 package com.sbnz.ibar.services;
 
 import java.util.Date;
+import java.util.UUID;
 
 import javax.transaction.Transactional;
 
@@ -73,7 +74,7 @@ public class UserService implements UserDetailsService {
 		return null;
 	}
 
-	public User getById(Long id) {
+	public User getById(UUID id) {
 		return null;
 	}
 
@@ -81,15 +82,15 @@ public class UserService implements UserDetailsService {
 		return null;
 	}
 
-	public boolean delete(Long id) throws Exception {
+	public boolean delete(UUID id) throws Exception {
 		return false;
 	}
 
-	public Reader update(Long id, Reader entity) throws Exception {
+	public Reader update(UUID id, Reader entity) throws Exception {
 		return null;
 	}
 
-	public User update(Long id, User entity) throws Exception {
+	public User update(UUID id, User entity) throws Exception {
 		return null;
 	}
 

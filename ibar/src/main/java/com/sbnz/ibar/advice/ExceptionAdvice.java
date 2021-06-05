@@ -1,9 +1,7 @@
 package com.sbnz.ibar.advice;
 
 import com.sbnz.ibar.dto.ErrorDto;
-import com.sbnz.ibar.exceptions.EmailTemporarilyBlockedException;
-import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
-import com.sbnz.ibar.exceptions.IpTemporarilyBlockedException;
+import com.sbnz.ibar.exceptions.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
@@ -28,8 +26,20 @@ public class ExceptionAdvice {
 
     @ExceptionHandler(EntityDoesNotExistException.class)
     public ResponseEntity<ErrorDto> handleEntityDoesNotExistException(EntityDoesNotExistException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity.badRequest()
                 .body(new ErrorDto(ex.getMessage(), ""));
+    }
+
+    @ExceptionHandler(EntityAlreadyExistsException.class)
+    public ResponseEntity<ErrorDto> handleEntityAlreadyExistsException(EntityAlreadyExistsException ex) {
+        return ResponseEntity.badRequest()
+                .body(new ErrorDto(ex.getMessage(), ""));
+    }
+
+    @ExceptionHandler(UserNotLoggedInException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorDto> onUserNotLoggedInException(UserNotLoggedInException exception) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorDto(exception.getMessage(), ""));
     }
 
     @ExceptionHandler(IpTemporarilyBlockedException.class)

@@ -4,13 +4,15 @@ import javax.validation.constraints.NotEmpty;
 
 import lombok.*;
 
+import java.util.UUID;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDto {
 
-	private Long id;
+	private UUID id;
 	
 	@NotEmpty(message = "Name cannot be null or empty.")
 	private String name;

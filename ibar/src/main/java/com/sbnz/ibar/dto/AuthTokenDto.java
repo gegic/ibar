@@ -4,12 +4,13 @@ import com.sbnz.ibar.model.Authority;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class AuthTokenDto {
-    private long userId;
+    private UUID userId;
     private String accessToken;
     private List<Authority> authorities;
     private String userInitials;

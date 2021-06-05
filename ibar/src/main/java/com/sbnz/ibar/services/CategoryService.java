@@ -1,6 +1,7 @@
 package com.sbnz.ibar.services;
 
 import java.util.Collection;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,7 +21,7 @@ public class CategoryService {
 		return categoryRepository.findAll();
 	}
 
-	public Category getById(Long id) {
+	public Category getById(UUID id) {
 		return categoryRepository.findById(id).orElse(null);
 	}
 
@@ -28,7 +29,7 @@ public class CategoryService {
 		return categoryRepository.save(entity);
 	}
 
-	public boolean delete(Long id) throws Exception {
+	public boolean delete(UUID id) throws Exception {
 		Category category = categoryRepository.findById(id).orElse(null);
 		if(category == null)
 			throw new Exception("Category with this ID doesn't exist.");
@@ -37,7 +38,7 @@ public class CategoryService {
 		return true;
 	}
 
-	public Category update(Long id, Category entity) throws Exception {
+	public Category update(UUID id, Category entity) throws Exception {
 		Category category = categoryRepository.findById(id).orElse(null);
 		if(category == null)
 			throw new Exception("Category with this ID doesn't exist.");

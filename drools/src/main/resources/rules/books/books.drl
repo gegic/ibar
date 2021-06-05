@@ -30,9 +30,9 @@ rule "Gain author info"
 
     when
         $author: Author();
-        $reviews : List() from collect(Review(reader.getId() == loggedReader.getId()));
-        $readingList: List() from collect(ReadingListItem(reader.getId() == loggedReader.getId()));
-        $readingProgressList: List() from collect(ReadingProgress(reader.getId() == loggedReader.getId()))
+        $reviews : List() from collect(Review(reader.getId().equals(loggedReader.getId())));
+        $readingList: List() from collect(ReadingListItem(reader.getId().equals(loggedReader.getId())));
+        $readingProgressList: List() from collect(ReadingProgress(reader.getId().equals(loggedReader.getId())))
         Number($numRead: longValue) from accumulate (
             $readingProgress: ReadingProgress(getPercentage() > 80, $author memberOf book.getAuthors())
             from $readingProgressList,
@@ -61,7 +61,7 @@ rule "Gain author info"
         insert(new AuthorFact($author, $numRead, $numUnread, $numReadingList, $numReviews, $averageRating));
         System.out.println("AUTHOR INFO");
         System.out.printf(
-                "LOG -> AuthorFact ( authorId=%d, numRead=%d, numUnread=%d, " +
+                "LOG -> AuthorFact ( authorId=%s, numRead=%d, numUnread=%d, " +
                  "numReadingList=%d, numReviews=%d, averageRating=%f )%n",
                 $author.getId(), $numRead, $numUnread, $numReadingList, $numReviews, $averageRating);
 end
@@ -73,27 +73,27 @@ rule "Gain category info"
 
     when
         $category: Category();
-        $reviews : List() from collect(Review(reader.getId() == loggedReader.getId()));
-        $readingList: List() from collect(ReadingListItem(reader.getId() == loggedReader.getId()));
-        $readingProgressList: List() from collect(ReadingProgress(reader.getId() == loggedReader.getId()))
+        $reviews : List() from collect(Review(reader.getId().equals(loggedReader.getId())));
+        $readingList: List() from collect(ReadingListItem(reader.getId().equals(loggedReader.getId())));
+        $readingProgressList: List() from collect(ReadingProgress(reader.getId().equals(loggedReader.getId())))
         Number($numRead: longValue) from accumulate (
-            $readingProgress: ReadingProgress(getPercentage() > 80, $category.getId() == book.getCategory().getId())
+            $readingProgress: ReadingProgress(getPercentage() > 80, $category.getId().equals(book.getCategory().getId()))
             from $readingProgressList,
             count($readingProgress)
         );
         Number($numUnread: longValue) from accumulate (
             $readingProgress: ReadingProgress(getPercentage() < 10 &&
                             lastOpened.plus(7, ChronoUnit.DAYS).isBefore(Instant.now()),
-            $category.getId() == book.getCategory().getId())
+            $category.getId().equals(book.getCategory().getId()))
             from $readingProgressList,
             count($readingProgress)
         );
         Number($averageRating: doubleValue) from accumulate (
-            $review: Review($bookRating: rating, $category.getId() == book.getCategory().getId()) from $reviews,
+            $review: Review($bookRating: rating, $category.getId().equals(book.getCategory().getId())) from $reviews,
             average($bookRating)
         );
         Number($numReviews: longValue) from accumulate (
-            $review: Review($category.getId() == book.getCategory().getId()) from $reviews,
+            $review: Review($category.getId().equals(book.getCategory().getId())) from $reviews,
             count($review)
         );
         Number($numReadingList: longValue) from accumulate(
@@ -105,7 +105,7 @@ rule "Gain category info"
         insert(new CategoryFact($category, $numRead, $numUnread, $numReadingList, $numReviews, $averageRating));
         System.out.println("CATEGORY INFO");
         System.out.printf(
-                "LOG -> CategoryFact ( categoryId=%d, numRead=%d, numUnread=%d, " +
+                "LOG -> CategoryFact ( categoryId=%s, numRead=%d, numUnread=%d, " +
                  "numReadingList=%d, numReviews=%d, averageRating=%f )%n",
                 $category.getId(), $numRead, $numUnread, $numReadingList, $numReviews, $averageRating);
 end
@@ -130,7 +130,7 @@ rule "Add points for authors' high rating (number of reviews is also important)"
 
         insert(new RecommendationPoints($book, $revRating * highRatingPoints));
         System.out.println("AUTHOR HIGH RATING");
-        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%s, points=%f )%n",
                           $book.getId(), $revRating * highRatingPoints);
 
 end
@@ -155,7 +155,7 @@ rule "Add points for authors' average rating (number of reviews is also importan
 
         insert(new RecommendationPoints($book, $revRating * averageRatingPoints));
         System.out.println("AUTHOR AVERAGE RATING");
-        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%s, points=%f )%n",
                           $book.getId(), $revRating * averageRatingPoints);
 
 end
@@ -179,7 +179,7 @@ rule "Deduct points for authors' poor rating (number of reviews is also importan
     then
         insert(new RecommendationPoints($book, $revRating * lowRatingPoints * -1));
         System.out.println("AUTHOR POOR RATING");
-        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%s, points=%f )%n",
                           $book.getId(), $revRating * lowRatingPoints * -1);
 
 end
@@ -199,7 +199,7 @@ rule "Add points for read authors"
 
         insert(new RecommendationPoints($book, $numRead * readPoints));
         System.out.println("AUTHOR READ");
-        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%s, points=%f )%n",
             $book.getId(), Double.valueOf($numRead * readPoints));
 
 end
@@ -219,7 +219,7 @@ rule "Deduct points for unread authors"
 
         insert(new RecommendationPoints($book, $numUnread * readPoints * -1));
         System.out.println("AUTHOR UNREAD");
-        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%s, points=%f )%n",
             $book.getId(), Double.valueOf($numUnread * readPoints * -1));
 end
 
@@ -237,7 +237,7 @@ rule "Add points for author in reading list"
     then
         insert(new RecommendationPoints($book, $numReadingList * readingListPoints));
         System.out.println("AUTHOR IN READING LIST");
-        System.out.printf("LOG -> RecommendationPoints ( bookId=%d, points=%f )%n",
+        System.out.printf("LOG -> RecommendationPoints ( bookId=%s, points=%f )%n",
             $book.getId(), Double.valueOf($numReadingList * readingListPoints));
 end
 
@@ -249,14 +249,14 @@ rule "Gather all points for a book"
     when
     	$book : Book();
         Number($totalPoints: doubleValue) from accumulate (
-        	RecommendationPoints(book.getId() == $book.getId(), $points: points),
+        	RecommendationPoints(book.getId().equals($book.getId()), $points: points),
         	sum($points)
         );
     then
 
     	insert(new BookResponse($book, $totalPoints));
     	System.out.println("GATHER ALL POINTS");
-    	System.out.printf("LOG -> BookResponse ( bookId=%d, points=%f )%n", $book.getId(), $totalPoints);
+    	System.out.printf("LOG -> BookResponse ( bookId=%s, points=%f )%n", $book.getId(), $totalPoints);
 end
 
 rule "Recommendation collection finished successfully"
@@ -289,16 +289,18 @@ end
 
 rule "Reading list for readers of the same category"
 	agenda-group "recommendations"
+	no-loop
+	lock-on-active
 
     when
     	UserCategoryRecommendation();
         $response : BookResponse($points: points, $book: book);
-        $readingList: List() from collect(ReadingListItem(book.getId() == $book.getId()));
+        $readingList: List() from collect(ReadingListItem(book.getId().equals($book.getId())));
         Number(intValue > 0, $numReadingList: intValue) from accumulate (
         	$similarReadingList: ReadingListItem(reader.getCategory().equals(loggedReader.getCategory()))
         	from $readingList,
         	count($similarReadingList));
     then
-        System.out.printf("LOG -> READING LIST ADDED %d POINTS FOR BOOK %d%n", $numReadingList, $book.getId());
+        System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numReadingList, $book.getId());
         modify($response){setPoints($points + $numReadingList)}
 end

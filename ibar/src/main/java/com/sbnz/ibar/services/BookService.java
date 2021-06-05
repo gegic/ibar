@@ -66,14 +66,14 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public BookDto getById(Long id) {
+    public BookDto getById(UUID id) {
         Optional<Book> book = bookRepository.findById(id);
         return this.toBookDto(book.orElseThrow(EntityNotFoundException::new));
     }
 
     public List<BookDto> getTopRated() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        long userId = user.getId();
+        UUID userId = user.getId();
 
         Pageable pageLimit = PageRequest.of(0, 10);
         return this.bookRepository.getTopRated(userId, pageLimit).stream()
@@ -84,7 +84,7 @@ public class BookService {
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        long userId = user.getId();
+        UUID userId = user.getId();
 
         Reader r = (Reader) this.userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
 
@@ -172,7 +172,7 @@ public class BookService {
     }
 
     @Transactional
-    public boolean delete(Long id) throws Exception {
+    public boolean delete(UUID id) throws Exception {
         Book existingBook = this.bookRepository.findById(id).orElse(null);
         if (existingBook == null) {
             throw new NotFoundException("Book with given id doesn't exist.");
@@ -187,12 +187,12 @@ public class BookService {
         return true;
     }
 
-    public Book update(Long id, Book entity) throws NotFoundException {
+    public Book update(UUID id, Book entity) throws NotFoundException {
         return null;
     }
 
     @Transactional
-    public Book update(Long id, Book entity, MultipartFile newImage) throws NotFoundException, IOException {
+    public Book update(UUID id, Book entity, MultipartFile newImage) throws NotFoundException, IOException {
         Book existingBook = this.bookRepository.findById(id).orElse(null);
         if (existingBook == null) {
             throw new NotFoundException("Book with given id doesn't exist.");
@@ -235,7 +235,7 @@ public class BookService {
         return bookRepository.save(entity);
     }
 
-    public ReadingProgressDto setReadingProgress(long bookId, long readerId, long progress) {
+    public ReadingProgressDto setReadingProgress(UUID bookId, UUID readerId, long progress) {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id " + bookId));
 
@@ -261,11 +261,11 @@ public class BookService {
         return readingProgressMapper.toDto(readingProgress);
     }
 
-    public Page<Book> getByCategoryId(Long id, Pageable pageable) {
+    public Page<Book> getByCategoryId(UUID id, Pageable pageable) {
         return bookRepository.getByCategoryId(id, pageable);
     }
 
-    public Page<Book> findByCategoryIdAndNameContains(Long id, String name, Pageable pageable) {
+    public Page<Book> findByCategoryIdAndNameContains(UUID id, String name, Pageable pageable) {
         return bookRepository.findByCategoryIdAndNameContainingIgnoreCase(id, name, pageable);
     }
 

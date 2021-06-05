@@ -5,6 +5,8 @@ import org.springframework.stereotype.Repository;
 
 import com.sbnz.ibar.model.Authority;
 
+import java.util.UUID;
+
 @Repository
 public interface AuthorityRepository extends JpaRepository<Authority, Long> {
 	

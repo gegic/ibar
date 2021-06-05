@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -30,7 +31,7 @@ public class ReadingProgressController {
     }
 
     @GetMapping(path = "book/{bookId}")
-    ResponseEntity<ReadingProgressDto> getProgress(@PathVariable long bookId) throws EntityDoesNotExistException {
+    ResponseEntity<ReadingProgressDto> getProgress(@PathVariable UUID bookId) throws EntityDoesNotExistException {
         return ResponseEntity.ok(progressService.get(bookId));
     }
 }

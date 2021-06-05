@@ -3,8 +3,10 @@ package com.sbnz.ibar.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -13,8 +15,12 @@ import javax.persistence.*;
 public class Achievement {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	@GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+    		name = "UUID",
+			strategy = "org.hibernate.id.UUIDGenerator"
+	)
+	private UUID id;
 
 	@Column(nullable = false)
 	private String name;

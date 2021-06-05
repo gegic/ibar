@@ -2,6 +2,7 @@ package com.sbnz.ibar.dto;
 
 import java.time.Instant;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class AuthorDto {
 
-	private Long id;
+	private UUID id;
 
 	@NotEmpty(message = "Name cannot be empty.")
 	private String name;

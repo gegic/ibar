@@ -17,11 +17,11 @@ export class BookDetailsService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getBook(id: number): Observable<Book> {
+  getBook(id: string): Observable<Book> {
     return this.httpClient.get<Book>(`${this.BOOKS_API}/${id}`);
   }
 
-  getReadingProgress(bookId: number): Observable<ReadingProgress> {
+  getReadingProgress(bookId: string): Observable<ReadingProgress> {
     return this.httpClient.get<ReadingProgress>(`${this.READING_PROGRESS_API}/book/${bookId}`);
   }
 

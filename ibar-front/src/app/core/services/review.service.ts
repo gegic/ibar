@@ -13,27 +13,27 @@ export class ReviewService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getReviews(bookId: number, page: number): Observable<Page<Review>> {
+  getReviews(bookId: string, page: number): Observable<Page<Review>> {
     return this.httpClient.get<Page<Review>>(`/api/reviews/book/${bookId}?page=${page}`);
   }
 
-  getReviewNumbers(bookId: number): Observable<ReviewNumber[]> {
+  getReviewNumbers(bookId: string): Observable<ReviewNumber[]> {
     return this.httpClient.get<ReviewNumber[]>(`/api/reviews/by-rating/book/${bookId}`);
   }
 
-  getReviewForUser(bookId: number): Observable<Review> {
+  getReviewForUser(bookId: string): Observable<Review> {
     return this.httpClient.get<Review>(`/api/reviews/user/book/${bookId}`);
   }
 
-  delete(reviewId: number): Observable<void> {
+  delete(reviewId: string): Observable<void> {
     return this.httpClient.delete<void>(`/api/reviews/${reviewId}`);
   }
 
-  add(review: Review): Observable<Review> {
+  post(review: Review): Observable<Review> {
     return this.httpClient.post<Review>('/api/reviews', review);
   }
 
-  edit(review: Review): Observable<Review> {
+  put(review: Review): Observable<Review> {
     return this.httpClient.put<Review>('/api/reviews', review);
   }
 

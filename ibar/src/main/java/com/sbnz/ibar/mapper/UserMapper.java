@@ -2,6 +2,7 @@ package com.sbnz.ibar.mapper;
 
 import com.sbnz.ibar.dto.UserDto;
 import com.sbnz.ibar.model.Admin;
+import com.sbnz.ibar.model.Authority;
 import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.AuthorityRepository;
@@ -38,7 +39,8 @@ public class UserMapper {
         entity.setPassword(dto.getPassword());
         entity.setEnabled(dto.isEnabled());
         entity.setAuthorities(dto.getAuthorities().stream()
-                .map(au -> authortyRepository.getOne(au.getId())).collect(Collectors.toList()));
+                .map(au -> authortyRepository.findById(au.getId()).orElse(new Authority(au.getId(), au.getName())))
+                .collect(Collectors.toList()));
         return entity;
     }
 }

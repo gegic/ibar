@@ -8,19 +8,20 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 @Repository
-public interface BookRepository extends JpaRepository<Book, Long> {
+public interface BookRepository extends JpaRepository<Book, UUID> {
 
-	Page<Book> getByCategoryId(Long id, Pageable pageable);
+	Page<Book> getByCategoryId(UUID id, Pageable pageable);
 
-	Page<Book> findByCategoryIdAndNameContainingIgnoreCase(Long id, String name, Pageable pageable);
+	Page<Book> findByCategoryIdAndNameContainingIgnoreCase(UUID id, String name, Pageable pageable);
 
 	Page<Book> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
 	@Query("select b from Book b where b not in (select bk from ReadingProgress rp join rp.book bk where rp.reader.id = :readerId) order by b.averageRating desc")
-	List<Book> getTopRated(long readerId, Pageable limitPage);
+	List<Book> getTopRated(UUID readerId, Pageable limitPage);
 
 	@Query("select b from Book b where b not in (select bk from ReadingProgress rp join rp.book bk where rp.reader.id = :readerId)")
-	List<Book> getUnread(long readerId);
+	List<Book> getUnread(UUID readerId);
 }
