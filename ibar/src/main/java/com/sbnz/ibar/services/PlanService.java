@@ -1,66 +1,114 @@
 package com.sbnz.ibar.services;
 
-import java.util.Optional;
-import java.util.UUID;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import com.sbnz.ibar.model.Plan;
+import com.sbnz.ibar.dto.PlanDto;
+import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
+import com.sbnz.ibar.mapper.PlanMapper;
+import com.sbnz.ibar.model.*;
 import com.sbnz.ibar.repositories.CategoryRepository;
 import com.sbnz.ibar.repositories.PlanRepository;
+import com.sbnz.ibar.repositories.SubscriptionRepository;
+import com.sbnz.ibar.repositories.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javassist.NotFoundException;
 
+import javax.persistence.EntityNotFoundException;
+
 @Service
+@AllArgsConstructor
 public class PlanService {
 
+	private final PlanMapper planMapper;
+	private final PlanRepository planRepository;
+	private final CategoryRepository categoryRepository;
+	private final SubscriptionRepository subscriptionRepository;
+	private final UserRepository userRepository;
 
-	private PlanRepository packageRepository;
-
-
-	private CategoryRepository categoryRepository;
-
-	public Iterable<Plan> getAll() {
-		return packageRepository.findAll();
+	public List<PlanDto> getAll() {
+		return planRepository.findAll().stream().map(planMapper::toDto).collect(Collectors.toList());
 	}
 
-	public Plan getById(UUID id) {
-		Optional<Plan> packageEntity = packageRepository.findById(id);
-
-		return packageEntity.orElse(null);
+	public PlanDto getById(UUID id) throws EntityDoesNotExistException {
+		return planRepository.findById(id).map(planMapper::toDto).
+				orElseThrow(() -> new EntityDoesNotExistException(Plan.class.getName(), id));
 	}
 
-	public Plan create(Plan entity) throws Exception {
-		Plan planEntity = packageRepository.findByName(entity.getName());
+	public void subscribe(PlanDto dto) throws EntityAlreadyExistsException, EntityDoesNotExistException {
+		User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (subscriptionRepository.existsByBuyerId(u.getId())) {
+			throw new EntityAlreadyExistsException(Subscription.class.getName(), u.getId());
+		}
+		Optional<Plan> optionalPlan =planRepository.findById(dto.getId());
+		if (!optionalPlan.isPresent()) {
+			throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
+		}
+		Reader r = (Reader) userRepository.findById(u.getId())
+				.orElseThrow(() -> new EntityDoesNotExistException(Reader.class.getName(), u.getId()));
 
-		if (planEntity != null) {
-			throw new Exception("Package with given name already exists.");
+		Plan p = optionalPlan.get();
+		Subscription s = new Subscription();
+		s.setBuyer(r);
+		s.setPurchasedPlan(p);
+		s.setDateOfPurchase(Instant.now());
+		subscriptionRepository.save(s);
+	}
+
+	public PlanDto create(PlanDto dto) throws Exception {
+		Optional<Plan> optionalPlan = planRepository.findByName(dto.getName());
+
+		if (optionalPlan.isPresent()) {
+			throw new EntityAlreadyExistsException(Plan.class.getName(), dto.getName());
 		}
 
-		planEntity = packageRepository.save(entity);
+		Plan entity = new Plan();
+		entity.setName(dto.getName());
+		entity.setPrice(dto.getPrice());
+		entity.setDayDuration(dto.getDayDuration());
+		entity.setDescription(dto.getDescription());
 
-		return planEntity;
+		Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
+		entity.setCategories(categories);
+
+		entity = planRepository.save(entity);
+
+		return planMapper.toDto(entity);
 	}
 
-	public boolean delete(UUID id) throws Exception {
-		// TODO Auto-generated method stub
-		return false;
+	public void delete(UUID id) {
+		try {
+			planRepository.deleteById(id);
+		} catch (Exception ignored) {
+		}
 	}
 
-	public Plan update(UUID id, Plan entity) throws Exception {
-		Plan planEntity = getById(id);
+	public PlanDto update(PlanDto dto) throws Exception {
+		Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
 
-		if (planEntity == null) {
-			throw new NotFoundException("Package with given id doesn't exist");
+		if (!optionalPlan.isPresent()) {
+			throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
 		}
 
-		planEntity.setName(entity.getName());
-		planEntity.setPrice(entity.getPrice());
-		planEntity.setDuration(entity.getDuration());
+		Plan entity = optionalPlan.get();
 
-		packageRepository.save(entity);
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setPrice(dto.getPrice());
+		entity.setDayDuration(dto.getDayDuration());
 
-		return entity;
+		Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
+		entity.setCategories(categories);
+
+		entity = planRepository.save(entity);
+
+		return planMapper.toDto(entity);
 	}
 
 }

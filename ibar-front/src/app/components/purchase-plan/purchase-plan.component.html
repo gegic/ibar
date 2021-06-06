@@ -1,0 +1,23 @@
+<div>
+  <h1 class="p-mt-6 p-ml-5 p-text-normal">Choose a plan:</h1>
+  <div class="p-mt-5">
+    <div class="carousel-bg">
+      <div class="snip1214">
+        <p-carousel [value]="plans"
+                    [circular]="true"
+                    [responsiveOptions]="responsiveOptions"
+                    [showIndicators]="false"
+                    *ngIf="!loadingPlans; else recommendedSkeleton"
+        >
+          <ng-template let-plan pTemplate="item">
+            <app-plan-cover [plan]="plan" (purchaseConfirmed)="purchaseConfirmed($event)"></app-plan-cover>
+          </ng-template>
+        </p-carousel>
+      </div>
+      <ng-template #recommendedSkeleton>
+        <p-skeleton width="100%" height="410px"></p-skeleton>
+      </ng-template>
+    </div>
+  </div>
+  <h3 class="p-text-center p-mt-4 p-text-light">Personalized reading experience with <span class="logo">ibar</span></h3>
+</div>

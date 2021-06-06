@@ -2,21 +2,23 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MenuItem} from 'primeng/api';
 import {Subscription} from 'rxjs';
 import {AuthService} from '../../core/services/auth.service';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {environment} from '../../../environments/environment';
 import {TokenService} from '../../core/services/token.service';
 import {Authority} from '../../core/model/authority';
+import {NavigationItem} from '../../core/model/navigation-item';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit, OnDestroy {
-
-  private subscriptions: Subscription[] = [];
+export class NavbarComponent implements OnInit {
 
   searchQuery = '';
+
+  navbarItems: NavigationItem[] = [];
+  hasSearch = false;
 
   menuItems: MenuItem[] = [
     {label: 'Edit account', icon: 'pi pi-fw pi-user-edit', routerLink: ['/user-edit']},
@@ -25,11 +27,18 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   constructor(private authService: AuthService,
               private router: Router,
-              private tokenService: TokenService) { }
+              private tokenService: TokenService,
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     console.log(this.tokenService.getToken());
 
+    this.activatedRoute.data.subscribe(val => {
+      if (val.navigation) {
+        this.navbarItems = val.navigation;
+      }
+      this.hasSearch = !!val.hasSearch;
+    });
     // this.subscriptions.push(
     //   this.culturalOfferingsService.searchQuery.subscribe(val => {
     //     this.searchQuery = val;
@@ -82,10 +91,6 @@ export class NavbarComponent implements OnInit, OnDestroy {
 
   get initials(): string {
     return this.tokenService.getToken().userInitials;
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.forEach(s => s.unsubscribe());
   }
 
 }

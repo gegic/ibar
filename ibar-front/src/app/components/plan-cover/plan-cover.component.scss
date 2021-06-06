@@ -1,0 +1,116 @@
+.plan {
+  margin: auto;
+  width: 250px;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.plan-title {
+  position: relative;
+  top: 0;
+  font-weight: 800;
+  padding: 5px 15px;
+  -webkit-transform: translateY(-50%);
+  transform: translateY(-50%);
+  display: inline-block;
+  background-color: #222f3d;
+  color: #ffffff;
+  text-transform: uppercase;
+}
+.plan-cost {
+  padding: 0 10px 20px;
+}
+.plan-price {
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 800;
+  font-size: 2.4em;
+  color: #34495e;
+}
+.plan-type {
+  opacity: 0.6;
+}
+.plan-features {
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  list-style: outside none none;
+  font-size: 0.8em;
+}
+.plan-features li {
+  border-top: 1px solid #d2d7e2;
+  padding: 10px 5%;
+}
+.plan-features li:nth-child(even) {
+  background: rgba(0, 0, 0, 0.08);
+}
+.plan-features i {
+  margin-right: 8px;
+  opacity: 0.4;
+}
+.plan-select {
+  border-top: 1px solid #d2d7e2;
+  padding: 10px 10px 0;
+}
+.plan-select a {
+  background-color: #222f3d;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 0.5em 1em;
+  font-weight: 800;
+  text-transform: uppercase;
+  display: inline-block;
+  cursor: pointer;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.plan-select a:hover {
+  background-color: #46627f;
+}
+.featured {
+  margin-top: -10px;
+  background-color: #34495e;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+.featured .plan-title,
+.featured .plan-price {
+  color: #ffffff;
+}
+.featured .plan-cost {
+  padding: 10px 10px 20px;
+}
+.featured .plan-features li {
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+.featured .plan-select {
+  padding: 20px 10px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+}
+@media only screen and (max-width: 767px) {
+  .plan {
+    width: 50%;
+  }
+  .plan-title,
+  .plan-select a {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  .plan-cost,
+  .featured .plan-cost {
+    padding: 20px 10px 20px;
+  }
+  .plan-select,
+  .featured .plan-select {
+    padding: 10px 10px 10px;
+  }
+  .featured {
+    margin-top: 0;
+  }
+}
+@media only screen and (max-width: 440px) {
+  .plan {
+    width: 100%;
+  }
+}

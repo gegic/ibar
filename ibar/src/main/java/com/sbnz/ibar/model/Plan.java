@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -29,6 +31,13 @@ public class Plan {
 	@Column(nullable = false)
 	private double price;
 
+	@ManyToMany
+	private Set<Category> categories;
+
+	@Lob
+	@Type(type = "org.hibernate.type.TextType")
+	private String description;
+
 	@Column(nullable = false)
-	private Long duration;
+	private Long dayDuration;
 }

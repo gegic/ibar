@@ -103,7 +103,6 @@ export class BookReviewsComponent implements OnInit {
   getUserReview(): void {
     this.isReviewsLoading = true;
     this.reviewService.getReviewForUser(this.book?.id ?? '').subscribe((val: Review) => {
-      console.log(val);
       this.userReview = val;
       this.isReviewsLoading = false;
     });

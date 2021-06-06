@@ -1,10 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {BookDetailsService} from '../../core/services/book-details.service';
 import {Book} from '../../core/model/book';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {ReadingProgress} from '../../core/model/reading-progress';
+import {NgxExtendedPdfViewerComponent} from 'ngx-extended-pdf-viewer';
 
 @Component({
   selector: 'app-book-reading',
@@ -14,7 +15,7 @@ import {ReadingProgress} from '../../core/model/reading-progress';
 export class BookReadingComponent implements OnInit, OnDestroy {
 
   isLoading = true;
-  currentPage = 1;
+  currentPage = 0;
 
   constructor(private detailsService: BookDetailsService,
               private activatedRoute: ActivatedRoute,
@@ -26,6 +27,9 @@ export class BookReadingComponent implements OnInit, OnDestroy {
       val => {
         if (!!val.id && (!this.book || (!!this.book && this.book.id !== val.id))) {
           this.getBook(val.id);
+          this.getReadingProgress(val.id);
+          setInterval(this.postProgress, 4 * 60 * 1000);
+        } else if (!!this.book && this.book.id === val.id) {
           this.getReadingProgress(val.id);
           setInterval(this.postProgress, 4 * 60 * 1000);
         } else {
@@ -67,6 +71,11 @@ export class BookReadingComponent implements OnInit, OnDestroy {
         }
       );
     }
+  }
+
+  pageChanged(sth: any): void {
+    console.log(sth);
+    this.currentPage = sth;
   }
 
   backToBook(): void {

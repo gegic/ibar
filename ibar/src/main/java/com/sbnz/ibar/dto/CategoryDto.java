@@ -17,7 +17,7 @@ public class CategoryDto {
 	@NotEmpty(message = "Name cannot be null or empty.")
 	private String name;
 	
-	@NotEmpty(message = "Discription cannot be null or empty.")
+	@NotEmpty(message = "Description cannot be null or empty.")
 	private String description;
 	
 	private boolean active;

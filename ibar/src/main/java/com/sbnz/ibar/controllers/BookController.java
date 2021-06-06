@@ -17,7 +17,6 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @RequestMapping(value = "/api/books", produces = MediaType.APPLICATION_JSON_VALUE)
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class BookController {
 
     private final BookService bookService;
@@ -58,39 +57,6 @@ public class BookController {
         return ResponseEntity.ok(bookService.getRecommended());
     }
 
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/by-page")
-//	public ResponseEntity<Page<BookResDTO>> getAllBooks(Pageable pageable) {
-//		Page<Book> page = bookService.findAll(pageable);
-//		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/category/{id}")
-//	public ResponseEntity<Page<BookResDTO>> getBooksByCategoryId(Pageable pageable, @PathVariable UUID id) {
-//		Page<Book> page = bookService.getByCategoryId(id, pageable);
-//		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/category/{id}/find-by-name/{name}")
-//	public ResponseEntity<Page<BookResDTO>> findBookByCategoryIdAndName(Pageable pageable, @PathVariable UUID id,
-//			@PathVariable String name) {
-//		Page<Book> page = bookService.findByCategoryIdAndNameContains(id, name, pageable);
-//
-//		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/find-by-name/{name}")
-//	public ResponseEntity<Page<BookResDTO>> findBookByName(Pageable pageable, @PathVariable String name) {
-//		Page<Book> page = bookService.findByNameContains(name, pageable);
-//
-//		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
-//	}
-//
-
-//
 //	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 //	public ResponseEntity<BookResDTO> createBook(@RequestPart("bookDTO") @Valid @NotNull BookDTO bookDTO,
 //			@RequestPart("file") MultipartFile file) {

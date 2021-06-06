@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Book} from '../../core/model/book';
 import {BookService} from '../../core/services/book.service';
 import {TokenService} from '../../core/services/token.service';
+import {RESPONSIVE_OPTIONS} from '../../core/utils/consts';
 
 @Component({
   selector: 'app-browse-books',
@@ -15,44 +16,7 @@ export class BrowseBooksComponent implements OnInit {
 
   recommended: Book[];
   loadingRecommended = true;
-
-  responsiveOptions = [
-    {
-      breakpoint: '2600px',
-      numVisible: 10,
-      numScroll: 2
-    },
-    {
-      breakpoint: '2350px',
-      numVisible: 8,
-      numScroll: 2
-    },
-    {
-      breakpoint: '1600px',
-      numVisible: 5,
-      numScroll: 1
-    },
-    {
-      breakpoint: '1350px',
-      numVisible: 4,
-      numScroll: 1
-    },
-    {
-      breakpoint: '1100px',
-      numVisible: 3,
-      numScroll: 1
-    },
-    {
-      breakpoint: '850px',
-      numVisible: 2,
-      numScroll: 1
-    },
-    {
-      breakpoint: '600px',
-      numVisible: 1,
-      numScroll: 1
-    }
-  ];
+  responsiveOptions = RESPONSIVE_OPTIONS;
 
   constructor(private bookService: BookService,
               private tokenService: TokenService) { }

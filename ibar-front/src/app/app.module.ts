@@ -40,6 +40,9 @@ import { BookReviewElementComponent } from './components/book-review-element/boo
 import {RippleModule} from 'primeng/ripple';
 import { BookReadingComponent } from './components/book-reading/book-reading.component';
 import {NgxExtendedPdfViewerModule} from 'ngx-extended-pdf-viewer';
+import {PlanInterceptor} from './core/interceptors/plan.interceptor';
+import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.component';
+import { PlanCoverComponent } from './components/plan-cover/plan-cover.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +59,8 @@ import {NgxExtendedPdfViewerModule} from 'ngx-extended-pdf-viewer';
     BookReviewsComponent,
     BookReviewElementComponent,
     BookReadingComponent,
+    PurchasePlanComponent,
+    PlanCoverComponent,
   ],
   imports: [
     BrowserModule,
@@ -90,9 +95,14 @@ import {NgxExtendedPdfViewerModule} from 'ngx-extended-pdf-viewer';
       useClass: JwtInterceptor,
       multi: true
     },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: PlanInterceptor,
+      multi: true
+    },
     ConfirmationService,
     MessageService,
-    DialogService
+    DialogService,
   ],
   bootstrap: [AppComponent]
 })
