@@ -23,8 +23,8 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    @PreAuthorize("permitAll()")
     @GetMapping
+    @PreAuthorize("permitAll()")
     public ResponseEntity<Iterable<CategoryDto>> getAllCategories() {
         List<CategoryDto> categoryDtos = categoryService.getAll();
 
@@ -32,6 +32,7 @@ public class CategoryController {
     }
 
     @GetMapping(value = "/{id}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<CategoryDto> getCategoryById(@PathVariable UUID id)
             throws EntityNotFoundException {
         CategoryDto category = categoryService.getById(id);
@@ -40,6 +41,7 @@ public class CategoryController {
     }
 
     @GetMapping(value = "/name/{name}")
+    @PreAuthorize("permitAll()")
     public ResponseEntity<CategoryDto> getCategoryByName(@PathVariable String name)
             throws EntityNotFoundException {
         CategoryDto category = categoryService.getByName(name);
@@ -48,6 +50,7 @@ public class CategoryController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto)
             throws EntityAlreadyExistsException {
         CategoryDto newCategory = categoryService.create(categoryDto);
@@ -56,6 +59,7 @@ public class CategoryController {
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryDto categoryDto)
             throws EntityDoesNotExistException, EntityAlreadyExistsException {
         CategoryDto updatedCategory = categoryService.update(id, categoryDto);
@@ -64,6 +68,7 @@ public class CategoryController {
     }
 
     @DeleteMapping(value = "/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Boolean> deleteCategory(@PathVariable UUID id) {
         Boolean deleteResult = categoryService.delete(id);
 

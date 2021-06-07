@@ -26,10 +26,8 @@ public class CategoryService {
     public List<CategoryDto> getAll() {
         List<Category> categories = categoryRepository.findAll();
 
-        List<CategoryDto> categoryDtos = categories.stream().map(this::toCategoryDto)
+        return categories.stream().map(this::toCategoryDto)
                 .collect(Collectors.toList());
-
-        return categoryDtos;
     }
 
     public CategoryDto getById(UUID id)
@@ -57,6 +55,8 @@ public class CategoryService {
         }
 
         Category category = new Category(categoryDto);
+
+        category.setId(UUID.randomUUID());
 
         category = categoryRepository.save(category);
 
@@ -89,9 +89,7 @@ public class CategoryService {
     }
 
     public boolean delete(UUID id) {
-        Optional<Category> category = categoryRepository.findById(id);
-
-        if (category.isEmpty()) {
+        if (!this.checkAllValiditiesForDeletingCategory(id)) {
             return false;
         }
 
@@ -104,4 +102,37 @@ public class CategoryService {
         return categoryMapper.toDto(category);
     }
 
+    private boolean checkAllValiditiesForDeletingCategory(UUID id) {
+        if (!this.doesExistCategoryWithGivenId(id)) {
+            return false;
+        }
+
+        if (this.doesExistBookThatContainsCategoryWithGivenId(id)) {
+            return false;
+        }
+
+        if (this.doesExistPlanThatContainsCategoryWithGivenId(id)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean doesExistCategoryWithGivenId(UUID id) {
+        Optional<Category> category = categoryRepository.findById(id);
+
+        return category.isPresent();
+    }
+
+    private boolean doesExistBookThatContainsCategoryWithGivenId(UUID id) {
+        Category category = categoryRepository.checkDoesBookContainCategoryWithGivenId(id);
+
+        return category != null;
+    }
+
+    private boolean doesExistPlanThatContainsCategoryWithGivenId(UUID id) {
+        Category category = categoryRepository.checkDoesPlanContainCategoryWithGivenId(id);
+
+        return category != null;
+    }
 }

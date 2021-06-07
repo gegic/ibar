@@ -19,6 +19,12 @@ public interface CategoryRepository extends JpaRepository<Category, UUID> {
     @Query("select distinct category from ReadingProgress rp join rp.book b join b.category category where rp.reader.id = :userId")
     List<Category> getReadCategories(UUID userId);
 
+    @Query("select distinct c from Category c, Book b where c.id = :categoryId and c.id = b.category.id")
+    Category checkDoesBookContainCategoryWithGivenId(UUID categoryId);
+
+    @Query("select distinct pc from Plan p join p.categories pc where pc.id = :categoryId")
+    Category checkDoesPlanContainCategoryWithGivenId(UUID categoryId);
+
     Optional<Category> getByName(String name);
 
 }
