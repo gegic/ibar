@@ -6,7 +6,8 @@ import {Router} from '@angular/router';
 import {AuthToken} from '../../core/model/auth-token';
 import {AuthService} from '../../core/services/auth.service';
 import {Authority} from '../../core/model/authority';
-import {ADMIN, READER} from '../../core/utils/consts';
+import {ADMIN, ADMIN_NAVBAR, READER, READER_NAVBAR} from '../../core/utils/consts';
+import {NavbarService} from '../../core/services/navbar.service';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ export class LoginComponent {
               private authService: AuthService,
               private messageService: MessageService,
               private formBuilder: FormBuilder,
-              private router: Router) {
+              private router: Router,
+              private navbarService: NavbarService) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.pattern(new RegExp('\\S'))]]
@@ -47,12 +49,11 @@ export class LoginComponent {
             this.messageService.add({
               severity: 'error',
               summary: 'Invalid role',
-              detail: 'Only super admins permitted.'
+              detail: 'Invalid role.'
             });
           }
         }
       }, er => {
-        console.log(er);
         this.loading = false;
         this.messageService.add({
           severity: 'error',
@@ -63,6 +64,5 @@ export class LoginComponent {
   }
 
   printsomething(): void {
-    console.log('sth');
   }
 }

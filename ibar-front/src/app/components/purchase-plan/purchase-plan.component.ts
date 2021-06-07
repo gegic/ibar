@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import {RESPONSIVE_OPTIONS} from '../../core/utils/consts';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {READER_NAVBAR, RESPONSIVE_OPTIONS} from '../../core/utils/consts';
 import {Plan} from '../../core/model/plan';
 import {PlanService} from '../../core/services/plan.service';
 import {Router} from '@angular/router';
 import {Message, MessageService} from 'primeng/api';
+import {NavbarService} from '../../core/services/navbar.service';
 
 @Component({
   selector: 'app-purchase-plan',
   templateUrl: './purchase-plan.component.html',
   styleUrls: ['./purchase-plan.component.scss']
 })
-export class PurchasePlanComponent implements OnInit {
+export class PurchasePlanComponent implements OnInit, OnDestroy {
 
   loadingPlans = true;
   plans: Plan[] = [];
@@ -18,10 +19,13 @@ export class PurchasePlanComponent implements OnInit {
 
   constructor(private planService: PlanService,
               private messageService: MessageService,
-              private router: Router) {}
+              private router: Router,
+              private navbarService: NavbarService) {}
 
   ngOnInit(): void {
     this.getPlans();
+    this.navbarService.navigation.next(null);
+    this.navbarService.hasSearch.next(false);
   }
 
   getPlans(): void {
@@ -43,6 +47,11 @@ export class PurchasePlanComponent implements OnInit {
         this.router.navigate(['']);
       }
     );
+  }
+
+  ngOnDestroy(): void {
+    this.navbarService.navigation.next(READER_NAVBAR);
+    this.navbarService.hasSearch.next(true);
   }
 
 }

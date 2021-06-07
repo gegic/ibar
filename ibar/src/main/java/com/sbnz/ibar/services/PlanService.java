@@ -1,9 +1,5 @@
 package com.sbnz.ibar.services;
 
-import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
-
 import com.sbnz.ibar.dto.PlanDto;
 import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
@@ -13,14 +9,15 @@ import com.sbnz.ibar.repositories.CategoryRepository;
 import com.sbnz.ibar.repositories.PlanRepository;
 import com.sbnz.ibar.repositories.SubscriptionRepository;
 import com.sbnz.ibar.repositories.UserRepository;
+import com.sbnz.ibar.rto.events.OnSubscribed;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.kie.api.runtime.KieSession;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javassist.NotFoundException;
-
-import javax.persistence.EntityNotFoundException;
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -31,6 +28,7 @@ public class PlanService {
 	private final CategoryRepository categoryRepository;
 	private final SubscriptionRepository subscriptionRepository;
 	private final UserRepository userRepository;
+	private final KieService kieService;
 
 	public List<PlanDto> getAll() {
 		return planRepository.findAll().stream().map(planMapper::toDto).collect(Collectors.toList());
@@ -58,6 +56,13 @@ public class PlanService {
 		s.setBuyer(r);
 		s.setPurchasedPlan(p);
 		s.setDateOfPurchase(Instant.now());
+
+		OnSubscribed event = new OnSubscribed();
+		event.setUser(r);
+		KieSession readingSession = kieService.getReadingSession();
+		readingSession.insert(event);
+		readingSession.fireAllRules();
+
 		subscriptionRepository.save(s);
 	}
 

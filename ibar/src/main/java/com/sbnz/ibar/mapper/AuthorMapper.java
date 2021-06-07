@@ -1,10 +1,10 @@
 package com.sbnz.ibar.mapper;
 
-import javax.validation.Valid;
-
 import com.sbnz.ibar.dto.AuthorDto;
 import com.sbnz.ibar.model.Author;
 import org.springframework.stereotype.Component;
+
+import javax.validation.Valid;
 
 @Component
 public class AuthorMapper {

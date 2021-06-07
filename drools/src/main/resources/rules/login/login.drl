@@ -1,41 +1,41 @@
 package rules.login;
 
 import java.lang.String;
-import com.sbnz.ibar.rto.events.LoginEvent;
-import com.sbnz.ibar.rto.events.SuspiciousEmailEvent
-import com.sbnz.ibar.rto.events.SuspiciousIpEvent;
+import com.sbnz.ibar.rto.events.OnLoggedIn;
+import com.sbnz.ibar.rto.events.OnSuspiciousEmail
+import com.sbnz.ibar.rto.events.OnSuspiciousIp;
 import com.sbnz.ibar.rto.EmailCheckFact;
 import com.sbnz.ibar.rto.IpCheckFact;
 
 
 rule "Unsuccessful login attempts - User account is suspicious"
     when
-        $le: LoginEvent($user: user, user != null);
+        $le: OnLoggedIn($user: user, user != null);
         Number(intValue >= 5) from accumulate(
-			$ale: LoginEvent(user.getId() == $user.getId(), success == false) over window:time(2m), count($ale)
+			$ale: OnLoggedIn(user.getId() == $user.getId(), success == false) over window:time(2m), count($ale)
 		);
-		not(SuspiciousEmailEvent(email.equals($user.getEmail())));
+		not(OnSuspiciousEmail(email.equals($user.getEmail())));
     then
     	System.out.println("LOG -> 5 UNSUCCESSFUL LOGIN ATTEMPTS FROM USER#" + $user.getId());
-    	insert(new SuspiciousEmailEvent($user.getEmail()));
+    	insert(new OnSuspiciousEmail($user.getEmail()));
 end
 
 rule "Unsuccessful login attempts - IP is suspicious"
     when
-        $le: LoginEvent($ipAddress: ipAddress);
+        $le: OnLoggedIn($ipAddress: ipAddress);
         Number(intValue >= 10) from accumulate(
-			$ale: LoginEvent(ipAddress == $ipAddress, success == false) over window:time(4m), count($ale)
+			$ale: OnLoggedIn(ipAddress == $ipAddress, success == false) over window:time(4m), count($ale)
 		);
-		not(SuspiciousIpEvent(ipAddress.equals($ipAddress)));
+		not(OnSuspiciousIp(ipAddress.equals($ipAddress)));
     then
     	System.out.println("LOG -> 10 UNSUCCESSFUL LOGIN ATTEMPTS FROM IP#" + $ipAddress);
-    	insert(new SuspiciousIpEvent($ipAddress));
+    	insert(new OnSuspiciousIp($ipAddress));
 end
 
 rule "User account temporarily disabled"
     when
         $lcf: EmailCheckFact($email: userEmail);
-        SuspiciousEmailEvent(email.equals($email));
+        OnSuspiciousEmail(email.equals($email));
     then
     	System.out.println("LOG -> USER TEMPORARILY BLOCKED " + $email);
         $lcf.setAllowed(false);
@@ -45,7 +45,7 @@ end
 rule "User account not disabled"
     when
         $lcf: EmailCheckFact($email: userEmail);
-        not(SuspiciousEmailEvent(email.equals($email)));
+        not(OnSuspiciousEmail(email.equals($email)));
     then
     	System.out.println("LOG -> USER NOT BLOCKED " + $email);
         $lcf.setAllowed(true);
@@ -55,7 +55,7 @@ end
 rule "IP temporarily blocked"
     when
         $lcf: IpCheckFact($ipAddress: ipAddress);
-        SuspiciousIpEvent(ipAddress.equals($ipAddress));
+        OnSuspiciousIp(ipAddress.equals($ipAddress));
     then
     	System.out.println("LOG -> IP TEMPORARILY BLOCKED " + $ipAddress);
         $lcf.setAllowed(false);
@@ -65,7 +65,7 @@ end
 rule "IP not blocked"
     when
         $lcf: IpCheckFact($ipAddress: ipAddress);
-        not(SuspiciousIpEvent(ipAddress.equals($ipAddress)));
+        not(OnSuspiciousIp(ipAddress.equals($ipAddress)));
     then
     	System.out.println("LOG -> IP TEMPORARILY NOT BLOCKED " + $ipAddress);
         $lcf.setAllowed(true);

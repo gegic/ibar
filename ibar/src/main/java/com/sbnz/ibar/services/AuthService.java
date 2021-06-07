@@ -8,7 +8,7 @@ import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.rto.EmailCheckFact;
 import com.sbnz.ibar.rto.IpCheckFact;
-import com.sbnz.ibar.rto.events.LoginEvent;
+import com.sbnz.ibar.rto.events.OnLoggedIn;
 import com.sbnz.ibar.security.TokenUtils;
 import lombok.AllArgsConstructor;
 import org.kie.api.runtime.KieSession;
@@ -61,9 +61,9 @@ public class AuthService {
         } catch (AuthenticationException e) {
             Optional<User> found = userRepository.findByEmail(loginDto.getEmail());
             User present = found.orElse(null);
-            LoginEvent loginEvent =
-                    new LoginEvent(new Date(), present, ipAddress, false);
-            loginSession.insert(loginEvent);
+            OnLoggedIn onLoggedIn =
+                    new OnLoggedIn(new Date(), present, ipAddress, false);
+            loginSession.insert(onLoggedIn);
             loginSession.fireAllRules();
             throw e;
         }

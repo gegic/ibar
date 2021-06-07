@@ -1,37 +1,25 @@
 package com.sbnz.ibar.controllers;
 
-import java.util.NoSuchElementException;
-import javax.validation.Valid;
-
 import com.sbnz.ibar.dto.AuthTokenDto;
+import com.sbnz.ibar.dto.UserDto;
 import com.sbnz.ibar.dto.UserLoginDto;
 import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.services.AuthService;
+import com.sbnz.ibar.services.AuthorityService;
+import com.sbnz.ibar.services.MailService;
+import com.sbnz.ibar.services.UserService;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import com.sbnz.ibar.dto.UserDto;
-import com.sbnz.ibar.security.TokenUtils;
-import com.sbnz.ibar.services.AuthorityService;
-import com.sbnz.ibar.services.MailService;
-import com.sbnz.ibar.services.UserService;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.validation.Valid;
 
 @RestController
 @AllArgsConstructor

@@ -2,17 +2,15 @@ package com.sbnz.ibar.controllers;
 
 import com.sbnz.ibar.dto.AuthorDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
+import com.sbnz.ibar.mapper.AuthorMapper;
+import com.sbnz.ibar.mapper.FileService;
+import com.sbnz.ibar.services.AuthorService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import com.sbnz.ibar.mapper.AuthorMapper;
-import com.sbnz.ibar.mapper.FileService;
-import com.sbnz.ibar.services.AuthorService;
 
 import java.io.FileNotFoundException;
 import java.util.List;

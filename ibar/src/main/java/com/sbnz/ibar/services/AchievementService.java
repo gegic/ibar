@@ -1,18 +1,15 @@
 package com.sbnz.ibar.services;
 
+import com.sbnz.ibar.model.Achievement;
+import com.sbnz.ibar.model.Reader;
+import com.sbnz.ibar.repositories.AchievementRepository;
+import com.sbnz.ibar.repositories.ReaderRepository;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.EntityExistsException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-
-import javax.persistence.EntityExistsException;
-
-import com.sbnz.ibar.model.Achievement;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.sbnz.ibar.model.Reader;
-import com.sbnz.ibar.repositories.ReaderRepository;
-import com.sbnz.ibar.repositories.AchievementRepository;
 
 @Service
 public class AchievementService {

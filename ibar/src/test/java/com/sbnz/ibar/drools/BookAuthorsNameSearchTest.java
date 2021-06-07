@@ -1,13 +1,11 @@
 package com.sbnz.ibar.drools;
 
-import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.model.Author;
 import com.sbnz.ibar.model.Book;
 import com.sbnz.ibar.model.Category;
 import com.sbnz.ibar.model.enums.BookType;
 import org.drools.template.DataProvider;
 import org.drools.template.DataProviderCompiler;
-import org.drools.template.ObjectDataCompiler;
 import org.drools.template.objects.ArrayDataProvider;
 import org.junit.Test;
 import org.kie.api.io.ResourceType;

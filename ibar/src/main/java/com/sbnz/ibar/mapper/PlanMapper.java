@@ -1,6 +1,5 @@
 package com.sbnz.ibar.mapper;
 
-import com.sbnz.ibar.dto.CategoryDto;
 import com.sbnz.ibar.dto.PlanDto;
 import com.sbnz.ibar.model.Category;
 import com.sbnz.ibar.model.Plan;

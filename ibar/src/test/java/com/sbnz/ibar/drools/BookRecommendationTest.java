@@ -1,25 +1,21 @@
 package com.sbnz.ibar.drools;
 
-import com.sbnz.ibar.dto.BookDto;
 import com.sbnz.ibar.model.*;
 import com.sbnz.ibar.model.enums.BookType;
 import com.sbnz.ibar.rto.BookResponse;
 import com.sbnz.ibar.rto.BookResponseFilter;
-import com.sbnz.ibar.services.KieService;
-import com.sbnz.ibar.utils.Utils;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BookRecommendationTest {
 

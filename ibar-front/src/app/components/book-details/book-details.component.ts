@@ -6,6 +6,7 @@ import {distinctUntilChanged} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BookDetailsService} from '../../core/services/book-details.service';
 import {Title} from '@angular/platform-browser';
+import {ReadingProgress} from '../../core/model/reading-progress';
 
 @Component({
   selector: 'app-book-details',
@@ -40,6 +41,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
       val => {
         if (!!val.id) {
           this.getBook(val.id);
+          this.getReadingProgress(val.id);
         } else {
           this.router.navigate(['']);
         }
@@ -57,6 +59,17 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
       }
     );
   }
+
+  getReadingProgress(id: string): void {
+    this.isLoading = true;
+    this.detailsService.getReadingProgress(id).subscribe(
+      (data: ReadingProgress) => {
+        this.detailsService.readingProgress.next(data);
+        this.isLoading = false;
+      }
+    );
+  }
+
 
   onClickEdit(): void {
   }
@@ -78,8 +91,8 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
     return this.tokenService.getToken()?.authorities.some(au => au.name === READER);
   }
 
-  get isLoggedIn(): boolean {
-    return !!this.tokenService.getToken();
+  get readingProgress(): ReadingProgress {
+    return this.detailsService.readingProgress.getValue();
   }
 
   get reviews(): string {

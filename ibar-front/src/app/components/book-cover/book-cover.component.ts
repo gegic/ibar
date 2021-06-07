@@ -15,7 +15,6 @@ export class BookCoverComponent {
   constructor(private router: Router) { }
 
   openDetails(): void {
-    console.log(this.book);
     this.router.navigate(['/book', this.book.id]);
   }
 

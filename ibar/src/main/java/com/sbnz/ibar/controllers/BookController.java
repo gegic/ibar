@@ -2,13 +2,13 @@ package com.sbnz.ibar.controllers;
 
 import com.sbnz.ibar.dto.BookDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
+import com.sbnz.ibar.mapper.FileService;
+import com.sbnz.ibar.services.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import com.sbnz.ibar.mapper.FileService;
-import com.sbnz.ibar.services.BookService;
 
 import java.io.FileNotFoundException;
 import java.util.List;

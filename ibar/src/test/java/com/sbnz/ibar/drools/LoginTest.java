@@ -1,31 +1,27 @@
 package com.sbnz.ibar.drools;
 
 import com.sbnz.ibar.model.Admin;
-import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.rto.EmailCheckFact;
 import com.sbnz.ibar.rto.IpCheckFact;
-import com.sbnz.ibar.rto.events.LoginEvent;
+import com.sbnz.ibar.rto.events.OnLoggedIn;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.kie.api.KieServices;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class LoginTest {
 
     private KieSession kieSession;
 
     @Before
-    @BeforeEach
     public void setUp() {
         KieServices ks = KieServices.Factory.get();
 
@@ -35,7 +31,7 @@ public class LoginTest {
     }
 
     @Test
-    public void testFirstUnsuccessfullLogin() {
+    public void testFirstUnsuccessfulLogin() {
         User admin = createUserForLogin();
 
         createFact(1, admin);
@@ -70,7 +66,7 @@ public class LoginTest {
     }
 
     @Test
-    public void testCheckIsUserBlockedWhenDidnotFailLogin() {
+    public void testCheckIsUserBlockedWhenDidNotFailLogin() {
         User admin = createUserForLogin();
 
         kieSession.insert(new EmailCheckFact("123.123.123.123", false));
@@ -115,7 +111,7 @@ public class LoginTest {
 
     private void createFact(int numberOfFacts, User user) {
         for (int i = 0; i < numberOfFacts; i++) {
-            kieSession.insert(new LoginEvent(new Date(), user, "123.123.123.123", false));
+            kieSession.insert(new OnLoggedIn(new Date(), user, "123.123.123.123", false));
         }
     }
 

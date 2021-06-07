@@ -1,15 +1,13 @@
 package com.sbnz.ibar.services;
 
-import java.util.Collection;
-import java.util.UUID;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sbnz.ibar.model.Category;
+import com.sbnz.ibar.repositories.CategoryRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.sbnz.ibar.model.Category;
-import com.sbnz.ibar.repositories.CategoryRepository;
+import java.util.Collection;
+import java.util.UUID;
 
 @Service
 public class CategoryService {

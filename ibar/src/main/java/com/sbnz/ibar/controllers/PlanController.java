@@ -1,11 +1,8 @@
 package com.sbnz.ibar.controllers;
 
-import com.sbnz.ibar.dto.BookDto;
 import com.sbnz.ibar.dto.PlanDto;
 import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
-import com.sbnz.ibar.mapper.CategoryMapper;
-import com.sbnz.ibar.services.CategoryService;
 import com.sbnz.ibar.services.PlanService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
@@ -14,7 +11,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor

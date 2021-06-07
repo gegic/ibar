@@ -1,22 +1,20 @@
 package com.sbnz.ibar.rto.events;
 
+import com.sbnz.ibar.model.Author;
+import com.sbnz.ibar.model.Review;
 import com.sbnz.ibar.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.kie.api.definition.type.Expires;
 import org.kie.api.definition.type.Role;
-import org.kie.api.definition.type.Timestamp;
-
-import java.util.Date;
 
 @Role(Role.Type.EVENT)
-@Timestamp("executionTime")
-@Expires("5m")
+@Expires("72h")
 @Data
+@NoArgsConstructor
 @AllArgsConstructor
-public class LoginEvent {
-    private Date executionTime;
-    private User user;
-    private String ipAddress;
-    private boolean success;
+public class OnAuthorReviewed {
+    private Author author;
+    private Review review;
 }

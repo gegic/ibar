@@ -6,11 +6,16 @@ import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.exceptions.UserNotLoggedInException;
 import com.sbnz.ibar.mapper.ReviewMapper;
-import com.sbnz.ibar.model.*;
+import com.sbnz.ibar.model.Book;
+import com.sbnz.ibar.model.Reader;
+import com.sbnz.ibar.model.Review;
+import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.BookRepository;
 import com.sbnz.ibar.repositories.ReviewRepository;
 import com.sbnz.ibar.repositories.UserRepository;
+import com.sbnz.ibar.rto.events.OnReview;
 import lombok.AllArgsConstructor;
+import org.kie.api.runtime.KieSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,7 +24,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,6 +35,7 @@ public class ReviewService {
     private final ReviewMapper reviewMapper;
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final KieService kieService;
 
     public Page<ReviewDto> getReviews(UUID bookId, Pageable p) {
         return this.reviewRepository.getAllByBookId(bookId, p).map(reviewMapper::toDto);
@@ -77,6 +82,11 @@ public class ReviewService {
         b.setNumReviews(newNumReviews);
 
         bookRepository.save(b);
+
+        OnReview onReview = new OnReview(r);
+        KieSession readingSession = kieService.getReadingSession();
+        readingSession.insert(r);
+        readingSession.fireAllRules();
 
         return reviewMapper.toDto(r);
     }

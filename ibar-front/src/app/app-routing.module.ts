@@ -4,8 +4,7 @@ import {environment} from '../environments/environment';
 import {AuthGuard} from './core/guards/auth.guard';
 import {LoginComponent} from './components/login/login.component';
 import {MainFrameComponent} from './components/main-frame/main-frame.component';
-import {ADMIN, READER, READER_NAVBAR} from './core/utils/consts';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ADMIN, READER} from './core/utils/consts';
 import {BrowseBooksComponent} from './components/browse-books/browse-books.component';
 import {BookDetailsComponent} from './components/book-details/book-details.component';
 import {BookAboutComponent} from './components/book-about/book-about.component';
@@ -38,12 +37,10 @@ const routes: Routes = [
       {
         path: 'browse',
         component: BrowseBooksComponent,
-        data: {navigation: READER_NAVBAR, hasSearch: true}
       },
       {
         path: 'book/:id',
         component: BookDetailsComponent,
-        data: {navigation: READER_NAVBAR, hasSearch: true},
         children: [
           { path: '', redirectTo: 'about', pathMatch: 'full'},
           { path: 'reviews', component: BookReviewsComponent },

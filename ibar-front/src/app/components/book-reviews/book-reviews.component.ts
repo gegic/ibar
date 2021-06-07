@@ -10,6 +10,7 @@ import {ReviewNumber} from '../../core/model/review-number-list';
 import {READER} from '../../core/utils/consts';
 import {Router} from '@angular/router';
 import {MessageService} from 'primeng/api';
+import {ReadingProgress} from '../../core/model/reading-progress';
 
 @Component({
   selector: 'app-book-reviews',
@@ -103,8 +104,10 @@ export class BookReviewsComponent implements OnInit {
   getUserReview(): void {
     this.isReviewsLoading = true;
     this.reviewService.getReviewForUser(this.book?.id ?? '').subscribe((val: Review) => {
-      this.userReview = val;
-      this.isReviewsLoading = false;
+      if (!!val) {
+        this.userReview = val;
+        this.isReviewsLoading = false;
+      }
     });
   }
 
@@ -189,7 +192,12 @@ export class BookReviewsComponent implements OnInit {
   }
 
   get canAddReview(): boolean {
-    return this.tokenService.getToken()?.authorities.some(au => au.name === READER);
+    return this.tokenService.getToken()?.authorities.some(au => au.name === READER) &&
+      !!this.readingProgress && this.readingProgress.percentage > 80;
+  }
+
+  get readingProgress(): ReadingProgress {
+    return this.detailsService.readingProgress.getValue();
   }
 
   get overallRating(): string {

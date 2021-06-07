@@ -1,16 +1,14 @@
 package com.sbnz.ibar.services;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import com.sbnz.ibar.model.Authority;
 import com.sbnz.ibar.repositories.AuthorityRepository;
 import com.sbnz.ibar.repositories.ReaderRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor

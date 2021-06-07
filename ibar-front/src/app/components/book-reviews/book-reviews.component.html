@@ -80,7 +80,7 @@
         </div>
         <div class="p-col-12 p-sm-6 p-md-3 p-text-center p-as-center">
           <p *ngIf="!canAddReview; else userAddReview"
-             class="p-text-light">You are not able to review the offering since you’re logged in as an admin.</p>
+             class="p-text-light">You have to read the book in order to write a review.</p>
           <ng-template #userAddReview>
             <p-skeleton *ngIf="isReviewsLoading; else reviewLoaded" height="100px"></p-skeleton>
             <ng-template #reviewLoaded>
@@ -99,7 +99,7 @@
       <div infinite-scroll
            (scrolled)="onScrollDown()">
         <div *ngFor="let review of reviews">
-          <app-review-element [review]="review" (reviewDeleted)="onReviewDeleted()"></app-review-element>
+          <app-book-review-element [review]="review" (reviewDeleted)="onReviewDeleted()"></app-book-review-element>
         </div>
         <div class="p-text-center" *ngIf="isReviewsLoading">
           <p-progressSpinner></p-progressSpinner>
@@ -109,7 +109,7 @@
     <ng-template #noReviews>
       <div class="p-text-center">
         <h2 class="p-text-light">
-          There are no reviews for this cultural offering.
+          There are no reviews for this book.
         </h2>
       </div>
       <div *ngIf="canAddReview" class="p-text-center">

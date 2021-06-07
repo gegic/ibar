@@ -7,4 +7,7 @@
 	<kbase name="login" eventProcessingMode="stream" packages="rules.login">
 		<ksession name="login-session"/>
 	</kbase>
+	<kbase name="reading" eventProcessingMode="stream" packages="rules.reading">
+		<ksession name="reading-session"/>
+	</kbase>
 </kmodule>

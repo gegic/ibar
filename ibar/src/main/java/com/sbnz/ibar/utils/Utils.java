@@ -11,6 +11,7 @@ public class Utils {
     public static final String BOOKS_SESSION = "books-session";
     public static final String RECOMMENDATIONS_AGENDA = "recommendations";
     public static final String LOGIN_SESSION = "login-session";
+    public static final String READING_SESSION = "reading-session";
 
     public static String getCategory(Reader r) {
         return String.format("%s", r.isMale() ? "male" : "female");

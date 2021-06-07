@@ -4,9 +4,7 @@ import com.sbnz.ibar.dto.ReadingProgressDto;
 import com.sbnz.ibar.model.ReadingProgress;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 
 @Component
 public class ReadingProgressMapper {

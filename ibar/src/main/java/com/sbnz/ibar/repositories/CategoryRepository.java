@@ -1,6 +1,5 @@
 package com.sbnz.ibar.repositories;
 
-import com.sbnz.ibar.model.Author;
 import com.sbnz.ibar.model.Category;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 @Repository

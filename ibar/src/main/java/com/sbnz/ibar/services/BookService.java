@@ -1,27 +1,18 @@
 package com.sbnz.ibar.services;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
-
 import com.sbnz.ibar.dto.BookDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.dto.ReadingProgressDto;
 import com.sbnz.ibar.mapper.BookMapper;
+import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.mapper.ReadingProgressMapper;
 import com.sbnz.ibar.model.*;
 import com.sbnz.ibar.repositories.*;
 import com.sbnz.ibar.rto.BookResponse;
 import com.sbnz.ibar.rto.BookResponseFilter;
 import com.sbnz.ibar.utils.Utils;
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
-
 import org.drools.template.DataProvider;
 import org.drools.template.DataProviderCompiler;
 import org.drools.template.ObjectDataCompiler;
@@ -34,9 +25,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.sbnz.ibar.mapper.FileService;
-
-import javassist.NotFoundException;
+import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor

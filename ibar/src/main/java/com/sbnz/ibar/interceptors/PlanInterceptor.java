@@ -3,7 +3,6 @@ package com.sbnz.ibar.interceptors;
 import com.sbnz.ibar.model.Admin;
 import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.model.Subscription;
-import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.SubscriptionRepository;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;

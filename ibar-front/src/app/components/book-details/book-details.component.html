@@ -79,14 +79,19 @@
         <ng-template #readButton>
           <button class="p-button blue-button"
                   icon="pi pi-file-o"
-                  label="Read"
+                  [label]="!readingProgress || readingProgress.percentage === 0 ? 'Start reading' : 'Continue reading'"
                   (click)="onClickRead()"
                   pButton
                   id="read-btn"
           ></button>
         </ng-template>
         <p class="p-text-light" *ngIf="!isLoading && !!book; else numSubscribedSkeleton">
-          {{book.numRead}} people have read this book.
+          <ng-container *ngIf="!readingProgress || readingProgress.percentage === 0; else continueText">
+            {{book.numRead}} people have read this book.
+          </ng-container>
+          <ng-template #continueText>
+            Already completed {{readingProgress.percentage | number : '1.1-1'}}% of the book.
+          </ng-template>
         </p>
         <ng-template #numSubscribedSkeleton>
           <p-skeleton></p-skeleton>

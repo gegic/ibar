@@ -1,12 +1,12 @@
 package com.sbnz.ibar.dto;
 
-import java.util.Set;
-import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
-
-import lombok.*;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor

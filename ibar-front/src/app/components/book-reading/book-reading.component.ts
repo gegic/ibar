@@ -28,10 +28,8 @@ export class BookReadingComponent implements OnInit, OnDestroy {
         if (!!val.id && (!this.book || (!!this.book && this.book.id !== val.id))) {
           this.getBook(val.id);
           this.getReadingProgress(val.id);
-          setInterval(this.postProgress, 4 * 60 * 1000);
         } else if (!!this.book && this.book.id === val.id) {
           this.getReadingProgress(val.id);
-          setInterval(this.postProgress, 4 * 60 * 1000);
         } else {
           this.router.navigate(['']);
         }
@@ -57,6 +55,7 @@ export class BookReadingComponent implements OnInit, OnDestroy {
         this.detailsService.readingProgress.next(data);
         this.currentPage = this.readingProgress.progress;
         this.isLoading = false;
+        setInterval(() => this.postProgress(),  3 * 60 * 1000);
       }
     );
   }
@@ -74,7 +73,6 @@ export class BookReadingComponent implements OnInit, OnDestroy {
   }
 
   pageChanged(sth: any): void {
-    console.log(sth);
     this.currentPage = sth;
   }
 

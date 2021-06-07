@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
 import {MenuItem} from 'primeng/api';
 import {Subscription} from 'rxjs';
 import {AuthService} from '../../core/services/auth.service';
@@ -7,6 +7,7 @@ import {environment} from '../../../environments/environment';
 import {TokenService} from '../../core/services/token.service';
 import {Authority} from '../../core/model/authority';
 import {NavigationItem} from '../../core/model/navigation-item';
+import {NavbarService} from '../../core/services/navbar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -28,22 +29,19 @@ export class NavbarComponent implements OnInit {
   constructor(private authService: AuthService,
               private router: Router,
               private tokenService: TokenService,
-              private activatedRoute: ActivatedRoute) { }
+              private navbarService: NavbarService) { }
 
   ngOnInit(): void {
-    console.log(this.tokenService.getToken());
-
-    this.activatedRoute.data.subscribe(val => {
-      if (val.navigation) {
-        this.navbarItems = val.navigation;
+    this.navbarService.navigation.subscribe(
+      (val: NavigationItem[]) => {
+        this.navbarItems = val;
       }
-      this.hasSearch = !!val.hasSearch;
-    });
-    // this.subscriptions.push(
-    //   this.culturalOfferingsService.searchQuery.subscribe(val => {
-    //     this.searchQuery = val;
-    //   })
-    // );
+    );
+    this.navbarService.hasSearch.subscribe(
+      (val: boolean) => {
+        this.hasSearch = val;
+      }
+    );
   }
 
   onClickLogout(): void {

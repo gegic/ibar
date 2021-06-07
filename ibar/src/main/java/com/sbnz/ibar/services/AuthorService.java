@@ -1,20 +1,10 @@
 package com.sbnz.ibar.services;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-
-import javax.transaction.Transactional;
-
 import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.model.Author;
 import com.sbnz.ibar.repositories.AuthorRepository;
+import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.drools.template.ObjectDataCompiler;
 import org.kie.api.runtime.KieSession;
@@ -23,7 +13,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javassist.NotFoundException;
+import javax.transaction.Transactional;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor

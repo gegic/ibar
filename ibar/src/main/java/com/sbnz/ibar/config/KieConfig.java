@@ -6,13 +6,13 @@ import org.kie.api.KieServices;
 import org.kie.api.builder.KieScanner;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import static com.sbnz.ibar.utils.Utils.LOGIN_SESSION;
+import static com.sbnz.ibar.utils.Utils.READING_SESSION;
 
 @Configuration
 @EnableTransactionManagement
@@ -33,6 +33,11 @@ public class KieConfig {
     @Bean(name = "loginSession")
     public KieSession loginSession() {
         return kieContainer().newKieSession(LOGIN_SESSION);
+    }
+
+    @Bean(name = "readingSession")
+    public KieSession readingSession() {
+        return kieContainer().newKieSession(READING_SESSION);
     }
 
 

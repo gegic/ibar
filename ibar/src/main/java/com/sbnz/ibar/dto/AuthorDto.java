@@ -1,16 +1,14 @@
 package com.sbnz.ibar.dto;
 
-import java.time.Instant;
-import java.util.Date;
-import java.util.UUID;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import java.time.Instant;
+import java.util.UUID;
 
 @Getter
 @Setter

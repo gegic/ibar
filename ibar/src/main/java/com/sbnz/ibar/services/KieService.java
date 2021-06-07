@@ -2,7 +2,6 @@ package com.sbnz.ibar.services;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.kie.api.builder.Results;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -18,6 +17,10 @@ public class KieService {
     @Getter
     @Qualifier("loginSession")
     private final KieSession loginSession;
+
+    @Getter
+    @Qualifier("readingSession")
+    private final KieSession readingSession;
 
     public KieSession getSession() {
         return this.kieContainer.newKieSession();

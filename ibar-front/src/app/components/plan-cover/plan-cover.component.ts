@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Plan} from '../../core/model/plan';
 import {ConfirmationService} from 'primeng/api';
+import {NavbarService} from '../../core/services/navbar.service';
 
 @Component({
   selector: 'app-plan-cover',
