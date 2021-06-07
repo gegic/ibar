@@ -1,56 +1,107 @@
 package com.sbnz.ibar.services;
 
+import com.sbnz.ibar.dto.CategoryDto;
+import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
+import com.sbnz.ibar.mapper.CategoryMapper;
 import com.sbnz.ibar.model.Category;
 import com.sbnz.ibar.repositories.CategoryRepository;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import javax.persistence.EntityNotFoundException;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
+@AllArgsConstructor
 public class CategoryService {
-	
 
-	private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
 
-	public Collection<Category> getAll() {
-		return categoryRepository.findAll();
-	}
+    private final CategoryMapper categoryMapper;
 
-	public Category getById(UUID id) {
-		return categoryRepository.findById(id).orElse(null);
-	}
+    public List<CategoryDto> getAll() {
+        List<Category> categories = categoryRepository.findAll();
 
-	public Category create(Category entity) {
-		return categoryRepository.save(entity);
-	}
+        List<CategoryDto> categoryDtos = categories.stream().map(this::toCategoryDto)
+                .collect(Collectors.toList());
 
-	public boolean delete(UUID id) throws Exception {
-		Category category = categoryRepository.findById(id).orElse(null);
-		if(category == null)
-			throw new Exception("Category with this ID doesn't exist.");
-		
-		categoryRepository.deleteById(id);
-		return true;
-	}
+        return categoryDtos;
+    }
 
-	public Category update(UUID id, Category entity) throws Exception {
-		Category category = categoryRepository.findById(id).orElse(null);
-		if(category == null)
-			throw new Exception("Category with this ID doesn't exist.");
-		category.setActive(entity.isActive());
-		category.setDescription(entity.getDescription());
-		category.setName(entity.getName());
-		return categoryRepository.save(category);
-	}
+    public CategoryDto getById(UUID id)
+            throws EntityNotFoundException {
+        Optional<Category> category = categoryRepository.findById(id);
 
-	public Page<Category> findAll(Pageable pageable) {
-		return categoryRepository.findAll(pageable);
-	}
-	
-	public Page<Category> findByName(String value, Pageable pageable){
-		return categoryRepository.findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(value, value, pageable);
-	}
+        return this.toCategoryDto(category.orElseThrow(EntityNotFoundException::new));
+    }
+
+    public CategoryDto getByName(String name)
+            throws EntityNotFoundException {
+        Optional<Category> category = categoryRepository.getByName(name);
+
+        return this.toCategoryDto(category.orElseThrow(EntityNotFoundException::new));
+    }
+
+    public CategoryDto create(CategoryDto categoryDto)
+            throws EntityAlreadyExistsException {
+        Optional<Category> existCategory = categoryRepository.getByName(categoryDto.getName());
+
+        if (existCategory.isPresent()) {
+            Category category = existCategory.get();
+
+            throw new EntityAlreadyExistsException(category.getName(), category.getId());
+        }
+
+        Category category = new Category(categoryDto);
+
+        category = categoryRepository.save(category);
+
+        return this.toCategoryDto(category);
+    }
+
+    public CategoryDto update(UUID id, CategoryDto entity)
+            throws EntityDoesNotExistException, EntityAlreadyExistsException {
+        Optional<Category> existCategory = categoryRepository.getByName(entity.getName());
+
+        if (existCategory.isPresent()) {
+            throw new EntityAlreadyExistsException(entity.getName(), id);
+        }
+
+        existCategory = categoryRepository.findById(id);
+
+        if (existCategory.isEmpty()) {
+            throw new EntityDoesNotExistException(entity.getName(), id);
+        }
+
+        Category category = existCategory.get();
+
+        category.setActive(entity.isActive());
+        category.setDescription(entity.getDescription());
+        category.setName(entity.getName());
+
+        category = categoryRepository.save(category);
+
+        return this.toCategoryDto(category);
+    }
+
+    public boolean delete(UUID id) {
+        Optional<Category> category = categoryRepository.findById(id);
+
+        if (category.isEmpty()) {
+            return false;
+        }
+
+        categoryRepository.deleteById(id);
+
+        return true;
+    }
+
+    private CategoryDto toCategoryDto(Category category) {
+        return categoryMapper.toDto(category);
+    }
+
 }

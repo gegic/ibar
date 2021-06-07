@@ -1,93 +1,73 @@
 package com.sbnz.ibar.controllers;
 
-import com.sbnz.ibar.mapper.CategoryMapper;
+import com.sbnz.ibar.dto.CategoryDto;
+import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.services.CategoryService;
+import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 
 @RestController
-@PreAuthorize("hasAuthority('ROLE_ADMIN')")
+@AllArgsConstructor
 @RequestMapping(value = "/api/categories", produces = MediaType.APPLICATION_JSON_VALUE)
 @CrossOrigin(origins = "https://localhost:4200", maxAge = 3600)
 public class CategoryController {
 
+    private final CategoryService categoryService;
 
-	private CategoryService categoryService;
+    @PreAuthorize("permitAll()")
+    @GetMapping
+    public ResponseEntity<Iterable<CategoryDto>> getAllCategories() {
+        List<CategoryDto> categoryDtos = categoryService.getAll();
 
+        return ResponseEntity.ok(categoryDtos);
+    }
 
-	private CategoryMapper categoryMapper;
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<CategoryDto> getCategoryById(@PathVariable UUID id)
+            throws EntityNotFoundException {
+        CategoryDto category = categoryService.getById(id);
 
-//	@PreAuthorize("permitAll()")
-//	@GetMapping
-//	public ResponseEntity<Iterable<CategoryDTO>> getAllCategorys() {
-//		List<CategoryDTO> categorysDTO = categoryMapper.toDTOList(categoryService.getAll());
-//		return new ResponseEntity<Iterable<CategoryDTO>>(categorysDTO, HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value="/by-page/{value}")
-//	public ResponseEntity<Page<CategoryDTO>> getAllCategoryByName(@PathVariable("value") String value, Pageable pageable){
-//		Page<Category> page = categoryService.findByName(value, pageable);
-//        List<CategoryDTO> categoryDTO = categoryMapper.toDTOList(page.toList());
-//        Page<CategoryDTO> pageCategoryDTO = new PageImpl<CategoryDTO>(categoryDTO.stream().collect(Collectors.toList()),page.getPageable(),page.getTotalElements());
-//        return new ResponseEntity<Page<CategoryDTO>>(pageCategoryDTO, HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value= "/by-page")
-//	public ResponseEntity<Page<CategoryDTO>> getAllCategory(Pageable pageable){
-//		Page<Category> page = categoryService.findAll(pageable);
-//        List<CategoryDTO> categoryDTO = categoryMapper.toDTOList(page.toList());
-//        Page<CategoryDTO> pageCategoryDTO = new PageImpl<CategoryDTO>(categoryDTO.stream().collect(Collectors.toList()),page.getPageable(),page.getTotalElements());
-//        return new ResponseEntity<Page<CategoryDTO>>(pageCategoryDTO, HttpStatus.OK);
-//	}
-//
-//	@GetMapping(value = "/{id}")
-//	public ResponseEntity<CategoryDTO> getCategory(@PathVariable UUID id) {
-//
-//		Category category = categoryService.getById(id);
-//		if (category == null) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//		return new ResponseEntity<CategoryDTO>(categoryMapper.toDto(category), HttpStatus.OK);
-//	}
-//
-//	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO CategoryDTO) {
-//
-//		try {
-//			return new ResponseEntity<CategoryDTO>(
-//					categoryMapper
-//							.toDto(categoryService.create(categoryMapper.toEntity(CategoryDTO))),
-//					HttpStatus.CREATED);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
-//
-//	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-//	public ResponseEntity<CategoryDTO> updateCategory(@PathVariable UUID id,
-//			@Valid @RequestBody CategoryDTO CategoryDTO) {
-//
-//		try {
-//			return new ResponseEntity<CategoryDTO>(
-//					categoryMapper
-//							.toDto(categoryService.update(id, categoryMapper.toEntity(CategoryDTO))),
-//					HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
-//
-//	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<Boolean> deleteCategory(@PathVariable UUID id) {
-//		try {
-//			return new ResponseEntity<Boolean>(categoryService.delete(id), HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<Boolean>(HttpStatus.NOT_FOUND);
-//		}
-//	}
+        return ResponseEntity.ok(category);
+    }
+
+    @GetMapping(value = "/name/{name}")
+    public ResponseEntity<CategoryDto> getCategoryByName(@PathVariable String name)
+            throws EntityNotFoundException {
+        CategoryDto category = categoryService.getByName(name);
+
+        return ResponseEntity.ok(category);
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto)
+            throws EntityAlreadyExistsException {
+        CategoryDto newCategory = categoryService.create(categoryDto);
+
+        return ResponseEntity.ok(newCategory);
+    }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<CategoryDto> updateCategory(@PathVariable UUID id, @Valid @RequestBody CategoryDto categoryDto)
+            throws EntityDoesNotExistException, EntityAlreadyExistsException {
+        CategoryDto updatedCategory = categoryService.update(id, categoryDto);
+
+        return ResponseEntity.ok(updatedCategory);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Boolean> deleteCategory(@PathVariable UUID id) {
+        Boolean deleteResult = categoryService.delete(id);
+
+        return ResponseEntity.ok(deleteResult);
+    }
+
 }

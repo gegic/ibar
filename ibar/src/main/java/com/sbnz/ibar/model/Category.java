@@ -1,5 +1,6 @@
 package com.sbnz.ibar.model;
 
+import com.sbnz.ibar.dto.CategoryDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,20 +20,25 @@ import java.util.UUID;
 @EqualsAndHashCode
 public class Category {
 
-	@Id
-	@GeneratedValue(generator = "UUID")
+    @Id
+    @GeneratedValue(generator = "UUID")
     @GenericGenerator(
-    		name = "UUID",
-			strategy = "org.hibernate.id.UUIDGenerator"
-	)
-	private UUID id;
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    private UUID id;
 
-	@Column(unique = true, nullable = false)
-	private String name;
+    @Column(unique = true, nullable = false)
+    private String name;
 
-	private String description;
+    private String description;
 
-	@Column
-	private boolean active;
+    @Column
+    private boolean active;
 
+    public Category(CategoryDto categoryDto) {
+        this.name = categoryDto.getName();
+        this.description = categoryDto.getDescription();
+        this.active = categoryDto.isActive();
+    }
 }
