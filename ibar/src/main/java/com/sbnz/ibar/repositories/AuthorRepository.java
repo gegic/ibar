@@ -13,8 +13,11 @@ import java.util.UUID;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, UUID> {
 
-	Page<Author> findByNameContainingIgnoreCase(String name, Pageable pageable);
+    Page<Author> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
-	@Query("select distinct authors from ReadingProgress rp join rp.book b join b.authors authors where rp.reader.id = :userId")
-	List<Author> getReadAuthors(UUID userId);
+    @Query("select distinct authors from ReadingProgress rp join rp.book b join b.authors authors where rp.reader.id = :userId")
+    List<Author> getReadAuthors(UUID userId);
+
+    @Query(value = "select count(*) from book_authors ba where ba.authors_id = :authorId", nativeQuery = true)
+    int getNumberOfBooks(UUID authorId);
 }

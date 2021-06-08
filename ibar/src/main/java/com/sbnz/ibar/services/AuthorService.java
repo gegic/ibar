@@ -1,10 +1,12 @@
 package com.sbnz.ibar.services;
 
+import com.sbnz.ibar.dto.AuthorDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
+import com.sbnz.ibar.mapper.AuthorMapper;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.model.Author;
 import com.sbnz.ibar.repositories.AuthorRepository;
-import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.drools.template.ObjectDataCompiler;
 import org.kie.api.runtime.KieSession;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -22,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class AuthorService {
-
 
     private final AuthorRepository authorRepository;
 
@@ -34,22 +37,24 @@ public class AuthorService {
 
     private final KieService kieService;
 
-    public Page<Author> findAll(Pageable pageable) {
-        return authorRepository.findAll(pageable);
-    }
+    private final AuthorMapper authorMapper;
 
     @Transactional
-    public Iterable<Author> getAll() {
-        return authorRepository.findAll();
+    public Iterable<AuthorDto> getAll() {
+        List<Author> authors = authorRepository.findAll();
+
+        return authors.stream().map(this::toAuthorDto).collect(Collectors.toList());
     }
 
-    public Author getById(UUID id) {
+    public AuthorDto getById(UUID id)
+            throws EntityNotFoundException {
         Optional<Author> author = authorRepository.findById(id);
-        return author.orElse(null);
 
+        return this.toAuthorDto(author.orElseThrow(EntityNotFoundException::new));
     }
 
-    public ArrayList<Author> findAllByRatingInterval(RatingIntervalDto ratingIntervalDTO) throws FileNotFoundException {
+    public List<AuthorDto> findAllByRatingInterval(RatingIntervalDto ratingIntervalDTO)
+            throws FileNotFoundException {
         ArrayList<Author> result = new ArrayList<>();
 
         InputStream template = new FileInputStream("../drools/src/main/resources/rules.templates/authorRatingSearch.drt");
@@ -64,7 +69,9 @@ public class AuthorService {
 
         KieSession kieSession = kieService.createKieSessionFromDRL(drl);
 
-        for (Author author : getAll()) {
+        List<Author> authors = authorRepository.findAll();
+
+        for (Author author : authors) {
             kieSession.insert(author);
         }
 
@@ -72,65 +79,90 @@ public class AuthorService {
 
         kieSession.fireAllRules();
 
-        return result;
-    }
-
-    public Author create(Author entity) throws Exception {
-        return null;
+        return result.stream().map(this::toAuthorDto).collect(Collectors.toList());
     }
 
     @Transactional
-    public boolean delete(UUID id) throws Exception {
-        Author existingAuthor = getById(id);
-        if (existingAuthor == null) {
-            throw new NotFoundException("Author with given id doesn't exist.");
+    public AuthorDto create(AuthorDto entity, MultipartFile file)
+            throws IOException {
+        Author author = new Author(entity);
+
+        author.setId(UUID.randomUUID());
+
+        String imagePath = fileService.saveImage(file, entity.getName());
+
+        author.setImage(imagePath);
+
+        authorRepository.save(author);
+
+        return this.toAuthorDto(author);
+    }
+
+    @Transactional
+    public AuthorDto update(UUID id, AuthorDto entity, MultipartFile newImage)
+            throws EntityDoesNotExistException, IOException {
+        Optional<Author> existingAuthor = authorRepository.findById(id);
+
+        if (!this.doesAuthorExist(existingAuthor)) {
+            throw new EntityDoesNotExistException(entity.getName(), id);
         }
 
-        // TODO
-//		if (existingAuthor.getWrittenBooks().size() > 0) {
-//			throw new Error("Can't delete author with written books.");
-//		}
+        Author author = existingAuthor.get();
 
-        fileService.deleteImageFromFile(existingAuthor.getImage());
+        author.setDescription(entity.getDescription());
+        author.setDateOfBirth(entity.getDateOfBirth());
+        author.setDateOfDeath(entity.getDateOfDeath());
+
+        if (!newImage.isEmpty()) {
+            fileService.uploadNewImage(newImage, author.getImage());
+        }
+
+        authorRepository.save(author);
+
+        return this.toAuthorDto(author);
+    }
+
+    @Transactional
+    public boolean delete(UUID id)
+            throws IOException {
+        Optional<Author> existingAuthor = authorRepository.findById(id);
+
+        if (!this.checkAllValiditiesForDeletingAuthor(existingAuthor)) {
+            return false;
+        }
+
+        Author author = existingAuthor.get();
+
+        fileService.deleteImageFromFile(author.getImage());
 
         authorRepository.deleteById(id);
 
         return true;
     }
 
-    public Author update(UUID id, Author entity) throws NotFoundException {
-        return null;
+    private AuthorDto toAuthorDto(Author author) {
+        return authorMapper.toDto(author);
     }
 
-    @Transactional
-    public Author update(UUID id, Author entity, MultipartFile newImage) throws NotFoundException, IOException {
-        Author existingAuthor = getById(id);
-        if (existingAuthor == null) {
-            throw new NotFoundException("Author with given id doesn't exist.");
+    private boolean checkAllValiditiesForDeletingAuthor(Optional<Author> existingAuthor) {
+        if (!this.doesAuthorExist(existingAuthor)) {
+            return false;
         }
 
-        existingAuthor.setDescription(entity.getDescription());
-        existingAuthor.setDateOfBirth(entity.getDateOfBirth());
-        existingAuthor.setDateOfDeath(entity.getDateOfDeath());
+        Author author = existingAuthor.get();
 
-        if (!newImage.isEmpty()) {
-            fileService.uploadNewImage(newImage, existingAuthor.getImage());
+        if (this.doesAuthorHaveWrittenBooks(author.getId())) {
+            return false;
         }
 
-        return authorRepository.save(existingAuthor);
+        return true;
     }
 
-    @Transactional
-    public Author create(Author entity, MultipartFile file) throws Exception {
-        String imagePath = fileService.saveImage(file, entity.getName());
-
-        entity.setImage(imagePath);
-
-        return authorRepository.save(entity);
-
+    private boolean doesAuthorExist(Optional<Author> author) {
+        return author.isPresent();
     }
 
-    public Page<Author> findByNameContains(String name, Pageable pageable) {
-        return authorRepository.findByNameContainingIgnoreCase(name, pageable);
+    private boolean doesAuthorHaveWrittenBooks(UUID id) {
+        return authorRepository.getNumberOfBooks(id) > 0;
     }
 }
