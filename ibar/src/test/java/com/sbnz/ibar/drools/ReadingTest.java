@@ -76,7 +76,7 @@ public class ReadingTest {
     }
 
     private Category createCategory() {
-        return new Category(UUID.randomUUID(), "Category", "", true);
+        return new Category(UUID.randomUUID(), "Category");
     }
 
     private Book createBook(Category category, Set<Author> authors) {

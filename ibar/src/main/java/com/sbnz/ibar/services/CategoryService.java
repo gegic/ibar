@@ -79,8 +79,6 @@ public class CategoryService {
 
         Category category = existCategory.get();
 
-        category.setActive(entity.isActive());
-        category.setDescription(entity.getDescription());
         category.setName(entity.getName());
 
         category = categoryRepository.save(category);

@@ -69,7 +69,7 @@ insert into user_authority values ('55a08e2e-3a28-42a2-89f6-01e798723968',	2);
 
 /*------------------------category-----------------------------------------*/
 
-insert into category values ('22e4c2d7-cbdc-4513-98cd-917d24c3d32d',	true,	'Neka kategorija',	'Kategorija');
+insert into category values ('22e4c2d7-cbdc-4513-98cd-917d24c3d32d', 'Kategorija');
 
 /*------------------------plan-----------------------------------------*/
 

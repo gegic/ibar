@@ -307,8 +307,8 @@ public class BookRecommendationTest {
                 0,
                 null);
 
-        Category category1 = new Category(UUID.randomUUID(), "Cat1", "", true);
-        Category category2 = new Category(UUID.randomUUID(), "Cat2", "", true);
+        Category category1 = new Category(UUID.randomUUID(), "Cat1");
+        Category category2 = new Category(UUID.randomUUID(), "Cat2");
 
         HashSet<Author> authors1 = new HashSet<>();
         authors1.add(author1);
@@ -433,8 +433,8 @@ public class BookRecommendationTest {
                 0,
                 null);
 
-        Category category1 = new Category(UUID.randomUUID(), "Cat1", "", true);
-        Category category2 = new Category(UUID.randomUUID(), "Cat2", "", true);
+        Category category1 = new Category(UUID.randomUUID(), "Cat1");
+        Category category2 = new Category(UUID.randomUUID(), "Cat2");
 
         HashSet<Author> authors1 = new HashSet<>();
         authors1.add(author1);
@@ -559,8 +559,8 @@ public class BookRecommendationTest {
                 0,
                 null);
 
-        Category category1 = new Category(UUID.randomUUID(), "Cat1", "", true);
-        Category category2 = new Category(UUID.randomUUID(), "Cat2", "", true);
+        Category category1 = new Category(UUID.randomUUID(), "Cat1");
+        Category category2 = new Category(UUID.randomUUID(), "Cat2");
 
         HashSet<Author> authors1 = new HashSet<>();
         authors1.add(author1);
@@ -687,8 +687,8 @@ public class BookRecommendationTest {
                 0,
                 null);
 
-        Category category1 = new Category(UUID.randomUUID(), "Cat1", "", true);
-        Category category2 = new Category(UUID.randomUUID(), "Cat2", "", true);
+        Category category1 = new Category(UUID.randomUUID(), "Cat1");
+        Category category2 = new Category(UUID.randomUUID(), "Cat2");
 
         HashSet<Author> authors1 = new HashSet<>();
         authors1.add(author1);
@@ -812,8 +812,8 @@ public class BookRecommendationTest {
                 0,
                 null);
 
-        Category category1 = new Category(UUID.randomUUID(), "Cat1", "", true);
-        Category category2 = new Category(UUID.randomUUID(), "Cat2", "", true);
+        Category category1 = new Category(UUID.randomUUID(), "Cat1");
+        Category category2 = new Category(UUID.randomUUID(), "Cat2");
 
         HashSet<Author> authors1 = new HashSet<>();
         authors1.add(author1);
@@ -926,8 +926,8 @@ public class BookRecommendationTest {
                 0,
                 null);
 
-        Category category1 = new Category(UUID.randomUUID(), "Cat1", "", true);
-        Category category2 = new Category(UUID.randomUUID(), "Cat2", "", true);
+        Category category1 = new Category(UUID.randomUUID(), "Cat1");
+        Category category2 = new Category(UUID.randomUUID(), "Cat2");
 
         HashSet<Author> authors1 = new HashSet<>();
         authors1.add(author1);

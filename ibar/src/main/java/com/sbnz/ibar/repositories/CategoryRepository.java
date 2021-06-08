@@ -14,7 +14,7 @@ import java.util.UUID;
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, UUID> {
 
-    Page<Category> findByNameContainingIgnoreCaseOrDescriptionContainingIgnoreCase(String name, String description, Pageable pageable);
+    Page<Category> findByNameContainingIgnoreCase(String name, Pageable pageable);
 
     @Query("select distinct category from ReadingProgress rp join rp.book b join b.category category where rp.reader.id = :userId")
     List<Category> getReadCategories(UUID userId);

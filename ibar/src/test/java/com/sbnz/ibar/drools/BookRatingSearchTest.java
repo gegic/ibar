@@ -151,7 +151,7 @@ public class BookRatingSearchTest {
     private List<Book> createBooks(List<Author> authors) {
         List<Book> books = new ArrayList<>();
 
-        Category category = new Category(UUID.randomUUID(), "Category 1", "Some description", true);
+        Category category = new Category(UUID.randomUUID(), "Category 1");
         Author author1 = authors.get(0);
         Author author2 = authors.get(1);
 

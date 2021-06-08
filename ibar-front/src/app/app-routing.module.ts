@@ -1,22 +1,23 @@
-import {RouterModule, Routes} from '@angular/router';
-import {NgModule} from '@angular/core';
-import {environment} from '../environments/environment';
-import {AuthGuard} from './core/guards/auth.guard';
-import {LoginComponent} from './components/login/login.component';
-import {MainFrameComponent} from './components/main-frame/main-frame.component';
-import {ADMIN, READER} from './core/utils/consts';
-import {BrowseBooksComponent} from './components/browse-books/browse-books.component';
-import {BookDetailsComponent} from './components/book-details/book-details.component';
-import {BookAboutComponent} from './components/book-about/book-about.component';
-import {BookReviewsComponent} from './components/book-reviews/book-reviews.component';
-import {BookReadingComponent} from './components/book-reading/book-reading.component';
-import {PurchasePlanComponent} from './components/purchase-plan/purchase-plan.component';
+import { RouterModule, Routes } from '@angular/router';
+import { NgModule } from '@angular/core';
+import { environment } from '../environments/environment';
+import { AuthGuard } from './core/guards/auth.guard';
+import { LoginComponent } from './components/login/login.component';
+import { MainFrameComponent } from './components/main-frame/main-frame.component';
+import { ADMIN, READER } from './core/utils/consts';
+import { BrowseBooksComponent } from './components/browse-books/browse-books.component';
+import { BookDetailsComponent } from './components/book-details/book-details.component';
+import { BookAboutComponent } from './components/book-about/book-about.component';
+import { BookReviewsComponent } from './components/book-reviews/book-reviews.component';
+import { BookReadingComponent } from './components/book-reading/book-reading.component';
+import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.component';
+import { CategoryComponent } from './components/category/category.component';
 
 const routes: Routes = [
   {
     path: environment.loginRoute,
     component: LoginComponent,
-    data: {unauthorized: true},
+    data: { unauthorized: true },
     canActivate: [AuthGuard]
   },
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
   {
     path: '',
     component: MainFrameComponent,
-    data: {roles: [ADMIN, READER]},
+    data: { roles: [ADMIN, READER] },
     canActivate: [AuthGuard],
     children: [
       {
@@ -42,7 +43,7 @@ const routes: Routes = [
         path: 'book/:id',
         component: BookDetailsComponent,
         children: [
-          { path: '', redirectTo: 'about', pathMatch: 'full'},
+          { path: '', redirectTo: 'about', pathMatch: 'full' },
           { path: 'reviews', component: BookReviewsComponent },
           { path: 'about', component: BookAboutComponent }
         ]
@@ -50,7 +51,12 @@ const routes: Routes = [
       {
         path: 'plan',
         component: PurchasePlanComponent,
-      }
+      },
+      {
+        path: 'categories',
+        component: CategoryComponent,
+        data: { roles: [ADMIN] }
+      },
     ]
   },
   {

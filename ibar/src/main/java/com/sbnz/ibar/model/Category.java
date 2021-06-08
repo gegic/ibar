@@ -31,14 +31,7 @@ public class Category {
     @Column(unique = true, nullable = false)
     private String name;
 
-    private String description;
-
-    @Column
-    private boolean active;
-
     public Category(CategoryDto categoryDto) {
         this.name = categoryDto.getName();
-        this.description = categoryDto.getDescription();
-        this.active = categoryDto.isActive();
     }
 }

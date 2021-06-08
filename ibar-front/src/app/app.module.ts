@@ -43,6 +43,8 @@ import {NgxExtendedPdfViewerModule} from 'ngx-extended-pdf-viewer';
 import {PlanInterceptor} from './core/interceptors/plan.interceptor';
 import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.component';
 import { PlanCoverComponent } from './components/plan-cover/plan-cover.component';
+import { CategoryComponent } from './components/category/category.component';
+import { CategoryListComponent } from './components/category-list/category-list.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { PlanCoverComponent } from './components/plan-cover/plan-cover.component
     BookReadingComponent,
     PurchasePlanComponent,
     PlanCoverComponent,
+    CategoryComponent,
+    CategoryListComponent,
   ],
   imports: [
     BrowserModule,
