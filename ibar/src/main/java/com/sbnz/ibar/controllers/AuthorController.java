@@ -2,18 +2,25 @@ package com.sbnz.ibar.controllers;
 
 import com.sbnz.ibar.dto.AuthorDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.mapper.AuthorMapper;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.services.AuthorService;
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityNotFoundException;
+import javax.validation.Valid;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
@@ -24,119 +31,57 @@ import java.util.stream.Collectors;
 public class AuthorController {
 
     private final AuthorService authorService;
-    private final AuthorMapper authorMapper;
-    private final FileService fileService;
 
     @PreAuthorize("permitAll()")
     @PostMapping(value = "/ratings-interval")
-    public ResponseEntity<?> getAllAuthorsByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO) {
-        try {
-            List<AuthorDto> authors = authorService.findAllByRatingInterval(ratingIntervalDTO)
-                    .stream().map(authorMapper::toDto)
-                    .collect(Collectors.toList());
+    public ResponseEntity<?> getAllAuthorsByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO)
+            throws FileNotFoundException {
+        List<AuthorDto> authors = authorService.findAllByRatingInterval(ratingIntervalDTO);
 
-            return new ResponseEntity<>(authors, HttpStatus.OK);
-        } catch (FileNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.ok(authors);
     }
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/by-page")
-//	public ResponseEntity<Page<AuthorDTO>> getAllAuthors(Pageable pageable) {
-//		Page<Author> page = authorService.findAll(pageable);
-//		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/find-by-name/{name}")
-//	public ResponseEntity<Page<AuthorResDTO>> findAuthorByName(Pageable pageable, @PathVariable String name) {
-//		Page<Author> page = authorService.findByNameContains(name, pageable);
-//
-//		return new ResponseEntity<>(createCustomPage(transformFromListToPage(page)), HttpStatus.OK);
-//	}
-//
-//	@PreAuthorize("permitAll()")
-//	@GetMapping(value = "/{id}")
-//	public ResponseEntity<AuthorResDTO> getAuthor(@PathVariable UUID id) {
-//
-//		Author author = authorService.getById(id);
-//		if (author == null) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//		AuthorResDTO authorResDTO = authorMapper.toDTORes(author);
-//		try {
-//			authorResDTO.setImage(fileService.uploadImageAsBase64(authorResDTO.getImage()));
-//		} catch (IOException e) {
-//			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//		}
-//
-//		return new ResponseEntity<>(authorResDTO, HttpStatus.OK);
-//	}
-//
-//	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//	public ResponseEntity<AuthorResDTO> createAuthor(@RequestPart("authorDTO") @Valid @NotNull AuthorDTO authorDTO,
-//			@RequestPart("file") MultipartFile file) {
-//		try {
-//			if (file == null || file.isEmpty()) {
-//				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//			}
-//
-//			AuthorResDTO authorResDTO = authorMapper
-//					.toDTORes(authorService.create(authorMapper.toEntity(authorDTO), file));
-//
-//			authorResDTO.setImage(fileService.uploadImageAsBase64(authorResDTO.getImage()));
-//
-//			return new ResponseEntity<>(authorResDTO, HttpStatus.CREATED);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
-//
-//	@PutMapping(value = "/{id}")
-//	public ResponseEntity<AuthorResDTO> updateAuthor(@PathVariable UUID id,
-//			@RequestPart("authorDTO") @Valid @NotNull AuthorDTO authorDTO, @RequestPart("file") MultipartFile file) {
-//
-//		try {
-//			AuthorResDTO authorResDTO = authorMapper
-//					.toDTORes(authorService.update(id, authorMapper.toEntity(authorDTO), file));
-//
-//			authorResDTO.setImage(fileService.uploadImageAsBase64(authorResDTO.getImage()));
-//
-//			return new ResponseEntity<>(authorResDTO, HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
-//
-//	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<Boolean> deleteAuthor(@PathVariable UUID id) {
-//		try {
-//			return new ResponseEntity<>(authorService.delete(id), HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
-//	private Page<AuthorResDTO> transformFromListToPage(Page<Author> page) {
-//		List<AuthorResDTO> authorsResDTO = authorMapper.toDTOResList(page.toList());
-//		authorsResDTO.stream().forEach(i -> {
-//			try {
-//				i.setImage(fileService.uploadImageAsBase64(i.getImage()));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		});
-//		return new PageImpl<>(authorsResDTO, page.getPageable(), page.getTotalElements());
-//	}
-//
-//	private Page<AuthorResDTO> customTransform(Page<Author> page) {
-//		List<AuthorResDTO> authorsResDTO = authorMapper.toDTOResList(page.toList());
-//		return new PageImpl<>(authorsResDTO, page.getPageable(), page.getTotalElements());
-//	}
-//
-//	private CustomPageImplementation<AuthorResDTO> createCustomPage(Page<AuthorResDTO> page) {
-//		return new CustomPageImplementation<>(page.getContent(), page.getNumber(), page.getSize(),
-//				page.getTotalElements(), null, page.isLast(), page.getTotalPages(), null, page.isFirst(),
-//				page.getNumberOfElements());
-//	}
+
+    @PreAuthorize("permitAll()")
+    @GetMapping
+    public ResponseEntity<Iterable<AuthorDto>> getAllAuthors() {
+        Iterable<AuthorDto> author = authorService.getAll();
+
+        return ResponseEntity.ok(author);
+    }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<AuthorDto> getAuthor(@PathVariable UUID id)
+            throws EntityNotFoundException {
+        AuthorDto author = authorService.getById(id);
+
+        return ResponseEntity.ok(author);
+    }
+
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<AuthorDto> createAuthor(@RequestPart("authorDTO") @Valid @NotNull AuthorDto authorDTO,
+                                                  @RequestPart("file") MultipartFile file)
+            throws IOException {
+        AuthorDto newAuthor = authorService.create(authorDTO, file);
+
+        return ResponseEntity.ok(newAuthor);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<AuthorDto> updateAuthor(@PathVariable UUID id,
+                                                  @RequestPart("authorDTO") @Valid @NotNull AuthorDto authorDTO,
+                                                  @RequestPart("file") MultipartFile file)
+            throws IOException, EntityDoesNotExistException {
+        AuthorDto updatedAuthor = authorService.update(id, authorDTO, file);
+
+        return ResponseEntity.ok(updatedAuthor);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Boolean> deleteAuthor(@PathVariable UUID id) throws IOException {
+        boolean result = authorService.delete(id);
+
+        return ResponseEntity.ok(result);
+    }
+
 }

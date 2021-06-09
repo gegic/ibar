@@ -19,26 +19,30 @@ import java.util.UUID;
 @Data
 public class UserDto {
 
-	private UUID id;
+    private UUID id;
 
-	@NotEmpty(message = "Email cannot be null or empty.")
-	@Email(message = "Email format is not valid.")
-	private String email;
-	
-	@NotEmpty(message = "First name cannot be null or empty.")
-	private String firstName;
-	
-	@NotEmpty(message = "Last name cannot be null or empty.")
-	private String lastName;
+    @NotEmpty(message = "Email cannot be null or empty.")
+    @Email(message = "Email format is not valid.")
+    private String email;
 
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	private String password;
+    @NotEmpty(message = "First name cannot be null or empty.")
+    private String firstName;
 
-	private boolean enabled;
+    @NotEmpty(message = "Last name cannot be null or empty.")
+    private String lastName;
 
-	private List<Authority> authorities;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String password;
 
-	@NotNull
-	private UserType userType;
-	
+    private long age;
+
+    private boolean male;
+
+    private boolean enabled;
+
+    private List<Authority> authorities;
+
+    @NotNull
+    private UserType userType;
+
 }

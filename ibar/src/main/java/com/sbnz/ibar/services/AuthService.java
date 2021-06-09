@@ -1,10 +1,16 @@
 package com.sbnz.ibar.services;
 
 import com.sbnz.ibar.dto.AuthTokenDto;
+import com.sbnz.ibar.dto.UserDto;
 import com.sbnz.ibar.dto.UserLoginDto;
 import com.sbnz.ibar.exceptions.EmailTemporarilyBlockedException;
+import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.IpTemporarilyBlockedException;
+import com.sbnz.ibar.mapper.UserMapper;
+import com.sbnz.ibar.model.Authority;
+import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.model.User;
+import com.sbnz.ibar.repositories.ReaderRepository;
 import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.rto.EmailCheckFact;
 import com.sbnz.ibar.rto.IpCheckFact;
@@ -15,11 +21,15 @@ import org.kie.api.runtime.KieSession;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -30,6 +40,18 @@ public class AuthService {
     private final KieService kieService;
     private final UserRepository userRepository;
     private final HttpServletRequest request;
+
+    private final ReaderRepository readerRepository;
+
+    private final AuthorityService authorityService;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final GenerateRandomPasswordService grpService;
+
+    private final MailService mailService;
+
+    private final UserMapper userMapper;
 
     public AuthTokenDto login(UserLoginDto loginDto) {
         KieSession loginSession = kieService.getLoginSession();
@@ -74,6 +96,38 @@ public class AuthService {
                 user.getAuthorities(),
                 user.getInitials()
         );
+    }
+
+    public UserDto registerNewUser(UserDto entity) throws EntityAlreadyExistsException {
+        Optional<User> user = userRepository.findByEmail(entity.getEmail());
+
+        if (user.isPresent()) {
+            throw new EntityAlreadyExistsException(entity.getEmail(), user.get().getId());
+        }
+
+        Reader reader = new Reader(entity);
+
+        reader.setId(UUID.randomUUID());
+
+        List<Authority> auth = authorityService.findByName("ROLE_READER");
+
+        reader.setAuthorities(auth);
+
+        String newPassword = grpService.generateRandomPassword();
+        reader.setPassword(passwordEncoder.encode(newPassword));
+
+        reader.setLastPasswordResetDate(new Date().getTime());
+
+        mailService.sendMail(reader.getEmail(), "Account activation", "You are now new user of IBAR. Congratulations!\n Your credentials are: \n\tEmail: " + reader.getEmail() +
+                "\n\tPassoword: " + newPassword);
+
+        reader = readerRepository.save(reader);
+
+        return this.toReaderDto(reader);
+    }
+
+    private UserDto toReaderDto(Reader reader) {
+        return userMapper.toUserDto(reader);
     }
 
 }

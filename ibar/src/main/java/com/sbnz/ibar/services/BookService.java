@@ -58,13 +58,22 @@ public class BookService {
     }
 
     @Transactional
-    public Iterable<Book> getAll() {
-        return bookRepository.findAll();
+    public List<BookDto> getAll() {
+        List<Book> books = bookRepository.findAll();
+
+        return books.stream().map(this::toBookDto).collect(Collectors.toList());
     }
 
     public BookDto getById(UUID id) {
         Optional<Book> book = bookRepository.findById(id);
+
         return this.toBookDto(book.orElseThrow(EntityNotFoundException::new));
+    }
+
+    public List<BookDto> findByNameContains(String name) {
+        List<Book> books = bookRepository.findByNameContainingIgnoreCase(name);
+
+        return books.stream().map(this::toBookDto).collect(Collectors.toList());
     }
 
     public List<BookDto> getTopRated() {
@@ -152,7 +161,9 @@ public class BookService {
 
         KieSession kieSession = kieService.createKieSessionFromDRL(drl);
 
-        for (Book book : getAll()) {
+        List<Book> books = bookRepository.findAll();
+
+        for (Book book : books) {
             kieSession.insert(book);
         }
 
@@ -165,22 +176,6 @@ public class BookService {
 
     public Book create(Book entity) throws Exception {
         return null;
-    }
-
-    @Transactional
-    public boolean delete(UUID id) throws Exception {
-        Book existingBook = this.bookRepository.findById(id).orElse(null);
-        if (existingBook == null) {
-            throw new NotFoundException("Book with given id doesn't exist.");
-        }
-
-        fileService.deleteImageFromFile(existingBook.getCover());
-
-        reviewRepository.deleteAllByBookId(id);
-
-        bookRepository.deleteById(id);
-
-        return true;
     }
 
     public Book update(UUID id, Book entity) throws NotFoundException {
@@ -231,6 +226,23 @@ public class BookService {
         return bookRepository.save(entity);
     }
 
+    @Transactional
+    public boolean delete(UUID id) throws IOException {
+        Book existingBook = this.bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+
+        if (this.doesExistReadingProgressContainingBookWithGivenId(id)) {
+            return false;
+        }
+
+        this.removeImageAndPDFOfBookFromFileSystem(existingBook);
+
+        this.removeReviewAndReadingListEntitiesThatContainsBookWithGivenId(id);
+
+        bookRepository.deleteById(id);
+
+        return true;
+    }
+
     public ReadingProgressDto setReadingProgress(UUID bookId, UUID readerId, long progress) {
         Book book = this.bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book with id " + bookId));
@@ -265,8 +277,20 @@ public class BookService {
         return bookRepository.findByCategoryIdAndNameContainingIgnoreCase(id, name, pageable);
     }
 
-    public Page<Book> findByNameContains(String name, Pageable pageable) {
-        return bookRepository.findByNameContainingIgnoreCase(name, pageable);
+    private boolean doesExistReadingProgressContainingBookWithGivenId(UUID id) {
+        return readingProgressRepository.countByBookId(id) > 0;
+    }
+
+    private void removeImageAndPDFOfBookFromFileSystem(Book book) throws IOException {
+        fileService.deleteImageFromFile(book.getCover());
+
+        fileService.deleteImageFromFile(book.getPdf());
+    }
+
+    private void removeReviewAndReadingListEntitiesThatContainsBookWithGivenId(UUID id) {
+        reviewRepository.deleteAllByBookId(id);
+
+        readingListItemRepository.deleteAllByBookId(id);
     }
 
     private Set<Author> getAuthorsOfBook(Book entity) throws NotFoundException {

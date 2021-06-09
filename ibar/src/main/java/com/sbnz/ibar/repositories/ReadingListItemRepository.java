@@ -16,6 +16,8 @@ public interface ReadingListItemRepository extends JpaRepository<ReadingListItem
 
 	List<ReadingListItem> getByReaderId(UUID readerId);
 
+	void deleteAllByBookId(UUID bookId);
+
 	Optional<ReadingListItem> findByBookIdAndReaderId(UUID bookId, UUID readerId);
 
 	@Query("select rl from ReadingListItem rl where rl.reader.id = :readerId or rl.reader.male = :isMale")
