@@ -12,14 +12,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class UserMapper {
-    
+
     private final AuthorityRepository authortyRepository;
-    
 
     public UserMapper(AuthorityRepository authortyRepository) {
         this.authortyRepository = authortyRepository;
     }
-    
+
     public User toEntity(UserDto dto) {
         User entity;
         switch (dto.getUserType()) {
@@ -42,5 +41,16 @@ public class UserMapper {
                 .map(au -> authortyRepository.findById(au.getId()).orElse(new Authority(au.getId(), au.getName())))
                 .collect(Collectors.toList()));
         return entity;
+    }
+
+    public UserDto toUserDto(User user) {
+        UserDto userDto = new UserDto();
+
+        userDto.setId(user.getId());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
+
+        return userDto;
     }
 }

@@ -43,8 +43,7 @@ public class AuthorController {
 
     @PreAuthorize("permitAll()")
     @GetMapping
-    public ResponseEntity<Iterable<AuthorDto>> getAllAuthor()
-            throws EntityNotFoundException {
+    public ResponseEntity<Iterable<AuthorDto>> getAllAuthors() {
         Iterable<AuthorDto> author = authorService.getAll();
 
         return ResponseEntity.ok(author);

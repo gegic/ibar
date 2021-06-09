@@ -1,5 +1,6 @@
 package com.sbnz.ibar.model;
 
+import com.sbnz.ibar.dto.UserDto;
 import com.sbnz.ibar.utils.Utils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,18 @@ public class Reader extends User {
         super(id, email, password, firstName, lastName, lastPasswordResetDate, authorities, enabled);
     }
 
+    public Reader(UserDto userDto) {
+        this.setEmail(userDto.getEmail());
+
+        this.setFirstName(userDto.getFirstName());
+        this.setLastName(userDto.getLastName());
+
+        this.setAge(userDto.getAge());
+
+        this.setMale(userDto.isMale());
+
+        this.setEnabled(true);
+    }
 //
 //	@ManyToMany(fetch = FetchType.LAZY)
 //	@JoinTable(name = "reader_achievements",

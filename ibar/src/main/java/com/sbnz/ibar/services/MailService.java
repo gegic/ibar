@@ -1,27 +1,28 @@
 package com.sbnz.ibar.services;
 
+import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class MailService {
 
+    private final JavaMailSender emailSender;
 
-	private JavaMailSender emailSender;
+    private static final String from = "noreply.kts.l9@gmail.com";
 
-	// TODO
+    @Async
+    public void sendMail(String to, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
 
-	@Async
-	public void sendMail(String to, String subject, String text) {
-		SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(from);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
 
-		message.setFrom("willsetup...");
-		message.setTo("milan_marinkovic98@hotmail.com");
-		message.setSubject(subject);
-		message.setText(text);
-
-		emailSender.send(message);
-	}
+        emailSender.send(message);
+    }
 }
