@@ -13,4 +13,5 @@ export class User {
   enabled: boolean;
   userType: UserType;
   authorities: Authority[];
+  age: Number;
 }

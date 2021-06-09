@@ -47,6 +47,7 @@ import { CategoryComponent } from './components/category/category.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
+import { RegistrationComponent } from './components/registration/registration.component';
 
 @NgModule({
   declarations: [
@@ -69,6 +70,7 @@ import { AdminListComponent } from './components/admin-list/admin-list.component
     CategoryListComponent,
     AdminComponent,
     AdminListComponent,
+    RegistrationComponent,
   ],
   imports: [
     BrowserModule,

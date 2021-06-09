@@ -1,0 +1,88 @@
+<div class="p-grid p-mx-0 p-justify-center centered-grid">
+  <div class="p-col-12 p-sm-9 p-md-6 p-lg-4">
+    <div class="p-text-center heading">
+      <h1>
+        <i class="pi pi-lock"></i> UNDER CONSTRUCTION <i class="pi pi-key"></i>
+      </h1>
+    </div>
+    <p-card class="registration-card">
+      <div class="p-card-header">
+        <div class="p-d-flex p-justify-center">
+          <h1 class="p-mt-1 p-mb-3 p-text-light">Registration</h1>
+        </div>
+      </div>
+      <form [formGroup]="registrationForm" (ngSubmit)="registration()">
+        <div class="p-card-content">
+          <div class="p-grid p-px-5">
+            <div class="p-col-12 p-mt-2">
+              <span class="p-float-label">
+                <input
+                  type="text"
+                  id="email"
+                  name="email"
+                  autocomplete="off"
+                  autofocus
+                  formControlName="email"
+                  pInputText
+                />
+                <label for="email">Email</label>
+              </span>
+            </div>
+            <div class="p-col-12 p-mt-2">
+              <span class="p-float-label">
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  autocomplete="off"
+                  autofocus
+                  formControlName="firstName"
+                  pInputText
+                />
+                <label for="firstName">First name</label>
+              </span>
+            </div>
+            <div class="p-col-12 p-mt-2">
+              <span class="p-float-label">
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  autocomplete="off"
+                  autofocus
+                  formControlName="lastName"
+                  pInputText
+                />
+                <label for="lastName">Last name</label>
+              </span>
+            </div>
+            <div class="p-col-12 p-mt-2">
+              <span class="p-float-label">
+                <input
+                  type="number"
+                  id="age"
+                  name="age"
+                  autocomplete="off"
+                  autofocus
+                  formControlName="age"
+                  pInputText
+                />
+                <label for="age">Age</label>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="registration-btn-container">
+          <div class="vertical-center">
+            <button
+              class="p-d-inline-block registration-btn blue-button"
+              type="submit"
+              label="Sign up"
+              pButton
+            ></button>
+          </div>
+        </div>
+      </form>
+    </p-card>
+  </div>
+</div>

@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import {Observable, of} from 'rxjs';
-import {AuthToken} from '../model/auth-token';
-import {HttpClient} from '@angular/common/http';
-import {catchError} from 'rxjs/operators';
-import {User} from '../model/user';
-import {Login} from '../model/login';
-import {Activation} from '../model/activation';
+import { Observable, of } from 'rxjs';
+import { AuthToken } from '../model/auth-token';
+import { HttpClient } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { User } from '../model/user';
+import { Login } from '../model/login';
+import { Activation } from '../model/activation';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,10 @@ export class AuthService {
 
   login(login: Login): Observable<AuthToken> {
     return this.httpClient.post<AuthToken>(`${this.AUTH_PATH}/login`, login);
+  }
+
+  registration(user: User): Observable<any> {
+    return this.httpClient.post(`${this.AUTH_PATH}/sign-up`, user);
   }
 
   activate(activation: Activation): Observable<User> {
