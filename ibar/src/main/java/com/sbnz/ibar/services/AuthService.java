@@ -121,7 +121,7 @@ public class AuthService {
         mailService.sendMail(reader.getEmail(), "Account activation", "You are now new user of IBAR. Congratulations!\n Your credentials are: \n\tEmail: " + reader.getEmail() +
                 "\n\tPassoword: " + newPassword);
 
-        readerRepository.save(reader);
+        reader = readerRepository.save(reader);
 
         return this.toReaderDto(reader);
     }

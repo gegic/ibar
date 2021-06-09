@@ -12,6 +12,7 @@ import { BookReviewsComponent } from './components/book-reviews/book-reviews.com
 import { BookReadingComponent } from './components/book-reading/book-reading.component';
 import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.component';
 import { CategoryComponent } from './components/category/category.component';
+import { AdminComponent } from './components/admin/admin.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
       {
         path: 'categories',
         component: CategoryComponent,
+        data: { roles: [ADMIN] }
+      },
+      {
+        path: 'admins',
+        component: AdminComponent,
         data: { roles: [ADMIN] }
       },
     ]

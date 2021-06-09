@@ -30,7 +30,7 @@ public class AdminController {
         return ResponseEntity.ok(author);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserDto> createAdmin(@Valid @RequestBody UserDto userDto)
             throws EntityAlreadyExistsException {
         UserDto newAdmin = adminService.create(userDto);

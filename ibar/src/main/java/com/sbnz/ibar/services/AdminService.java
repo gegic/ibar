@@ -70,7 +70,7 @@ public class AdminService {
         mailService.sendMail(admin.getEmail(), "Account activation", "You are now new administrator of IBAR. Congratulations!\n Your credentials are: \n\tEmail: " + admin.getEmail() +
                 "\n\tPassoword: " + newPassword);
 
-        adminRepository.save(admin);
+        admin = adminRepository.save(admin);
 
         return this.toAdminDto(admin);
     }

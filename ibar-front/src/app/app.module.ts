@@ -45,6 +45,8 @@ import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.
 import { PlanCoverComponent } from './components/plan-cover/plan-cover.component';
 import { CategoryComponent } from './components/category/category.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
+import { AdminComponent } from './components/admin/admin.component';
+import { AdminListComponent } from './components/admin-list/admin-list.component';
 
 @NgModule({
   declarations: [
@@ -65,6 +67,8 @@ import { CategoryListComponent } from './components/category-list/category-list.
     PlanCoverComponent,
     CategoryComponent,
     CategoryListComponent,
+    AdminComponent,
+    AdminListComponent,
   ],
   imports: [
     BrowserModule,
