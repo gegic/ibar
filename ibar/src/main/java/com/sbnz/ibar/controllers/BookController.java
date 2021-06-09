@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,21 +21,28 @@ import java.util.UUID;
 public class BookController {
 
     private final BookService bookService;
-    private final FileService fileService;
 
     @PreAuthorize("permitAll()")
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<BookDto> getBook(@PathVariable UUID id) {
-		return ResponseEntity.ok(bookService.getById(id));
-	}
+    @GetMapping
+    public ResponseEntity<List<BookDto>> getAllBooks() {
+        List<BookDto> books = bookService.getAll();
+
+        return ResponseEntity.ok(books);
+    }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<BookDto> getBook(@PathVariable UUID id) {
+        return ResponseEntity.ok(bookService.getById(id));
+    }
 
     @PreAuthorize("permitAll()")
     @PostMapping(value = "/ratings-interval")
     public ResponseEntity<List<BookDto>> getAllBooksByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO)
             throws FileNotFoundException {
 
-            List<BookDto> books = bookService.findAllByRatingInterval(ratingIntervalDTO);
-            return ResponseEntity.ok(books);
+        List<BookDto> books = bookService.findAllByRatingInterval(ratingIntervalDTO);
+        return ResponseEntity.ok(books);
     }
 
     @PreAuthorize("permitAll()")
@@ -42,6 +50,14 @@ public class BookController {
     public ResponseEntity<List<BookDto>> getAllBooksByAuthorsName(@PathVariable String authorName)
             throws FileNotFoundException {
         List<BookDto> books = bookService.findAllByAuthorsName(authorName);
+        return ResponseEntity.ok(books);
+    }
+
+    @PreAuthorize("permitAll()")
+    @GetMapping(value = "/{bookName}")
+    public ResponseEntity<List<BookDto>> getAllBooksByName(@PathVariable String bookName) {
+        List<BookDto> books = bookService.findByNameContains(bookName);
+
         return ResponseEntity.ok(books);
     }
 
@@ -89,16 +105,14 @@ public class BookController {
 //			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 //		}
 //	}
-//
-//	@DeleteMapping(value = "/{id}")
-//	public ResponseEntity<Boolean> deleteBook(@PathVariable UUID id) {
-//		try {
-//			return new ResponseEntity<>(bookService.delete(id), HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//	}
-//
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Boolean> deleteBook(@PathVariable UUID id) throws IOException {
+        boolean statusOfDeletingBook = bookService.delete(id);
+
+        return ResponseEntity.ok(statusOfDeletingBook);
+    }
+
 //	private Page<BookResDTO> transformFromListToPage(Page<Book> page) {
 //		List<BookResDTO> booksResDTO = bookMapper.toDTOResList(page.toList());
 //		booksResDTO.stream().forEach(i -> {
