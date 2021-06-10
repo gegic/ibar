@@ -23,7 +23,8 @@ export class RegistrationComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      age: [0, [Validators.required, Validators.min(13), Validators.max(120)]]
+      age: [0, [Validators.required, Validators.min(13), Validators.max(120)]],
+      sex: ['', [Validators.required]],
     });
   }
 
@@ -40,7 +41,7 @@ export class RegistrationComponent implements OnInit {
     newUser.firstName = this.registrationForm.controls['firstName'].value;
     newUser.lastName = this.registrationForm.controls['lastName'].value;
     newUser.age = this.registrationForm.controls['age'].value;
-
+    newUser.male = this.registrationForm.controls['sex'].value === "Male" ? true : false;
     newUser.userType = 1;
 
     this.authService.registration(newUser).subscribe(res => {

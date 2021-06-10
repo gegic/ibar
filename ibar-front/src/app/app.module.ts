@@ -51,7 +51,8 @@ import { AdminListComponent } from './components/admin-list/admin-list.component
 import { RegistrationComponent } from './components/registration/registration.component';
 import { AuthorComponent } from './components/author/author.component';
 import { AuthorListComponent } from './components/author-list/author-list.component';
-import {FileUploadModule} from 'primeng/fileupload';
+import { FileUploadModule } from 'primeng/fileupload';
+import { RadioButtonModule } from 'primeng/radiobutton';
 
 @NgModule({
   declarations: [
@@ -105,7 +106,8 @@ import {FileUploadModule} from 'primeng/fileupload';
     RippleModule,
     NgxExtendedPdfViewerModule,
     CalendarModule,
-    FileUploadModule
+    FileUploadModule,
+    RadioButtonModule
   ],
   providers: [
     {

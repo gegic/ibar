@@ -44,7 +44,7 @@ public class Reader extends User {
 
         this.setAge(userDto.getAge());
 
-        this.setMale(true);
+        this.setMale(userDto.isMale());
 
         this.setEnabled(true);
     }
