@@ -13,11 +13,19 @@ import { BookReadingComponent } from './components/book-reading/book-reading.com
 import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.component';
 import { CategoryComponent } from './components/category/category.component';
 import { AdminComponent } from './components/admin/admin.component';
+import { RegistrationComponent } from './components/registration/registration.component';
+import { AuthorComponent } from './components/author/author.component';
 
 const routes: Routes = [
   {
     path: environment.loginRoute,
     component: LoginComponent,
+    data: { unauthorized: true },
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'registration',
+    component: RegistrationComponent,
     data: { unauthorized: true },
     canActivate: [AuthGuard]
   },
@@ -52,6 +60,11 @@ const routes: Routes = [
       {
         path: 'plan',
         component: PurchasePlanComponent,
+      },
+      {
+        path: 'aauthors',
+        component: AuthorComponent,
+        data: { roles: [ADMIN] }
       },
       {
         path: 'categories',

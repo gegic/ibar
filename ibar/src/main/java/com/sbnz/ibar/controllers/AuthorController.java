@@ -67,7 +67,7 @@ public class AuthorController {
         return ResponseEntity.ok(newAuthor);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<AuthorDto> updateAuthor(@PathVariable UUID id,
                                                   @RequestPart("authorDTO") @Valid @NotNull AuthorDto authorDTO,
                                                   @RequestPart("file") MultipartFile file)

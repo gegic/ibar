@@ -1,4 +1,4 @@
-import {Authority} from './authority';
+import { Authority } from './authority';
 
 export enum UserType {
   ADMIN,
@@ -13,4 +13,6 @@ export class User {
   enabled: boolean;
   userType: UserType;
   authorities: Authority[];
+  age: Number;
+  male: boolean;
 }
