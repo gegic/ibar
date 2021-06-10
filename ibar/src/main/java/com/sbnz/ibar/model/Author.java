@@ -47,8 +47,8 @@ public class Author {
     public Author(AuthorDto authorDto) {
         this.name = authorDto.getName();
         this.description = authorDto.getDescription();
-        this.dateOfBirth = authorDto.getDateOfBirth();
-        this.dateOfDeath = authorDto.getDateOfDeath();
+        this.dateOfBirth = authorDto.getDateOfBirth().toInstant();
+        this.dateOfDeath = authorDto.getDateOfDeath().toInstant();
 
         this.averageRating = 0;
     }

@@ -93,7 +93,7 @@ public class AuthorService {
 
         author.setImage(imagePath);
 
-        authorRepository.save(author);
+        author = authorRepository.save(author);
 
         return this.toAuthorDto(author);
     }
@@ -109,9 +109,10 @@ public class AuthorService {
 
         Author author = existingAuthor.get();
 
+        author.setName(entity.getName());
         author.setDescription(entity.getDescription());
-        author.setDateOfBirth(entity.getDateOfBirth());
-        author.setDateOfDeath(entity.getDateOfDeath());
+        author.setDateOfBirth(entity.getDateOfBirth().toInstant());
+        author.setDateOfDeath(entity.getDateOfDeath().toInstant());
 
         if (!newImage.isEmpty()) {
             fileService.uploadNewImage(newImage, author.getImage());

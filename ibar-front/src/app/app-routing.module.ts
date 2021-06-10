@@ -14,6 +14,7 @@ import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.
 import { CategoryComponent } from './components/category/category.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { RegistrationComponent } from './components/registration/registration.component';
+import { AuthorComponent } from './components/author/author.component';
 
 const routes: Routes = [
   {
@@ -59,6 +60,11 @@ const routes: Routes = [
       {
         path: 'plan',
         component: PurchasePlanComponent,
+      },
+      {
+        path: 'aauthors',
+        component: AuthorComponent,
+        data: { roles: [ADMIN] }
       },
       {
         path: 'categories',

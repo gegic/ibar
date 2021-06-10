@@ -1,0 +1,95 @@
+<div>
+  <div class="list-header p-d-flex p-ai-center">
+    <h2 class="p-text-light">Showing all authors</h2>
+    <button
+      id="newAuthor"
+      class="p-button blue-button p-ml-auto"
+      label="NEW AUTHOR"
+      (click)="openAddDialog()"
+      pButton
+    ></button>
+  </div>
+  <div class="list-content">
+    <app-author-list
+      *ngFor="let author of authors"
+      [author]="author"
+      (authorDeleted)="authorDeletionConfirmed()"
+      (clickEdit)="openAddDialog(true, $event)"
+    >
+    </app-author-list>
+  </div>
+  <p-dialog
+    [modal]="true"
+    [header]="editing ? 'Edit author' : 'Add a new author'"
+    [(visible)]="isAddDialogOpen"
+    (onHide)="onHideAddDialog()"
+    [resizable]="false"
+    [style]="{ height: '55vw', width: '40vw' }"
+  >
+    <div>
+      <form [formGroup]="authorForm" (ngSubmit)="saveAuthor()">
+        <span class="p-float-label p-mt-5">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            autocomplete="off"
+            formControlName="name"
+            pInputText
+          />
+          <label for="name">Name</label>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <p-calendar
+            formControlName="dateOfBirth"
+            dateFormat="dd.mm.yy"
+          ></p-calendar>
+          <label for="name">Date of birth</label>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <p-calendar
+            formControlName="dateOfDeath"
+            dateFormat="dd.mm.yy"
+          ></p-calendar>
+          <label for="name">Date of death</label>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <textarea
+            id="description"
+            name="description"
+            formControlName="description"
+            pInputTextarea
+            [rows]="11"
+            [cols]="50"
+          >
+          </textarea>
+          <label for="name">Description</label>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <img *ngIf="image" [src]="image" width="200" height="200"/>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <p-fileUpload
+            #form
+            mode="basic"
+            accept="image/*"
+            name="file"
+            accept="image/*"
+            chooseLabel="Choose an image"
+            customUpload="true"
+            [auto]="true"
+            (uploadHandler)="uploadFile($event, form)"
+          >
+          </p-fileUpload>
+        </span>
+        <button
+          type="submit"
+          id="addAuthor"
+          class="p-button blue-button p-d-block p-ml-auto p-mt-4"
+          label="Save"
+          pButton
+        ></button>
+      </form>
+    </div>
+  </p-dialog>
+</div>

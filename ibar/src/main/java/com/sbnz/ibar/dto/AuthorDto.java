@@ -8,6 +8,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
+import java.util.Date;
 import java.util.UUID;
 
 @Getter
@@ -24,9 +25,11 @@ public class AuthorDto {
 	private String description;
 
 	@NotNull(message = "Date of birth cannot be null.")
-	private Instant dateOfBirth;
+	private Date dateOfBirth;
 
-	private Instant dateOfDeath;
+	private Date dateOfDeath;
 
 	private double averageRating;
+
+	private String image;
 }

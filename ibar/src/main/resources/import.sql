@@ -84,9 +84,9 @@ insert into plan values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', 30, 'Our recomm
 insert into plan_categories values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', '22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
 
 /*-----------------------author--------------------------------------------*/
-INSERT INTO author VALUES('68d0f630-808c-42e3-a97c-75150203ff6c',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	null,	'Agata Kristi');
-INSERT INTO author VALUES('bbf41804-ad07-4cf9-ad6c-6cc9f02c956c',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	null,	'Donato Karizi');
-INSERT INTO author VALUES('17462d5b-59f2-42b2-99f3-9bba1c1631c5',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	null,	'Fjodor Mihailovič Dostojevski');
+INSERT INTO author VALUES('68d0f630-808c-42e3-a97c-75150203ff6c',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	'/photos/kristi.png',	'Agata Kristi');
+INSERT INTO author VALUES('bbf41804-ad07-4cf9-ad6c-6cc9f02c956c',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	'/photos/karizi.jpg',	'Donato Karizi');
+INSERT INTO author VALUES('17462d5b-59f2-42b2-99f3-9bba1c1631c5',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	'/photos/dostojevski.jpg',	'Fjodor Mihailovič Dostojevski');
 
 /*------------------------book-----------------------------------------*/
 
