@@ -14,7 +14,10 @@ public class PlanInterceptorConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(planInterceptor).addPathPatterns("/api/**").excludePathPatterns("/api/plans/**");
+        registry.addInterceptor(planInterceptor)
+                .addPathPatterns("/pdf/**")
+                .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/plans/**");
     }
 
 }

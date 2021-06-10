@@ -5,7 +5,7 @@ export const READER = 'ROLE_READER';
 
 export const READER_NAVBAR: NavigationItem[] = [
   {routerLink: 'browse', icon: 'pi pi-table'},
-  {routerLink: 'personal', icon: 'pi pi-user'}
+  {routerLink: 'list', icon: 'pi pi-list'}
 ];
 
 export const ADMIN_NAVBAR: NavigationItem[] = [

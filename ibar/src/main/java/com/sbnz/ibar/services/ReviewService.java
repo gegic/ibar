@@ -85,7 +85,7 @@ public class ReviewService {
 
         OnReview onReview = new OnReview(r);
         KieSession readingSession = kieService.getReadingSession();
-        readingSession.insert(r);
+        readingSession.insert(onReview);
         readingSession.fireAllRules();
 
         return reviewMapper.toDto(r);

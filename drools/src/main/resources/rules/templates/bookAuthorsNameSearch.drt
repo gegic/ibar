@@ -14,8 +14,8 @@ template "books-search-by-authors-name"
 rule "Get books by authors name @{authorName}"
 
     when
-        $book : Book()
-        Author (name.toLowerCase().contains("@{authorName}".toLowerCase())) from $book.authors
+        $book : Book();
+        Author (name.toLowerCase().contains("@{authorName}".toLowerCase())) from $book.authors;
     then
         result.add($book);
     end

@@ -1,1 +1,95 @@
-<p>book-list works!</p>
+<div>
+  <div class="list-header p-d-flex p-ai-center">
+    <h2 class="p-text-light">{{filterSet || !!searchQuery ? 'Search and filter results' : 'Showing all books'}}</h2>
+    <button class="p-button p-ml-auto new-offering blue-button"
+            *ngIf="canModify"
+            routerLink="/create-book"
+            label="NEW BOOK"
+            pButton
+    ></button>
+  </div>
+  <div class="list-content">
+    <div class="p-d-flex p-ai-center">
+      <div class="p-d-flex p-ml-auto">
+        <button class="p-button p-button-icon p-button-text p-button-plain p-button-rounded"
+                icon="pi pi-filter"
+                (click)="openFilterDialog()"
+                pButton
+                pRipple
+                id="filter-btn"
+        ></button>
+        <button class="p-button p-button-text p-button-plain"
+                label="RESET"
+                (click)="resetFilter()"
+                pButton
+                pRipple
+                *ngIf="filterSet"
+                id="reset-filter-btn"
+        ></button>
+      </div>
+    </div>
+    <div *ngIf="books.length > 0; else noBooks">
+      <app-book-list-element class='culturalOffer' *ngFor="let book of books; let index = index;"
+                        [book]="book"
+                        (bookDeleted)="bookDeleted()"
+                        [index]="index"
+      >
+      </app-book-list-element>
+    </div>
+    <ng-template #noBooks>
+      <h2 class="p-text-bold" *ngIf="!isLoadingBooks; else booksLoadingSpinner">
+        {{filterSet || !!searchQuery ? 'No results...' : 'No books...'}}
+      </h2>
+      <ng-template #booksLoadingSpinner>
+        <div class="p-text-center">
+          <p-progressSpinner></p-progressSpinner>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+  <p-dialog header="Filter"
+            [resizable]="false"
+            [(visible)]="isFilterDialogOpen"
+            [modal]="true"
+            (onHide)="restoreFilter()"
+  >
+    <div class="filter-dialog-content">
+      <div class="p-grid p-p-0 p-m-0">
+        <div class="p-col-12 p-px-3">
+          <div class="p-d-flex p-ai-center">
+            <h3 class="p-text-normal p-my-0">Rating: {{filter.ratingInterval.interval[0]}}-{{filter.ratingInterval.interval[1]}}</h3>
+          </div>
+          <hr class="p-mb-4">
+          <div>
+            <p-slider
+                      [(ngModel)]="filter.ratingInterval.interval"
+                      [range]="true"
+                      [min]="0"
+                      [max]="5"
+                      [step]="0.1"
+                      [draggable]="false"
+            ></p-slider>
+          </div>
+        </div>
+        <div class="p-col-12 p-px-3">
+          <div class="p-d-flex p-ai-center">
+            <h3 class="p-text-normal p-my-0">Author's name:</h3>
+          </div>
+          <hr class="p-mb-4">
+          <div>
+            <input type="text" [style]="{width: '100%'}" [(ngModel)]="filter.authorsName" pInputText>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <p-footer>
+      <button class="p-button blue-button"
+              label="Save filter"
+              (click)="saveFilter()"
+              pButton
+              id="save-filter-btn"
+      ></button>
+    </p-footer>
+  </p-dialog>
+</div>

@@ -67,7 +67,7 @@ public class AuthorService {
 
         String drl = converter.compile(data, template);
 
-        KieSession kieSession = kieService.createKieSessionFromDRL(drl);
+        KieSession kieSession = kieService.createKieSessionFromDrl(drl);
 
         List<Author> authors = authorRepository.findAll();
 

@@ -1,5 +1,6 @@
 package com.sbnz.ibar.config;
 
+import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.utils.Utils;
 import lombok.AllArgsConstructor;
 import org.kie.api.KieServices;
@@ -20,6 +21,8 @@ import static com.sbnz.ibar.utils.Utils.READING_SESSION;
 @AllArgsConstructor
 public class KieConfig {
 
+    private final UserRepository userRepository;
+
     @Bean
     public KieContainer kieContainer() {
         KieServices kieService = KieServices.Factory.get();
@@ -37,8 +40,9 @@ public class KieConfig {
 
     @Bean(name = "readingSession")
     public KieSession readingSession() {
-        return kieContainer().newKieSession(READING_SESSION);
+        KieSession readingSession = kieContainer().newKieSession(READING_SESSION);
+        readingSession.setGlobal("userRepository", userRepository);
+        return readingSession;
     }
-
 
 }

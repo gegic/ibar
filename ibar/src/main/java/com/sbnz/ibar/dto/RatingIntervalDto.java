@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RatingIntervalDto {
 
-    private int min;
-    private int max;
+    private double min;
+    private double max;
 }
