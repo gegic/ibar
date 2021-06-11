@@ -37,8 +37,6 @@ const routes: Routes = [
   {
     path: '',
     component: MainFrameComponent,
-    data: { roles: [ADMIN, READER] },
-    canActivate: [AuthGuard],
     children: [
       {
         path: '',
@@ -48,10 +46,14 @@ const routes: Routes = [
       {
         path: 'browse',
         component: BrowseBooksComponent,
+        data: { roles: [READER] },
+        canActivate: [AuthGuard],
       },
       {
         path: 'book/:id',
         component: BookDetailsComponent,
+        data: { roles: [ADMIN, READER] },
+        canActivate: [AuthGuard],
         children: [
           { path: '', redirectTo: 'about', pathMatch: 'full' },
           { path: 'reviews', component: BookReviewsComponent },
@@ -60,26 +62,33 @@ const routes: Routes = [
       },
       {
         path: 'plan',
+        data: { roles: [READER] },
+        canActivate: [AuthGuard],
         component: PurchasePlanComponent,
       },
       {
-        path: 'aauthors',
+        path: 'authors',
         component: AuthorComponent,
-        data: { roles: [ADMIN] }
+        data: { roles: [ADMIN] },
+        canActivate: [AuthGuard],
       },
       {
         path: 'list',
         component: BookListComponent,
+        data: { roles: [ADMIN, READER] },
+        canActivate: [AuthGuard],
       },
       {
         path: 'categories',
         component: CategoryComponent,
-        data: { roles: [ADMIN] }
+        data: { roles: [ADMIN] },
+        canActivate: [AuthGuard],
       },
       {
         path: 'admins',
         component: AdminComponent,
-        data: { roles: [ADMIN] }
+        data: { roles: [ADMIN] },
+        canActivate: [AuthGuard],
       },
     ]
   },

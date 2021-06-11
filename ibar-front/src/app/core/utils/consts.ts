@@ -9,7 +9,10 @@ export const READER_NAVBAR: NavigationItem[] = [
 ];
 
 export const ADMIN_NAVBAR: NavigationItem[] = [
-
+  {routerLink: 'list', icon: 'pi pi-list'},
+  {routerLink: 'categories', icon: 'pi pi-table'},
+  {routerLink: 'authors', icon: 'pi pi-id-card'},
+  {routerLink: 'admins', icon: 'pi pi-users'}
 ];
 
 export const RESPONSIVE_OPTIONS = [
