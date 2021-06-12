@@ -6,6 +6,7 @@ import { catchError } from 'rxjs/operators';
 import { User } from '../model/user';
 import { Login } from '../model/login';
 import { Activation } from '../model/activation';
+import { ChangePassword } from '../model/changePassword';
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,9 @@ export class AuthService {
     return this.httpClient.post<AuthToken>(`${this.AUTH_PATH}/login`, login);
   }
 
+  changePassword(changePassword: ChangePassword) {
+    return this.httpClient.post<boolean>(`${this.AUTH_PATH}/change-password`, changePassword);
+  }
   registration(user: User): Observable<any> {
     return this.httpClient.post(`${this.AUTH_PATH}/sign-up`, user);
   }

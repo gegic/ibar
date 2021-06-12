@@ -61,6 +61,9 @@ import {SelectButtonModule} from 'primeng/selectbutton';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {DropdownModule} from 'primeng/dropdown';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
   declarations: [
@@ -89,6 +92,7 @@ import {DropdownModule} from 'primeng/dropdown';
     AuthorListComponent,
     AuthorListElementComponent,
     BookCreateComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -119,6 +123,8 @@ import {DropdownModule} from 'primeng/dropdown';
     SliderModule,
     CalendarModule,
     FileUploadModule,
+    RadioButtonModule,
+    MessageModule,
     RadioButtonModule,
     SelectButtonModule,
     NgSelectModule,

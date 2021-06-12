@@ -20,12 +20,17 @@ import lombok.AllArgsConstructor;
 import org.kie.api.runtime.KieSession;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.management.InvalidAttributeValueException;
 import javax.persistence.EntityExistsException;
 import javax.servlet.http.HttpServletRequest;
+import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -124,6 +129,27 @@ public class AuthService {
         reader = readerRepository.save(reader);
 
         return this.toReaderDto(reader);
+    }
+
+    @Transactional
+    public void changePassword(String oldPassword, String newPassword) throws IllegalAccessException, InvalidAttributeValueException {
+        Authentication currentUser = SecurityContextHolder.getContext().getAuthentication();
+
+        String email;
+
+        try {
+            email = ((User) currentUser.getPrincipal()).getEmail();
+        } catch (Exception e) {
+            throw new IllegalAccessException("Invalid token.");
+        }
+
+        User user = userRepository.findByEmail(email).orElse(null);
+
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, oldPassword));
+
+        user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
+
+        userRepository.save(user);
     }
 
     private UserDto toReaderDto(Reader reader) {

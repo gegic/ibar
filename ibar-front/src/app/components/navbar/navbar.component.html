@@ -42,5 +42,9 @@
               pButton
       ></button>
     </ng-template>
+    <app-change-password
+      [isChangePasswordDialogOpen]="isChangePasswordDialogOpen"
+      (closeDialog) = "closeDialog()"
+    ></app-change-password>
   </div>
 </div>
