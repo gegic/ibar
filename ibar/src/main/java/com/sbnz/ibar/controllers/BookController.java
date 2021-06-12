@@ -1,7 +1,9 @@
 package com.sbnz.ibar.controllers;
 
 import com.sbnz.ibar.dto.BookDto;
+import com.sbnz.ibar.dto.FilterDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.services.BookService;
 import lombok.AllArgsConstructor;
@@ -31,44 +33,25 @@ public class BookController {
     }
 
     @PreAuthorize("permitAll()")
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<BookDto> getBook(@PathVariable UUID id) {
-        return ResponseEntity.ok(bookService.getById(id));
-    }
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<BookDto> getBook(@PathVariable UUID id) throws EntityDoesNotExistException {
+		return ResponseEntity.ok(bookService.getById(id));
+	}
 
-    @PreAuthorize("permitAll()")
-    @PostMapping(value = "/ratings-interval")
-    public ResponseEntity<List<BookDto>> getAllBooksByRatingInterval(@RequestBody RatingIntervalDto ratingIntervalDTO)
-            throws FileNotFoundException {
-
-        List<BookDto> books = bookService.findAllByRatingInterval(ratingIntervalDTO);
-        return ResponseEntity.ok(books);
-    }
-
-    @PreAuthorize("permitAll()")
-    @GetMapping(value = "/author/{authorName}")
-    public ResponseEntity<List<BookDto>> getAllBooksByAuthorsName(@PathVariable String authorName)
-            throws FileNotFoundException {
-        List<BookDto> books = bookService.findAllByAuthorsName(authorName);
-        return ResponseEntity.ok(books);
-    }
-
-    @PreAuthorize("permitAll()")
-    @GetMapping(value = "/{bookName}")
-    public ResponseEntity<List<BookDto>> getAllBooksByName(@PathVariable String bookName) {
-        List<BookDto> books = bookService.findByNameContains(bookName);
-
-        return ResponseEntity.ok(books);
+    @PostMapping(value = "/search")
+    public ResponseEntity<List<BookDto>> search(@RequestParam(name = "query", defaultValue = "")  String searchQuery,
+                                                @RequestBody FilterDto filterDto) throws FileNotFoundException {
+        return ResponseEntity.ok(bookService.search(searchQuery, filterDto));
     }
 
     @PreAuthorize("hasAuthority('ROLE_READER')")
-    @GetMapping(value = "top-rated")
+    @GetMapping(value = "/top-rated")
     public ResponseEntity<List<BookDto>> topRated() {
         return ResponseEntity.ok(bookService.getTopRated());
     }
 
     @PreAuthorize("hasAuthority('ROLE_READER')")
-    @GetMapping(value = "recommended")
+    @GetMapping(value = "/recommended")
     public ResponseEntity<List<BookDto>> recommended() {
         return ResponseEntity.ok(bookService.getRecommended());
     }

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Book} from '../model/book';
-import {HttpClient} from '@angular/common/http';
-import {BehaviorSubject, Observable} from 'rxjs';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import {ReadingProgress} from '../model/reading-progress';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

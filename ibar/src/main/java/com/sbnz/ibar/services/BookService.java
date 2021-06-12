@@ -1,8 +1,10 @@
 package com.sbnz.ibar.services;
 
 import com.sbnz.ibar.dto.BookDto;
+import com.sbnz.ibar.dto.FilterDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.dto.ReadingProgressDto;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.mapper.BookMapper;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.mapper.ReadingProgressMapper;
@@ -13,10 +15,6 @@ import com.sbnz.ibar.rto.BookResponseFilter;
 import com.sbnz.ibar.utils.Utils;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.drools.template.DataProvider;
-import org.drools.template.DataProviderCompiler;
-import org.drools.template.ObjectDataCompiler;
-import org.drools.template.objects.ArrayDataProvider;
 import org.kie.api.runtime.KieSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,10 +25,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -52,10 +48,7 @@ public class BookService {
     private final BookMapper bookMapper;
     private final ReadingListItemRepository readingListItemRepository;
     private final BookResponseFilter bookResponseFilter;
-
-    public Page<Book> findAll(Pageable pageable) {
-        return bookRepository.findAll(pageable);
-    }
+    private final SubscriptionRepository subscriptionRepository;
 
     @Transactional
     public List<BookDto> getAll() {
@@ -64,18 +57,51 @@ public class BookService {
         return books.stream().map(this::toBookDto).collect(Collectors.toList());
     }
 
-    public BookDto getById(UUID id) {
+    public BookDto getById(UUID id) throws EntityDoesNotExistException {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Book> book = bookRepository.findById(id);
-
-        return this.toBookDto(book.orElseThrow(EntityNotFoundException::new));
+        Subscription s = subscriptionRepository.findByBuyerId(user.getId())
+                .orElseThrow(() -> new EntityDoesNotExistException(Subscription.class.getName(), user.getId()));
+        Book b = book.orElseThrow(EntityNotFoundException::new);
+        if (!s.getPurchasedPlan().getCategories().contains(b.getCategory())) {
+            b.setPdf(null);
+        }
+        return this.toBookDto(b);
     }
 
-    public List<BookDto> findByNameContains(String name) {
-        List<Book> books = bookRepository.findByNameContainingIgnoreCase(name);
-
-        return books.stream().map(this::toBookDto).collect(Collectors.toList());
+    public List<BookDto> search(String searchQuery, FilterDto filterDto) throws FileNotFoundException {
+        List<Book> books = bookRepository.findByNameContainsIgnoreCase(searchQuery);
+        if (filterDto.getAuthorsName() != null && filterDto.getAuthorsName().length() > 0) {
+            books = this.filterByAuthorsName(books, filterDto.getAuthorsName());
+        }
+        if (filterDto.getRatingInterval() != null) {
+            books = this.filterByRatingInterval(books, filterDto.getRatingInterval());
+        }
+        return books.stream().map(bookMapper::toBookDto).collect(Collectors.toList());
     }
 
+    private List<Book> filterByAuthorsName(List<Book> books, String authorsName) throws FileNotFoundException {
+        List<Book> result = new ArrayList<>();
+        KieSession kieSession = kieService.getBookByAuthorsNameSearchSession(authorsName);
+        kieSession.setGlobal("result", result);
+        books.forEach(kieSession::insert);
+
+        kieSession.fireAllRules();
+        kieSession.dispose();
+        return result;
+    }
+
+    private List<Book> filterByRatingInterval(List<Book> books, RatingIntervalDto ratingInterval)
+            throws FileNotFoundException {
+        List<Book> result = new ArrayList<>();
+        KieSession kieSession = kieService.getBookByRatingSearchSession(ratingInterval);
+        kieSession.setGlobal("result", result);
+        books.forEach(kieSession::insert);
+
+        kieSession.fireAllRules();
+        kieSession.dispose();
+        return result;
+    }
     public List<BookDto> getTopRated() {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         UUID userId = user.getId();
@@ -126,53 +152,7 @@ public class BookService {
 
     }
 
-    public List<BookDto> findAllByRatingInterval(RatingIntervalDto ratingIntervalDTO) throws FileNotFoundException {
-        // TODO replace with classpath
-        InputStream template = new FileInputStream("../drools/src/main/resources/rules.templates/bookRatingSearch.drt");
 
-        ObjectDataCompiler converter = new ObjectDataCompiler();
-
-        List<RatingIntervalDto> data = new ArrayList<>();
-
-        data.add(ratingIntervalDTO);
-
-        String drl = converter.compile(data, template);
-
-        return this.fireTemplateRules(drl).stream().map(this::toBookDto).collect(Collectors.toList());
-    }
-
-    public List<BookDto> findAllByAuthorsName(String authorsName) throws FileNotFoundException {
-        // TODO replace with classpath
-        InputStream template = new FileInputStream("../drools/src/main/resources/rules.templates/bookAuthorsNameSearch.drt");
-
-        DataProviderCompiler converter = new DataProviderCompiler();
-
-        DataProvider dataProvider = new ArrayDataProvider(new String[][]{
-                new String[]{authorsName}
-        });
-
-        String drl = converter.compile(dataProvider, template);
-
-        return this.fireTemplateRules(drl).stream().map(this::toBookDto).collect(Collectors.toList());
-    }
-
-    private ArrayList<Book> fireTemplateRules(String drl) {
-        ArrayList<Book> result = new ArrayList<>();
-
-        KieSession kieSession = kieService.createKieSessionFromDRL(drl);
-
-        List<Book> books = bookRepository.findAll();
-
-        for (Book book : books) {
-            kieSession.insert(book);
-        }
-
-        kieSession.setGlobal("result", result);
-
-        kieSession.fireAllRules();
-
-        return result;
-    }
 
     public Book create(Book entity) throws Exception {
         return null;

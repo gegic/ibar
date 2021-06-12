@@ -39,7 +39,11 @@ export class AuthGuard implements CanActivate {
           return true;
         }
       }
-      this.router.navigate(['']);
+      if (this.tokenService.getToken()?.authorities?.some((au: Authority) => au.name === ADMIN)) {
+        this.router.navigate(['list']);
+      } else {
+        this.router.navigate(['']);
+      }
     } else {
       if (route.data.unauthorized) {
         return true;

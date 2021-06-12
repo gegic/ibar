@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.resource.ResourceHttpRequestHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +36,7 @@ public class PlanInterceptor implements HandlerInterceptor {
         } else if (o instanceof Reader) {
             UUID userId = ((Reader) o).getId();
             Optional<Subscription> optionalSubscription = subscriptionRepository.findByBuyerId(userId);
-            if (!optionalSubscription.isPresent()) {
+            if (optionalSubscription.isEmpty()) {
                 response.sendError(HttpStatus.FORBIDDEN.value(), "No subscription.");
                 return false;
             }

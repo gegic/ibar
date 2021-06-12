@@ -8,6 +8,7 @@ import { TokenService } from '../../core/services/token.service';
 import { Authority } from '../../core/model/authority';
 import { NavigationItem } from '../../core/model/navigation-item';
 import { NavbarService } from '../../core/services/navbar.service';
+import { BookService } from '../../core/services/book.service';
 
 @Component({
   selector: 'app-navbar',
@@ -29,10 +30,12 @@ export class NavbarComponent implements OnInit {
     { label: 'Logout', icon: 'pi pi-fw pi-power-off', command: e => this.onClickLogout(), id: 'logout-btn' }
   ];
 
-  constructor(private authService: AuthService,
+  constructor(
+    private authService: AuthService,
     private router: Router,
     private tokenService: TokenService,
-    private navbarService: NavbarService) { }
+    private navbarService: NavbarService,
+    private bookService: BookService) { }
 
   ngOnInit(): void {
     this.navbarService.navigation.subscribe(
@@ -59,8 +62,8 @@ export class NavbarComponent implements OnInit {
   setSearchQuery(event: KeyboardEvent): void {
 
     if (event.key === 'Enter') {
-      // do search
-      // this.router.navigate(['list-view']);
+      this.bookService.searchQuery.next(this.searchQuery);
+      this.router.navigate(['list']);
     }
   }
 

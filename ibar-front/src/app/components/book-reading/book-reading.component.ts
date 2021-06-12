@@ -6,6 +6,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {ReadingProgress} from '../../core/model/reading-progress';
 import {NgxExtendedPdfViewerComponent} from 'ngx-extended-pdf-viewer';
+import {TokenService} from '../../core/services/token.service';
 
 @Component({
   selector: 'app-book-reading',
@@ -20,7 +21,8 @@ export class BookReadingComponent implements OnInit, OnDestroy {
   constructor(private detailsService: BookDetailsService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
-              private titleService: Title) { }
+              private titleService: Title,
+              private tokenService: TokenService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.pipe(distinctUntilChanged()).subscribe(
@@ -40,6 +42,9 @@ export class BookReadingComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.detailsService.getBook(id).pipe(distinctUntilChanged()).subscribe(
       (data: Book) => {
+        if (!data.pdf) {
+          this.router.navigate(['']);
+        }
         this.detailsService.book.next(data);
         const newTitle = `${data.name} | ibar`;
         this.titleService.setTitle(newTitle);
@@ -72,10 +77,6 @@ export class BookReadingComponent implements OnInit, OnDestroy {
     }
   }
 
-  pageChanged(sth: any): void {
-    this.currentPage = sth;
-  }
-
   backToBook(): void {
     this.router.navigate(['book', this.book.id]);
   }
@@ -91,6 +92,10 @@ export class BookReadingComponent implements OnInit, OnDestroy {
 
   get pdfUrl(): string {
     return `/pdf/${this.book.pdf}.pdf`;
+  }
+
+  get token(): string {
+    return this.tokenService.getToken()?.accessToken;
   }
 
   ngOnDestroy(): void {

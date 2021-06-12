@@ -13,15 +13,19 @@ import java.util.UUID;
 @Repository
 public interface BookRepository extends JpaRepository<Book, UUID> {
 
-    Page<Book> getByCategoryId(UUID id, Pageable pageable);
+	Book findByPdf(String pdf);
 
-    Page<Book> findByCategoryIdAndNameContainingIgnoreCase(UUID id, String name, Pageable pageable);
+	List<Book> findByNameContainsIgnoreCase(String name);
 
-    List<Book> findByNameContainingIgnoreCase(String name);
+	Page<Book> getByCategoryId(UUID id, Pageable pageable);
 
-    @Query("select b from Book b where b not in (select bk from ReadingProgress rp join rp.book bk where rp.reader.id = :readerId) order by b.averageRating desc")
-    List<Book> getTopRated(UUID readerId, Pageable limitPage);
+	Page<Book> findByCategoryIdAndNameContainingIgnoreCase(UUID id, String name, Pageable pageable);
 
-    @Query("select b from Book b where b not in (select bk from ReadingProgress rp join rp.book bk where rp.reader.id = :readerId)")
-    List<Book> getUnread(UUID readerId);
+	Page<Book> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+	@Query("select b from Book b where b not in (select bk from ReadingProgress rp join rp.book bk where rp.reader.id = :readerId) order by b.averageRating desc")
+	List<Book> getTopRated(UUID readerId, Pageable limitPage);
+
+	@Query("select b from Book b where b not in (select bk from ReadingProgress rp join rp.book bk where rp.reader.id = :readerId)")
+	List<Book> getUnread(UUID readerId);
 }

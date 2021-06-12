@@ -46,8 +46,11 @@ import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.
 import { PlanCoverComponent } from './components/plan-cover/plan-cover.component';
 import { CategoryComponent } from './components/category/category.component';
 import { CategoryListComponent } from './components/category-list/category-list.component';
+import { BookListComponent } from './components/book-list/book-list.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { AdminListComponent } from './components/admin-list/admin-list.component';
+import {SliderModule} from 'primeng/slider';
+import { BookListElementComponent } from './components/book-list-element/book-list-element.component';
 import { RegistrationComponent } from './components/registration/registration.component';
 import { AuthorComponent } from './components/author/author.component';
 import { AuthorListComponent } from './components/author-list/author-list.component';
@@ -77,6 +80,8 @@ import { MessageModule } from 'primeng/message';
     CategoryListComponent,
     AdminComponent,
     AdminListComponent,
+    BookListComponent,
+    BookListElementComponent,
     RegistrationComponent,
     AuthorComponent,
     AuthorListComponent,
@@ -108,6 +113,7 @@ import { MessageModule } from 'primeng/message';
     DialogModule,
     RippleModule,
     NgxExtendedPdfViewerModule,
+    SliderModule,
     CalendarModule,
     FileUploadModule,
     RadioButtonModule,

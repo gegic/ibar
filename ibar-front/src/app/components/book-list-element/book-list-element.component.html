@@ -1,0 +1,57 @@
+<p-card class="offering-card" (click)="onClickCard()">
+  <div class="p-grid p-m-0 p-p-0 p-justify-around">
+    <div class="p-col-fixed p-p-0" style="width: 100px; height: 100px">
+      <img class="thumbnail-img" [src]="coverUrl" alt="thumbnail">
+    </div>
+    <div class="p-col-12 p-sm-4 p-lg-6 p-ml-4">
+      <h5 class="p-text-normal p-m-0 category-subcategory">
+        {{book.categoryName}}
+      </h5>
+      <h2 class="p-text-bold p-m-0 offering-name">
+        {{book.name}}
+      </h2>
+      <p class="p-text-light p-m-0 subscribed">
+        {{book.numRead}} people started reading.
+      </p>
+      <div>
+        <small class="p-mt-1 p-d-inline-flex">{{book.numReviews}} reviews.</small>
+      </div>
+    </div>
+    <div class="p-col-12 p-sm-4 p-lg-3 p-text-right p-as-end">
+      <button class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
+              icon="pi pi-map-marker"
+              label="ADD TO READING LIST"
+              (click)="onClickRead()"
+              pButton
+      ></button>
+      <div class="p-d-block p-mb-3">
+        <div *ngIf="canModify; else subscribeButton">
+          <button class="p-button p-button-rounded p-button-icon p-button-danger p-ml-3"
+                  icon="pi pi-trash"
+                  (click)="onClickDelete($event)"
+                  [id]="'delete-num' + index"
+                  pButton
+          ></button>
+          <button class="p-button blue-button p-button-rounded p-button-icon p-ml-3"
+                  icon="pi pi-pencil"
+                  (click)="onClickEdit($event)"
+                  pButton
+          ></button>
+        </div>
+        <ng-template #subscribeButton>
+          <button class="p-button blue-button subscribe-btn"
+                  [disabled]="!book.pdf"
+                  label="Subscribe"
+                  icon="pi pi-bell"
+                  (click)="onClickRead()"
+                  pButton
+          ></button>
+        </ng-template>
+      </div>
+      <div class="p-d-inline-block p-ml-auto">
+        <i class="pi pi-star"></i>
+        <small class="p-ml-1 p-text-light review">{{book.averageRating}}</small>
+      </div>
+    </div>
+  </div>
+</p-card>

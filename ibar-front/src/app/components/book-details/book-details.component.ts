@@ -1,7 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Book} from '../../core/model/book';
 import {TokenService} from '../../core/services/token.service';
-import {READER} from '../../core/utils/consts';
+import {ADMIN, READER} from '../../core/utils/consts';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {BookDetailsService} from '../../core/services/book-details.service';
@@ -88,7 +88,11 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   }
 
   get canRead(): boolean {
-    return this.tokenService.getToken()?.authorities.some(au => au.name === READER);
+    return this.tokenService.getToken()?.authorities.some(au => au.name === READER) && !!this.book.pdf;
+  }
+
+  get canModify(): boolean {
+    return this.tokenService.getToken()?.authorities.some(au => au.name === ADMIN);
   }
 
   get readingProgress(): ReadingProgress {

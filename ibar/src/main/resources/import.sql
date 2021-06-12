@@ -70,6 +70,7 @@ insert into user_authority values ('55a08e2e-3a28-42a2-89f6-01e798723968',	2);
 /*------------------------category-----------------------------------------*/
 
 insert into category values ('22e4c2d7-cbdc-4513-98cd-917d24c3d32d', 'Kategorija');
+insert into category values ('0daa21f6-dd7f-48ee-9d39-2c4ba6b2bdec', 'Druga kategorija');
 
 /*------------------------plan-----------------------------------------*/
 
@@ -82,6 +83,7 @@ insert into plan_categories values ('981b8f72-60b9-4c31-a880-1abab63c4d15', '22e
 
 insert into plan values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', 30, 'Our recommended plan', 'Gold', 9.99);
 insert into plan_categories values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', '22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into plan_categories values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', '0daa21f6-dd7f-48ee-9d39-2c4ba6b2bdec');
 
 /*-----------------------author--------------------------------------------*/
 INSERT INTO author VALUES('68d0f630-808c-42e3-a97c-75150203ff6c',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	'/photos/kristi.png',	'Agata Kristi');
@@ -89,29 +91,28 @@ INSERT INTO author VALUES('bbf41804-ad07-4cf9-ad6c-6cc9f02c956c',	0,	'1900-08-07
 INSERT INTO author VALUES('17462d5b-59f2-42b2-99f3-9bba1c1631c5',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	'/photos/dostojevski.jpg',	'Fjodor Mihailovič Dostojevski');
 
 /*------------------------book-----------------------------------------*/
-
-insert into book values ('ffa1fd63-9b73-4fa9-8cf1-7492b4c0b874', 	0,	null,	'Some description',	'Ubistvo u Mesopotamiji',   	    0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('099f22b5-d839-4b60-be60-c4c299726f15',	5,	null,	'Some description',	'Rani slučajevi Herkula Poaroa',	1,  '1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('1e3ddcaf-c0f0-442d-8087-b6f3bee418a8', 	0,	null,	'Some description',	'Kukavičje jaje',	                0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('0c2a1eb0-3d92-4dee-8fa7-e06d49c63b2c', 	1,	null,	'Some description',	'Slonovi pamte',	                1,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('e8b7719a-2bdd-4365-96a4-079a75e53898', 	4,	null,	'Some description',	'Ubistvo Rodžera Akrojda',	        1,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('3f207bf0-5256-4599-ab1d-7e050f6bd0c5',	0,	null,	'Some description',	'Smrt na Nilu',                 	0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('91005749-dbd4-4e12-95fa-308bfd956e10',	0,	null,	'Some description',	'Ubistvo u Orijent Ekspresu',	    0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('af4ffa04-2967-4ca7-95a7-2de5aced405a',	0,	null,	'Some description',	'Lovac na duše',	                0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('7761d291-efed-4e81-bb1a-cb9f02a8770f',	0,	null,	'Some description',	'Dečak od stakla',	                0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('9f7abb57-8153-4945-9e68-64f0d0827468',	0,	null,	'Some description',	'Vladar iz senke',	                0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('2a52dbf7-560f-4fc6-b85e-324e08a77da8',	0,	null,	'Some description',	'Šaptač',	                        0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('6147c0ff-fe26-4303-b417-46e1eb9a998d',	0,	null,	'Some description',	'Noć mi te uzima',              	0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('1668b709-06bb-4aed-a5a1-253344879d9e',	0,	null,	'Some description',	'Gospodar senki',	                0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('a57c82bc-24f5-4358-b303-6c789609b48b',	0,	null,	'Some description',	'Braća karamazovi I',	            0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('48459a83-99de-4899-893d-f73a0b48488f',	0,	null,	'Some description',	'Braća karamazovi II',	            0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('7d093d94-44fd-4514-8e7f-7e00810d40be',	0,	null,	'Some description',	'Bele noći',	                    0,	'1',	112,    1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('dd31fdc0-e882-4e15-8deb-73d2984e8315',	0,	null,	'Some description',	'Zapisi iz podezemlja',	            0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('3ec4e897-bc9d-441b-9cea-215a1a0e7018',	5,	null,	'Some description',	'Idiot - I tom',	                1,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('f9b1891c-c507-4027-9946-991c54b17bd2',	0,	null,	'Some description',	'Idiot - II tom',	                0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('28d17353-7c03-4833-b46d-3c11e118294a',	0,	null,	'Some description',	'Zločin i kazna',	                0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('7401a322-5d43-4abf-90dd-126515c08057',	0,	null,	'Some description',	'Bedni ljudi',	                    0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
-insert into book values ('054865b6-262c-4ab7-9dad-72b0c43c1be8',	0,	null,	'Some description',	'Kockar',                       	0,	'1',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('ffa1fd63-9b73-4fa9-8cf1-7492b4c0b874', 	0,	null,	'Some description',	'Ubistvo u Mesopotamiji',   	    0,	'167c2dd8-5998-4c16-8887-95d7605a8bcd',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('099f22b5-d839-4b60-be60-c4c299726f15',	5,	null,	'Some description',	'Rani slučajevi Herkula Poaroa',	1,  '5fccfa68-d115-404f-a80a-40cc22363457',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('1e3ddcaf-c0f0-442d-8087-b6f3bee418a8', 	0,	null,	'Some description',	'Kukavičje jaje',	                0,	'6f68c3a6-830c-485a-a7f6-87aa7f01db9f',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('0c2a1eb0-3d92-4dee-8fa7-e06d49c63b2c', 	1,	null,	'Some description',	'Slonovi pamte',	                1,	'cf16a54e-f264-462f-a45c-3fcabb273b2a',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('e8b7719a-2bdd-4365-96a4-079a75e53898', 	4,	null,	'Some description',	'Ubistvo Rodžera Akrojda',	        1,	'bc1b8515-5253-4a2c-a44e-4809ca7a173b',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('3f207bf0-5256-4599-ab1d-7e050f6bd0c5',	0,	null,	'Some description',	'Smrt na Nilu',                 	0,	'fbf81892-05c1-4d38-a4ff-02e4ccc23b90',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('91005749-dbd4-4e12-95fa-308bfd956e10',	0,	null,	'Some description',	'Ubistvo u Orijent Ekspresu',	    0,	'd361f0d0-5d2f-40fe-aaa0-f4aefa8bee1b',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('af4ffa04-2967-4ca7-95a7-2de5aced405a',	0,	null,	'Some description',	'Lovac na duše',	                0,	'711a7fa5-f20a-4638-853b-30cb90fea0e2',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('7761d291-efed-4e81-bb1a-cb9f02a8770f',	0,	null,	'Some description',	'Dečak od stakla',	                0,	'e0d006f7-920d-4cd9-90fb-e5c7eb0cd420',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('9f7abb57-8153-4945-9e68-64f0d0827468',	0,	null,	'Some description',	'Vladar iz senke',	                0,	'361d15d7-4fd1-4d31-a867-2610e17097b9',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('2a52dbf7-560f-4fc6-b85e-324e08a77da8',	0,	null,	'Some description',	'Šaptač',	                        0,	'9a11d859-814e-4bdf-b0e3-2eb0b448e3f9',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('6147c0ff-fe26-4303-b417-46e1eb9a998d',	0,	null,	'Some description',	'Noć mi te uzima',              	0,	'4f01e825-ea9e-4252-bee8-0e0f42396107',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('1668b709-06bb-4aed-a5a1-253344879d9e',	0,	null,	'Some description',	'Gospodar senki',	                0,	'93a4ac87-477c-4ad3-98a1-3bec6d12ee1f',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('a57c82bc-24f5-4358-b303-6c789609b48b',	0,	null,	'Some description',	'Braća karamazovi I',	            0,	'04ea6c08-ae24-4a4f-8464-9932bbcf52d9',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('48459a83-99de-4899-893d-f73a0b48488f',	0,	null,	'Some description',	'Braća karamazovi II',	            0,	'9a6b30fd-60ff-4a88-9f39-07d8411bd525',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('7d093d94-44fd-4514-8e7f-7e00810d40be',	0,	null,	'Some description',	'Bele noći',	                    0,	'5b5cbdf5-f591-4694-a36c-8fd888707030',	112,    1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('dd31fdc0-e882-4e15-8deb-73d2984e8315',	0,	null,	'Some description',	'Zapisi iz podezemlja',	            0,	'6632aecc-d8ea-4c0b-ab8a-a99fc2612ede',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('3ec4e897-bc9d-441b-9cea-215a1a0e7018',	5,	null,	'Some description',	'Idiot - I tom',	                1,	'ede98d74-2a26-4610-a84b-b0f7d09fa925',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('f9b1891c-c507-4027-9946-991c54b17bd2',	0,	null,	'Some description',	'Idiot - II tom',	                0,	'549f112a-2116-40a6-8dd3-a3586c82cab7',	112,	1,	'0daa21f6-dd7f-48ee-9d39-2c4ba6b2bdec');
+insert into book values ('28d17353-7c03-4833-b46d-3c11e118294a',	0,	null,	'Some description',	'Zločin i kazna',	                0,	'862431cb-4987-45ec-917b-d1e2e3530a0f',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('7401a322-5d43-4abf-90dd-126515c08057',	0,	null,	'Some description',	'Bedni ljudi',	                    0,	'83243caf-7e96-4dde-af1d-9a59612a2c24',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into book values ('054865b6-262c-4ab7-9dad-72b0c43c1be8',	0,	null,	'Some description',	'Kockar',                       	0,	'96094631-dfad-4f49-a5af-be0be724488a',	112,	1,	'22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
 
 /*-------------------------book_authors-------------------------*/
 INSERT INTO book_authors VALUES('ffa1fd63-9b73-4fa9-8cf1-7492b4c0b874',	'68d0f630-808c-42e3-a97c-75150203ff6c');

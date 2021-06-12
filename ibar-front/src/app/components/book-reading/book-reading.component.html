@@ -1,6 +1,7 @@
 <div>
   <ngx-extended-pdf-viewer *ngIf="!isLoading; else bookLoading"
                            [src]="pdfUrl"
+                           [authorization]="token"
                            height="100%"
                            [customToolbar]="additionalButtons"
                            [useBrowserLocale]="true"
