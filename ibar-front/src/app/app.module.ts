@@ -53,6 +53,8 @@ import { AuthorComponent } from './components/author/author.component';
 import { AuthorListComponent } from './components/author-list/author-list.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { RadioButtonModule } from 'primeng/radiobutton';
+import { ChangePasswordComponent } from './components/change-password/change-password.component';
+import { MessageModule } from 'primeng/message';
 
 @NgModule({
   declarations: [
@@ -78,6 +80,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     RegistrationComponent,
     AuthorComponent,
     AuthorListComponent,
+    ChangePasswordComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,7 +110,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
     NgxExtendedPdfViewerModule,
     CalendarModule,
     FileUploadModule,
-    RadioButtonModule
+    RadioButtonModule,
+    MessageModule
   ],
   providers: [
     {

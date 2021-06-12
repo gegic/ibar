@@ -1,13 +1,13 @@
-import {AfterViewInit, Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
-import {MenuItem} from 'primeng/api';
-import {Subscription} from 'rxjs';
-import {AuthService} from '../../core/services/auth.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {environment} from '../../../environments/environment';
-import {TokenService} from '../../core/services/token.service';
-import {Authority} from '../../core/model/authority';
-import {NavigationItem} from '../../core/model/navigation-item';
-import {NavbarService} from '../../core/services/navbar.service';
+import { AfterViewInit, Component, DoCheck, OnDestroy, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { Subscription } from 'rxjs';
+import { AuthService } from '../../core/services/auth.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { TokenService } from '../../core/services/token.service';
+import { Authority } from '../../core/model/authority';
+import { NavigationItem } from '../../core/model/navigation-item';
+import { NavbarService } from '../../core/services/navbar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -16,20 +16,23 @@ import {NavbarService} from '../../core/services/navbar.service';
 })
 export class NavbarComponent implements OnInit {
 
+  public isChangePasswordDialogOpen: boolean = false;
+
   searchQuery = '';
 
   navbarItems: NavigationItem[] = [];
   hasSearch = false;
 
   menuItems: MenuItem[] = [
-    {label: 'Edit account', icon: 'pi pi-fw pi-user-edit', routerLink: ['/user-edit']},
-    {label: 'Logout', icon: 'pi pi-fw pi-power-off', command: e => this.onClickLogout(), id: 'logout-btn'}
+    { label: 'Edit account', icon: 'pi pi-fw pi-user-edit', routerLink: ['/user-edit'] },
+    { label: 'Change password', icon: 'pi pi-fw pi-key', command: e => this.onClickChangePassword(), id: 'change-password-btn' },
+    { label: 'Logout', icon: 'pi pi-fw pi-power-off', command: e => this.onClickLogout(), id: 'logout-btn' }
   ];
 
   constructor(private authService: AuthService,
-              private router: Router,
-              private tokenService: TokenService,
-              private navbarService: NavbarService) { }
+    private router: Router,
+    private tokenService: TokenService,
+    private navbarService: NavbarService) { }
 
   ngOnInit(): void {
     this.navbarService.navigation.subscribe(
@@ -47,6 +50,10 @@ export class NavbarComponent implements OnInit {
   onClickLogout(): void {
     this.tokenService.removeToken();
     this.router.navigate([environment.loginRoute]);
+  }
+
+  onClickChangePassword(): void {
+    this.isChangePasswordDialogOpen = true;
   }
 
   setSearchQuery(event: KeyboardEvent): void {
@@ -85,6 +92,10 @@ export class NavbarComponent implements OnInit {
       baseUrl = baseUrl.slice(0, -1);
     }
     return baseUrl === url;
+  }
+
+  closeDialog(): void {
+    this.isChangePasswordDialogOpen = false;
   }
 
   get initials(): string {

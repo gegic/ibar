@@ -56,13 +56,13 @@ public class AuthController {
     }
 
     @PostMapping(value = "/change-password", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<String> changePassword(@Valid @RequestBody PasswordChanger passwordChanger) {
+    public ResponseEntity<?> changePassword(@Valid @RequestBody PasswordChanger passwordChanger) {
         try {
-            userDetailsService.changePassword(passwordChanger.getOldPassword(), passwordChanger.getNewPassword());
+            authService.changePassword(passwordChanger.getOldPassword(), passwordChanger.getNewPassword());
         } catch (Exception e) {
             return new ResponseEntity<>("Incorrect old password", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>("Password changed successfully", HttpStatus.OK);
+        return ResponseEntity.ok(null);
     }
 
     @Getter
@@ -78,6 +78,7 @@ public class AuthController {
     static class PasswordChanger {
         private String oldPassword;
         private String newPassword;
+        private String repeatedPassword;
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_REGISTERED_USER')")

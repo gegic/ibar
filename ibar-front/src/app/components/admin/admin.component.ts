@@ -27,7 +27,8 @@ export class AdminComponent implements OnInit {
   constructor(
     private adminService: AdminService,
     private messageService: MessageService,
-    private tokenService: TokenService) {
+    private tokenService: TokenService
+  ) {
     this.userId = tokenService.getToken().userId;
   }
 
