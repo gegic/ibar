@@ -1,75 +1,136 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
+
+import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
+
 import { User } from 'src/app/core/model/user';
+
 import { AdminService } from 'src/app/core/services/admin.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
-  selector: 'app-admin-list',
+  selector: 'app-admin',
   templateUrl: './admin-list.component.html',
   styleUrls: ['./admin-list.component.scss']
 })
 export class AdminListComponent implements OnInit {
 
-  @Input()
-  admin!: User;
+  isAddDialogOpen = false;
 
-  @Output()
-  adminDeleted: EventEmitter<any> = new EventEmitter<any>();
+  private userId: string = "";
 
-  @Output()
-  clickEdit: EventEmitter<any> = new EventEmitter<any>();
+  emailControl = new FormControl('', [Validators.required]);
+  firstNameControl = new FormControl('', [Validators.required]);
+  lastNameControl = new FormControl('', [Validators.required]);
 
   constructor(
     private adminService: AdminService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
-  ) { }
+    private tokenService: TokenService) {
+    this.userId = tokenService.getToken().userId;
+  }
 
-  public ngOnInit(): void { }
+  ngOnInit(): void {
+    this.resetAdmins();
+  }
 
-  public onClickDelete(): void {
-    this.confirmationService.confirm(
-      {
-        message: `Are you sure that you want to delete ${this.admin.firstName} ${this.admin.lastName}`,
-        acceptLabel: 'Delete',
-        rejectLabel: 'Close',
-        header: 'Deletion',
-        icon: 'pi pi-trash',
-        accept: () => this.deletionConfirmed()
+  resetAdmins(): void {
+    this.adminService.admins = [];
+
+    this.emailControl.reset();
+    this.firstNameControl.reset();
+    this.lastNameControl.reset();
+
+    this.getAdmins();
+  }
+
+  getAdmins(): void {
+    this.adminService.getAdmins().subscribe(
+      val => {
+        for (const el of val) {
+          if (this.adminService.admins.some(mod => mod.id === el.id) || el.id === this.userId) {
+            continue;
+          }
+          this.adminService.admins.push(el);
+        }
+      }
+    );
+  };
+
+  openAddDialog(): void {
+    this.isAddDialogOpen = true;
+  };
+
+  onHideAddDialog(): void {
+    this.emailControl.reset();
+    this.firstNameControl.reset();
+    this.lastNameControl.reset();
+  };
+
+  saveAdmin(): void {
+    if (!this.emailControl.valid) {
+      this.messageService.add(
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Email is required.' }
+      );
+    }
+
+    if (!this.firstNameControl.valid) {
+      this.messageService.add(
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'First name is required.' }
+      );
+    }
+
+    if (!this.lastNameControl.valid) {
+      this.messageService.add(
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Last name is required.' }
+      );
+    }
+
+    const email = this.emailControl.value;
+    const firstName = this.firstNameControl.value;
+    const lastName = this.lastNameControl.value;
+
+    let admin: User = new User();
+
+    admin.email = email;
+    admin.firstName = firstName;
+    admin.lastName = lastName;
+    admin.userType = 0;
+
+    this.adminService.create(admin).subscribe(res => {
+      this.admins.push(res);
+
+      this.showSuccessMessageOnUpdateOrCreateAdmin("Create");
+    },
+      err => {
+        this.showErrorMessageOnUpdateOrCreateAdmin("Create");
       });
-  }
+  };
 
-  public onClickEdit(): void {
-    this.clickEdit.emit(this.admin);
-  }
+  adminDeletionConfirmed(): void {
+    this.resetAdmins();
+  };
 
-  private deletionConfirmed(): void {
-    this.adminService.delete(this.admin?.id ?? "").subscribe((res) => {
-      if (res) {
-        this.showToastWhenDeleteCategorySucceed();
-      }
-      else {
-        this.showToastWhenDeleteCategoryFailed();
-      }
-    });
-  }
+  get admins(): User[] {
+    return this.adminService.admins;
+  };
 
-  private showToastWhenDeleteCategorySucceed(): void {
-    this.messageService.add({
-      id: 'toast-container',
-      severity: 'success',
-      summary: 'Deleted successfully',
-      detail: 'The admin was deleted successfully'
-    });
-    this.adminDeleted.emit(this.admin);
-  }
-
-  private showToastWhenDeleteCategoryFailed(): void {
+  private showErrorMessageOnUpdateOrCreateAdmin(operation: string) {
     this.messageService.add({
       id: 'toast-container',
       severity: 'error',
-      summary: 'Deletion unsuccessful',
-      detail: 'Error encountered. Please try again.'
+      summary: `${operation} unsuccessful`,
+      detail: "User's email is already in use, please use a different email."
+    });
+  }
+
+  private showSuccessMessageOnUpdateOrCreateAdmin(operation: string) {
+    this.messageService.add({
+      id: 'toast-container',
+      severity: 'success',
+      summary: `${operation} successfully`,
+      detail: `The admin was ${operation.toLocaleLowerCase()}d successfully`
     });
   }
 

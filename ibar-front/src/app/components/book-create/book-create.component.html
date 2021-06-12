@@ -1,0 +1,160 @@
+<form [formGroup]="formGroup" (submit)="saveBook()">
+  <div class="p-grid p-m-0 add-view">
+    <div class="p-col-12 p-sm-5 p-md-4 p-lg-3 p-px-4 p-ai-stretch left-view">
+      <h2 class="p-text-light">Create a book</h2>
+      <div>
+        <h3 class="p-text-light p-mb-2">Firstly, we need you to enter the name</h3>
+        <input type="text"
+               formControlName="name"
+               id="name"
+               autocomplete="off"
+               placeholder="Name"
+               pInputText
+        >
+      </div>
+      <div class="p-mt-5">
+        <h3 class="p-text-light p-mb-2">Now specify the category</h3>
+        <div class="p-grid">
+          <div class="p-col-6">
+<!--            <ng-select formControlName="selectedCategory"-->
+<!--                       [items]="categories"-->
+<!--                       [searchable]="false"-->
+<!--                       [loading]="categoriesLoading"-->
+<!--                       [virtualScroll]="false"-->
+<!--                       [hideSelected]="mode === 'edit'"-->
+<!--                       bindLabel="name"-->
+<!--                       placeholder="Category"-->
+<!--                       id="category"-->
+<!--            ></ng-select>-->
+            <p-dropdown [options]="categories"
+                        [filter]="false"
+                        optionLabel="name"
+                        placeholder="Category"
+                        [style]="{width: '100%'}"
+                        id="category"
+            ></p-dropdown>
+          </div>
+          <div class="p-col-6">
+            <p-multiSelect [options]="authors"
+                           optionLabel="name"
+                           placeholder="Authors"
+                           [style]="{width: '100%'}"
+                           [filter]="false"
+            ></p-multiSelect>
+          </div>
+
+        </div>
+      </div>
+      <div class="p-mt-5">
+        <h3 class="p-text-light p-mb-2">Choose the book type</h3>
+        <div class="p-text-center">
+          <p-selectButton [options]="bookTypeOptions"
+                          formControlName="bookType"
+                          optionLabel="label"
+                          optionValue="value"
+                          class="blue-select-button"
+          ></p-selectButton>
+        </div>
+      </div>
+      <div class="p-grid p-mt-5 p-mx-0">
+        <h3 class="p-text-light p-mb-2">Now we gotta see those book covers</h3>
+
+        <div class="p-col">
+          <input type="file"
+                 id="file-upload"
+                 accept=".jpg, .png"
+                 [disabled]="coverLoading"
+                 (input)="coverChosen($event)"
+                 hidden>
+          <label for="file-upload">
+            <span class="p-flex-column file-upload">
+              <ng-template [ngIf]="!coverLoading" [ngIfElse]="spinner">
+                <ng-template [ngIf]="!cover" [ngIfElse]="image">
+                  <i class="download-icon pi pi-download"></i>
+                  <small class="upload-text p-text-light">Upload a photo...</small>
+                </ng-template>
+                <ng-template #image>
+                  <img class="cover"
+                       [src]="coverPath"
+                       alt="cover"
+                       id="cover"
+                  >
+                </ng-template>
+              </ng-template>
+              <ng-template #spinner>
+                <p-progressSpinner>
+                </p-progressSpinner>
+              </ng-template>
+            </span>
+          </label>
+        </div>
+        <div class="p-col">
+          <div class="p-flex-column">
+            <div class="p-flex-row">
+              <small class="p-mt-2 p-text-light">
+                max 4MB jpg, png
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-d-flex p-col-12 p-sm-7 p-md-8 p-lg-9 p-ai-center p-justify-center right-view">
+      <div class="right-side-info">
+        <div>
+          <h3 class="p-text-light p-mb-4">Provide the content:</h3>
+          <div class="p-grid p-mx-0 p-px-0">
+            <h4 class="p-text-light" *ngIf="!formGroup.get('bookType').value">Firstly choose a book type</h4>
+            <p-fileUpload mode="basic"
+                          *ngIf="formGroup.get('bookType').value === 'E_BOOK'"
+                          chooseLabel="Choose PDF"
+                          uploadLabel="Upload"
+                          [customUpload]="true"
+                          accept=".pdf"
+                          styleClass="blue-button"
+                          maxFileSize="1000000"
+                          (uploadHandler)="pdfChosen($event)"
+                          [disabled]="contentFileLoading"
+                          [uploadIcon]="!contentFile ? 'pi pi-upload' : 'pi pi-check'"
+            ></p-fileUpload>
+            <p-fileUpload mode="basic"
+                          *ngIf="formGroup.get('bookType').value === 'AUDIO_BOOK'"
+                          chooseLabel="Choose audio"
+                          uploadLabel="Upload"
+                          [customUpload]="true"
+                          accept="audio/*"
+                          styleClass="blue-button"
+                          maxFileSize="1000000"
+                          (uploadHandler)="audioChosen($event)"
+                          [disabled]="contentFileLoading"
+                          [uploadIcon]="!contentFile ? 'pi pi-upload' : 'pi pi-check'"
+            ></p-fileUpload>
+            <p-progressSpinner class="p-ml-2"
+                               *ngIf="contentFileLoading"
+                               [style]="{width: '35px', height: '35px'}"
+            ></p-progressSpinner>
+          </div>
+          <small></small>
+        </div>
+        <div>
+          <h3 class="p-text-light">Tell us additional information about the book</h3>
+          <textarea formControlName="description"
+                    class="description"
+                    [maxLength]="1000"
+                    placeholder="Description"
+                    pInputTextarea
+                    id="description"
+          ></textarea>
+        </div>
+        <div class="p-text-right p-mt-3">
+          <button type="submit"
+                  class="p-button p-button-lg blue-button"
+                  [label]="this.mode === 'add' ? 'Create' : 'Update'"
+                  pButton
+                  id="create"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

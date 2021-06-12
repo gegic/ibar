@@ -1,8 +1,6 @@
 package com.sbnz.ibar.controllers;
 
-import com.sbnz.ibar.dto.BookDto;
-import com.sbnz.ibar.dto.FilterDto;
-import com.sbnz.ibar.dto.RatingIntervalDto;
+import com.sbnz.ibar.dto.*;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.services.BookService;
@@ -11,9 +9,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,7 +24,6 @@ public class BookController {
 
     private final BookService bookService;
 
-    @PreAuthorize("permitAll()")
     @GetMapping
     public ResponseEntity<List<BookDto>> getAllBooks() {
         List<BookDto> books = bookService.getAll();
@@ -32,11 +31,24 @@ public class BookController {
         return ResponseEntity.ok(books);
     }
 
-    @PreAuthorize("permitAll()")
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<BookDto> getBook(@PathVariable UUID id) throws EntityDoesNotExistException {
 		return ResponseEntity.ok(bookService.getById(id));
 	}
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping
+    ResponseEntity<BookDto> create(@RequestBody BookDto bookDto) throws EntityDoesNotExistException {
+        BookDto saved = this.bookService.create(bookDto);
+        return ResponseEntity.created(URI.create(saved.getId().toString())).body(saved);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping
+    ResponseEntity<BookDto> update(@RequestBody BookDto bookDto) throws EntityDoesNotExistException {
+        BookDto saved = this.bookService.update(bookDto);
+        return ResponseEntity.ok(saved);
+    }
 
     @PostMapping(value = "/search")
     public ResponseEntity<List<BookDto>> search(@RequestParam(name = "query", defaultValue = "")  String searchQuery,
@@ -56,38 +68,26 @@ public class BookController {
         return ResponseEntity.ok(bookService.getRecommended());
     }
 
-//	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//	public ResponseEntity<BookResDTO> createBook(@RequestPart("bookDTO") @Valid @NotNull BookDTO bookDTO,
-//			@RequestPart("file") MultipartFile file) {
-//		try {
-//			if (file == null || file.isEmpty()) {
-//				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//			}
-//
-//			BookResDTO bookResDTO = bookMapper.toDTORes(bookService.create(bookMapper.toEntity(bookDTO), file));
-//
-//			bookResDTO.setImage(fileService.uploadImageAsBase64(bookResDTO.getImage()));
-//
-//			return new ResponseEntity<>(bookResDTO, HttpStatus.CREATED);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
-//
-//	@PutMapping(value = "/{id}")
-//	public ResponseEntity<BookResDTO> updateBook(@PathVariable UUID id,
-//			@RequestPart("bookDTO") @Valid @NotNull BookDTO bookDTO, @RequestPart("file") MultipartFile file) {
-//
-//		try {
-//			BookResDTO bookResDTO = bookMapper.toDTORes(bookService.update(id, bookMapper.toEntity(bookDTO), file));
-//
-//			bookResDTO.setImage(fileService.uploadImageAsBase64(bookResDTO.getImage()));
-//
-//			return new ResponseEntity<>(bookResDTO, HttpStatus.OK);
-//		} catch (Exception e) {
-//			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//		}
-//	}
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path="/add-cover", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<CoverDto> setPhoto(@RequestParam("cover") MultipartFile photoFile){
+        UUID savedPath = this.bookService.setCover(photoFile);
+        return ResponseEntity.created(URI.create(savedPath.toString())).body(new CoverDto(savedPath));
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path="/add-pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<ContentFileDto> setPdf(@RequestParam("pdf") MultipartFile pdfFile){
+        ContentFileDto saved = this.bookService.setPdf(pdfFile);
+        return ResponseEntity.created(URI.create(saved.getPath().toString())).body(saved);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(path="/add-audio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    ResponseEntity<ContentFileDto> setAudio(@RequestParam("audio") MultipartFile audioFile){
+        ContentFileDto saved = this.bookService.setAudio(audioFile);
+        return ResponseEntity.created(URI.create(saved.getPath().toString())).body(saved);
+    }
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> deleteBook(@PathVariable UUID id) throws IOException {
@@ -95,22 +95,4 @@ public class BookController {
 
         return ResponseEntity.ok(statusOfDeletingBook);
     }
-
-//	private Page<BookResDTO> transformFromListToPage(Page<Book> page) {
-//		List<BookResDTO> booksResDTO = bookMapper.toDTOResList(page.toList());
-//		booksResDTO.stream().forEach(i -> {
-//			try {
-//				i.setImage(fileService.uploadImageAsBase64(i.getImage()));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//		});
-//		return new PageImpl<>(booksResDTO, page.getPageable(), page.getTotalElements());
-//	}
-//
-//	private CustomPageImplementation<BookResDTO> createCustomPage(Page<BookResDTO> page) {
-//		return new CustomPageImplementation<>(page.getContent(), page.getNumber(), page.getSize(),
-//				page.getTotalElements(), null, page.isLast(), page.getTotalPages(), null, page.isFirst(),
-//				page.getNumberOfElements());
-//	}
 }

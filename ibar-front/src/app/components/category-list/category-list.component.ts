@@ -1,78 +1,150 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
 import { Category } from 'src/app/core/model/category';
 
 import { CategoryService } from 'src/app/core/services/category.service';
 
 @Component({
-  selector: 'app-category-list',
+  selector: 'app-category',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss']
 })
 export class CategoryListComponent implements OnInit {
 
-  @Input()
-  category!: Category;
 
-  @Output()
-  categoryDeleted: EventEmitter<any> = new EventEmitter<any>();
-
-  @Output()
-  clickEdit: EventEmitter<any> = new EventEmitter<any>();
+  isAddDialogOpen = false;
+  nameControl = new FormControl('', [Validators.required]);
+  editingCategory?: Category;
 
   constructor(
     private categoryService: CategoryService,
     private messageService: MessageService,
-    private confirmationService: ConfirmationService
-  ) { }
+    private dialogService: DialogService) { }
 
-  public ngOnInit(): void { }
-
-  public onClickDelete(): void {
-    this.confirmationService.confirm(
-      {
-        message: `Are you sure that you want to delete ${this.category.name ?? ''}`,
-        acceptLabel: 'Delete',
-        rejectLabel: 'Close',
-        header: 'Deletion',
-        icon: 'pi pi-trash',
-        accept: () => this.deletionConfirmed()
-      });
+  ngOnInit(): void {
+    this.resetCategories();
   }
 
-  public onClickEdit(): void {
-    this.clickEdit.emit(this.category);
+  resetCategories(): void {
+    this.categoryService.categories = [];
+
+    this.nameControl.reset();
+
+    this.getCategories();
   }
 
-  private deletionConfirmed(): void {
-    this.categoryService.delete(this.category?.id ?? 0).subscribe((res) => {
-      if (res) {
-        this.showToastWhenDeleteCategorySucceed();
+  getCategories(): void {
+    this.categoryService.getCategories().subscribe(
+      val => {
+        for (const el of val) {
+          if (this.categoryService.categories.some(mod => mod.id === el.id)) {
+            continue;
+          }
+          this.categoryService.categories.push(el);
+        }
       }
-      else {
-        this.showToastWhenDeleteCategoryFailed();
-      }
-    });
+    );
   }
 
-  private showToastWhenDeleteCategorySucceed(): void {
-    this.messageService.add({
-      id: 'toast-container',
-      severity: 'success',
-      summary: 'Deleted successfully',
-      detail: 'The category was deleted successfully'
-    });
-    this.categoryDeleted.emit(this.category);
+  openAddDialog(editing = false, category?: Category): void {
+    this.isAddDialogOpen = true;
+
+    if (editing) {
+      this.nameControl.setValue(category?.name ?? '');
+
+      this.editingCategory = category;
+    }
   }
 
-  private showToastWhenDeleteCategoryFailed(): void {
+  onHideAddDialog(): void {
+    this.nameControl.reset();
+    this.editingCategory = undefined;
+  }
+
+  saveCategory(): void {
+    if (!this.nameControl.valid) {
+      this.messageService.add(
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Name is required.' }
+      );
+    }
+
+    const name = this.nameControl.value;
+
+    let c: Category;
+
+    if (!!this.editingCategory) {
+      c = this.editingCategory;
+    }
+    else {
+      c = new Category();
+    }
+
+    c.name = name;
+
+    if (!!this.editingCategory) {
+      this.categoryService.update(this.editingCategory.id, c).subscribe(res => {
+        this.updateListOfCategories(res);
+
+        this.showSuccessMessageOnUpdateOrCreateCategory('Update');
+      },
+        err => {
+          this.showErrorMessageOnUpdateOrCreateCategory('Update');
+        });
+    }
+    else {
+      this.categoryService.create(c).subscribe(res => {
+        this.updateListOfCategories(res);
+
+        this.showSuccessMessageOnUpdateOrCreateCategory('Create');
+      },
+        err => {
+          this.showErrorMessageOnUpdateOrCreateCategory('Create');
+        });
+    }
+  }
+
+  categoryDeletionConfirmed(): void {
+    this.resetCategories();
+  }
+
+  get categories(): Category[] {
+    return this.categoryService.categories;
+  }
+
+  get editing(): boolean {
+    return !!this.editingCategory;
+  }
+
+  private updateListOfCategories(category: Category): void {
+    const index: number = this.categories.findIndex(cat => cat.id === category.id);
+
+    if (index !== -1) {
+      this.categories[index] = category;
+    }
+    else {
+      this.categories.push(category);
+    }
+  }
+
+  private showErrorMessageOnUpdateOrCreateCategory(operation: string): void{
     this.messageService.add({
       id: 'toast-container',
       severity: 'error',
-      summary: 'Deletion unsuccessful',
-      detail: 'There are books or plans that contain this category. Plase, first remove them and then try again.'
+      summary: `${operation} unsuccessful`,
+      detail: 'Category name is already in use, please use a different category name.'
+    });
+  }
+
+  private showSuccessMessageOnUpdateOrCreateCategory(operation: string): void {
+    this.messageService.add({
+      id: 'toast-container',
+      severity: 'success',
+      summary: `${operation} successful`,
+      detail: `The category was ${operation.toLocaleLowerCase()}d successfully`
     });
   }
 

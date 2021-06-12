@@ -38,9 +38,9 @@ public class Book {
 
 	private long numReviews;
 
-	private String cover;
+	private UUID cover;
 
-	private String pdf;
+	private UUID pdf;
 
 	@Column(nullable = false)
 	private BookType type;

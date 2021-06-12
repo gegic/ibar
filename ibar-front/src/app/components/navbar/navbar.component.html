@@ -1,7 +1,7 @@
 <div class="navbar p-grid p-justify-between p-px-3 p-mx-0">
-  <div class="p-col-4 p-p-0 p-col-align-center p-d-flex p-ai-center logo-col">
+  <div class="p-col-2 p-p-0 p-col-align-center p-d-none p-d-sm-flex p-ai-center logo-col">
     <a routerLink="/" class="logo p-my-0">ibar</a>
-    <span class="p-input-icon-left search-bar p-d-none p-d-md-inline-block"
+    <span class="p-input-icon-left search-bar p-d-none p-d-xl-inline-block"
           *ngIf="hasSearch"
     >
       <i class="pi pi-search"></i>
@@ -14,7 +14,7 @@
       >
     </span>
   </div>
-  <div class="p-col-5 p-sm-4 p-text-center p-p-0">
+  <div class="p-col-8 p-xl-4 p-text-center p-p-0">
     <button *ngFor="let item of navbarItems"
             class="p-button-text topnav-button p-px-4"
             routerLinkActive="activated"
@@ -24,7 +24,7 @@
             pButton
     ></button>
   </div>
-  <div class="p-col-3 p-sm-4 p-justify-end p-col-align-center p-p-0">
+  <div class="p-col-2 p-justify-end p-col-align-center p-p-0">
     <div *ngIf="isLoggedIn(); else signIn">
       <p-menu class="user-menu" [model]="menuItems" [popup]="true" #menu></p-menu>
       <p-avatar class="ng-avatar"

@@ -26,4 +26,15 @@ public class BookMapper {
 		return dto;
 	}
 
+	public Book toEntity(BookDto dto) {
+		Book book = new Book();
+		book.setId(dto.getId());
+		book.setName(dto.getName());
+		book.setDescription(dto.getDescription());
+		book.setQuantity(dto.getQuantity());
+		book.setCover(dto.getCover());
+		book.setPdf(dto.getPdf());
+		return book;
+	}
+
 }

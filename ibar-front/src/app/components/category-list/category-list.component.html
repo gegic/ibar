@@ -1,27 +1,51 @@
-<p-card class="category-card">
-  <div class="p-d-flex p-m-0 p-p-0">
-    <div class="p-col">
-      <h2 [id]="'p' + category.name" class="p-m-0 p-text-light">
-        {{ category.name }}
-      </h2>
-    </div>
-    <div class="p-col p-text-right p-as-end">
-      <div class="p-d-block button-group p-mb-3">
-        <button
-          class="p-button p-button-rounded p-button-icon p-button-danger p-ml-3"
-          icon="pi pi-trash"
-          [id]="'delete' + category.name"
-          (click)="onClickDelete()"
-          pButton
-        ></button>
-        <button
-          class="p-button blue-button p-button-rounded p-button-icon p-ml-3"
-          icon="pi pi-pencil"
-          [id]="'edit' + category.name"
-          (click)="onClickEdit()"
-          pButton
-        ></button>
-      </div>
-    </div>
+<div>
+  <div class="list-header p-d-flex p-ai-center">
+    <h2 class="p-text-light">Showing all categories</h2>
+    <button
+      id="newCategory"
+      class="p-button blue-button p-ml-auto"
+      label="NEW CATEGORY"
+      (click)="openAddDialog()"
+      pButton
+    ></button>
   </div>
-</p-card>
+  <div class="list-content">
+    <app-category-list
+      *ngFor="let category of categories"
+      [category]="category"
+      (categoryDeleted)="categoryDeletionConfirmed()"
+      (clickEdit)="openAddDialog(true, $event)"
+    >
+    </app-category-list>
+  </div>
+  <p-dialog
+    [modal]="true"
+    [header]="editing ? 'Edit category' : 'Add a new category'"
+    [(visible)]="isAddDialogOpen"
+    (onHide)="onHideAddDialog()"
+    [resizable]="false"
+  >
+    <div>
+      <form (ngSubmit)="saveCategory()">
+        <span class="p-float-label p-mt-5">
+          <input
+            type="text"
+            id="name"
+            name="email"
+            autocomplete="off"
+            [formControl]="nameControl"
+            pInputText
+          />
+          <label for="name">Name</label>
+        </span>
+        <button
+          type="submit"
+          id="addCategory"
+          class="p-button blue-button p-d-block p-ml-auto p-mt-4"
+          label="Save"
+          pButton
+        ></button>
+      </form>
+    </div>
+  </p-dialog>
+</div>

@@ -20,7 +20,7 @@ export class CategoryService {
         return this.httpClient.get<Category[]>(`${this.CATEGORY_API}`);
     }
 
-    public delete(id: number): Observable<boolean> {
+    public delete(id: string): Observable<boolean> {
         return this.httpClient.delete<boolean>(`${this.CATEGORY_API}/${id}`);
     }
 
@@ -28,7 +28,7 @@ export class CategoryService {
         return this.httpClient.post<Category>(`${this.CATEGORY_API}`, category);
     }
 
-    public update(id: number, category: Category): Observable<Category> {
+    public update(id: string, category: Category): Observable<Category> {
         return this.httpClient.put<Category>(`${this.CATEGORY_API}/${id}`, category);
     }
 

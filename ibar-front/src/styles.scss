@@ -36,6 +36,16 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background: #365991 !important;
 }
 
+.blue-select-button {
+  .p-highlight {
+    background: #275DAD !important;
+    border: 1px solid #275DAD !important;
+
+    :disabled {
+      background: #365991 !important;
+    }
+  }
+}
 .blue-button-outlined {
   border: 1px solid #275DAD !important;
 }

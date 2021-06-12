@@ -1,9 +1,7 @@
 package com.sbnz.ibar.services;
 
-import com.sbnz.ibar.dto.BookDto;
-import com.sbnz.ibar.dto.FilterDto;
-import com.sbnz.ibar.dto.RatingIntervalDto;
-import com.sbnz.ibar.dto.ReadingProgressDto;
+import com.sbnz.ibar.config.FilesConfig;
+import com.sbnz.ibar.dto.*;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.mapper.BookMapper;
 import com.sbnz.ibar.mapper.FileService;
@@ -15,6 +13,8 @@ import com.sbnz.ibar.rto.BookResponseFilter;
 import com.sbnz.ibar.utils.Utils;
 import javassist.NotFoundException;
 import lombok.AllArgsConstructor;
+import net.coobird.thumbnailator.Thumbnails;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.kie.api.runtime.KieSession;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +23,18 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.persistence.EntityNotFoundException;
+import javax.sound.sampled.*;
 import javax.transaction.Transactional;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,6 +57,7 @@ public class BookService {
     private final ReadingListItemRepository readingListItemRepository;
     private final BookResponseFilter bookResponseFilter;
     private final SubscriptionRepository subscriptionRepository;
+    private final FilesConfig filesConfig;
 
     @Transactional
     public List<BookDto> getAll() {
@@ -152,58 +161,107 @@ public class BookService {
 
     }
 
+    public UUID setCover(MultipartFile coverFile) {
 
+        if (coverFile == null) {
+            throw new NullPointerException();
+        }
 
-    public Book create(Book entity) throws Exception {
-        return null;
+        BufferedImage bufferedImage;
+
+        try {
+            bufferedImage = Thumbnails.of(coverFile.getInputStream()).size(1000, 1000).asBufferedImage();
+        } catch (IOException e) {
+            return null;
+        }
+
+        UUID id = UUID.randomUUID();
+
+        try {
+            savePhoto(filesConfig.getCoverPath(), bufferedImage, id);
+        } catch (IOException e) {
+            System.out.println("Exception:" + e);
+        }
+        return id;
     }
 
-    public Book update(UUID id, Book entity) throws NotFoundException {
-        return null;
+    private void savePhoto(String path,
+                           BufferedImage bufferedImage,
+                           UUID id) throws IOException {
+        Path fileStorageLocation = Paths.get(path)
+                .toAbsolutePath().normalize();
+        Path targetLocation = fileStorageLocation.resolve(String.format("%s.png", id));
+        File output = new File(targetLocation.toString());
+        ImageIO.write(bufferedImage, "png", output);
     }
 
-    @Transactional
-    public Book update(UUID id, Book entity, MultipartFile newImage) throws NotFoundException, IOException {
-        Book existingBook = this.bookRepository.findById(id).orElse(null);
-        if (existingBook == null) {
-            throw new NotFoundException("Book with given id doesn't exist.");
+    public ContentFileDto setPdf(MultipartFile pdfFile) {
+
+        if (pdfFile == null) {
+            throw new NullPointerException();
         }
 
-        Category category = categoryRepository.findById(entity.getCategory().getId()).orElse(null);
-        if (category == null) {
-            throw new NotFoundException("Category doesn't exist.");
+        UUID id = UUID.randomUUID();
+        long numPages = -1;
+        try (OutputStream os = Files
+                .newOutputStream(Path.of(Paths.get(filesConfig.getPdfPath(), id.toString()) + ".pdf"))) {
+            PDDocument doc = PDDocument.load(pdfFile.getBytes());
+            numPages = doc.getNumberOfPages();
+            os.write(pdfFile.getBytes());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        existingBook.setCategory(category);
-        existingBook.setDescription(entity.getDescription());
-        existingBook.setType(entity.getType());
-
-        Set<Author> writtenBy = getAuthorsOfBook(entity);
-
-        existingBook.setAuthors(writtenBy);
-
-        if (!newImage.isEmpty()) {
-            fileService.uploadNewImage(newImage, existingBook.getCover());
-        }
-        return bookRepository.save(existingBook);
+        return new ContentFileDto(id, numPages);
     }
 
-    @Transactional
-    public Book create(Book entity, MultipartFile file) throws Exception {
-        Category category = categoryRepository.findById(entity.getCategory().getId()).orElse(null);
-        if (category == null) {
-            throw new NotFoundException("Category doesn't exist.");
+    public ContentFileDto setAudio(MultipartFile audioFile) {
+
+        if (audioFile == null) {
+            throw new NullPointerException();
         }
 
-        entity.setCategory(category);
+        UUID id = UUID.randomUUID();
 
-        String imagePath = fileService.saveImage(file, entity.getName());
+        long seconds = -1;
+        try {
+            OutputStream outputStream = Files.newOutputStream(Paths.get(filesConfig.getAudioPath(), id.toString()));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile.getInputStream());
+            AudioFormat format = audioInputStream.getFormat();
+            long audioFileLength = audioFile.getBytes().length;
+            int frameSize = format.getFrameSize();
+            float frameRate = format.getFrameRate();
+            seconds = (long) (audioFileLength / (frameSize * frameRate));
+            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputStream);
+        } catch (UnsupportedAudioFileException | IOException e) {
+            e.printStackTrace();
+        }
 
-        entity.setCover(imagePath);
+        return new ContentFileDto(id, seconds);
+    }
 
-        entity.setAuthors(getAuthorsOfBook(entity));
 
-        return bookRepository.save(entity);
+
+    public BookDto create(BookDto dto) throws EntityDoesNotExistException {
+        return save(dto);
+    }
+
+    public BookDto update(BookDto dto) throws EntityDoesNotExistException {
+        if (dto.getId() == null || !bookRepository.existsById(dto.getId())) {
+            throw new EntityDoesNotExistException(Book.class.getName(), dto.getId());
+        }
+        return save(dto);
+    }
+
+    private BookDto save(BookDto dto) throws EntityDoesNotExistException {
+        Book book = bookMapper.toEntity(dto);
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new EntityDoesNotExistException(Category.class.getName(), dto.getCategoryId()));
+
+        book.setCategory(category);
+
+        book = bookRepository.save(book);
+
+        return bookMapper.toBookDto(book);
     }
 
     @Transactional
@@ -213,8 +271,6 @@ public class BookService {
         if (this.doesExistReadingProgressContainingBookWithGivenId(id)) {
             return false;
         }
-
-        this.removeImageAndPDFOfBookFromFileSystem(existingBook);
 
         this.removeReviewAndReadingListEntitiesThatContainsBookWithGivenId(id);
 
@@ -259,12 +315,6 @@ public class BookService {
 
     private boolean doesExistReadingProgressContainingBookWithGivenId(UUID id) {
         return readingProgressRepository.countByBookId(id) > 0;
-    }
-
-    private void removeImageAndPDFOfBookFromFileSystem(Book book) throws IOException {
-        fileService.deleteImageFromFile(book.getCover());
-
-        fileService.deleteImageFromFile(book.getPdf());
     }
 
     private void removeReviewAndReadingListEntitiesThatContainsBookWithGivenId(UUID id) {

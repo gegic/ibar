@@ -1,5 +1,8 @@
-package com.sbnz.ibar.security;
+package com.sbnz.ibar.config;
 
+import com.sbnz.ibar.security.AuthFilter;
+import com.sbnz.ibar.security.EntryPoint;
+import com.sbnz.ibar.security.TokenUtils;
 import com.sbnz.ibar.services.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

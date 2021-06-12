@@ -11,11 +11,12 @@ import { BookAboutComponent } from './components/book-about/book-about.component
 import { BookReviewsComponent } from './components/book-reviews/book-reviews.component';
 import { BookReadingComponent } from './components/book-reading/book-reading.component';
 import { PurchasePlanComponent } from './components/purchase-plan/purchase-plan.component';
-import { CategoryComponent } from './components/category/category.component';
-import { AdminComponent } from './components/admin/admin.component';
 import {BookListComponent} from './components/book-list/book-list.component';
 import { RegistrationComponent } from './components/registration/registration.component';
-import { AuthorComponent } from './components/author/author.component';
+import {AuthorListComponent} from './components/author-list/author-list.component';
+import {CategoryListComponent} from './components/category-list/category-list.component';
+import {AdminListComponent} from './components/admin-list/admin-list.component';
+import {BookCreateComponent} from './components/book-create/book-create.component';
 
 const routes: Routes = [
   {
@@ -68,7 +69,7 @@ const routes: Routes = [
       },
       {
         path: 'authors',
-        component: AuthorComponent,
+        component: AuthorListComponent,
         data: { roles: [ADMIN] },
         canActivate: [AuthGuard],
       },
@@ -80,13 +81,19 @@ const routes: Routes = [
       },
       {
         path: 'categories',
-        component: CategoryComponent,
+        component: CategoryListComponent,
+        data: { roles: [ADMIN] },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'create-book',
+        component: BookCreateComponent,
         data: { roles: [ADMIN] },
         canActivate: [AuthGuard],
       },
       {
         path: 'admins',
-        component: AdminComponent,
+        component: AdminListComponent,
         data: { roles: [ADMIN] },
         canActivate: [AuthGuard],
       },
