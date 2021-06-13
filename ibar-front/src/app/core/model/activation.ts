@@ -1,4 +1,4 @@
 export class Activation {
-  uuid: string;
-  password: string;
+  uuid?: string;
+  password?: string;
 }

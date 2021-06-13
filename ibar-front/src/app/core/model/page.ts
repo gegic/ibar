@@ -1,10 +1,10 @@
 class Pageable {
-  pageNumber: number;
+  pageNumber?: number;
 }
 
 export class Page<T> {
-  content: T[];
-  totalElements: number;
-  totalPages: number;
-  pageable: Pageable;
+  content?: T[];
+  totalElements?: number;
+  totalPages?: number;
+  pageable?: Pageable;
 }

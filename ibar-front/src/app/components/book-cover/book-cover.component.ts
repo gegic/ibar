@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 export class BookCoverComponent {
 
   @Input()
-  book: Book;
+  book: Book = new Book();
 
   constructor(private router: Router) { }
 

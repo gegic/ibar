@@ -18,7 +18,7 @@ export class AuthorListComponent implements OnInit {
   isAddDialogOpen = false;
   authorForm: FormGroup;
   editingAuthor?: Author;
-  image: SafeUrl;
+  image?: SafeUrl;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -58,28 +58,28 @@ export class AuthorListComponent implements OnInit {
         }
       }
     );
-  };
+  }
 
   openAddDialog(editing = false, author?: Author): void {
     this.isAddDialogOpen = true;
 
     if (editing) {
       this.authorForm.patchValue({
-        name: author.name,
-        description: author.description,
-        dateOfBirth: new Date(author.dateOfBirth),
-        dateOfDeath: new Date(author.dateOfDeath)
+        name: author?.name ?? '',
+        description: author?.description ?? '',
+        dateOfBirth: new Date(author?.dateOfBirth ?? ''),
+        dateOfDeath: new Date(author?.dateOfDeath ?? '')
       });
 
       this.editingAuthor = author;
     }
-  };
+  }
 
   onHideAddDialog(): void {
     this.authorForm.reset();
     this.editingAuthor = undefined;
     this.image = undefined;
-  };
+  }
 
   saveAuthor(): void {
     if (!this.authorForm.valid) {
@@ -98,10 +98,10 @@ export class AuthorListComponent implements OnInit {
       author = new Author();
     }
 
-    author.name = this.authorForm.controls['name'].value;
-    author.description = this.authorForm.controls['description'].value;
-    author.dateOfBirth = this.authorForm.controls['dateOfBirth'].value;
-    author.dateOfDeath = this.authorForm.controls['dateOfDeath'].value;
+    author.name = this.authorForm.controls.name.value;
+    author.description = this.authorForm.controls.description.value;
+    author.dateOfBirth = this.authorForm.controls.dateOfBirth.value;
+    author.dateOfDeath = this.authorForm.controls.dateOfDeath.value;
 
     const formData = new FormData();
 
@@ -110,35 +110,35 @@ export class AuthorListComponent implements OnInit {
     });
 
     formData.append('authorDTO', blob);
-    formData.append('file', this.authorForm.controls['image'].value?? new File([],""));
+    formData.append('file', this.authorForm.controls.image.value ?? new File([], ''));
 
     if (!!this.editingAuthor) {
-      this.authorService.update(this.editingAuthor.id, formData).subscribe(res => {
+      this.authorService.update(this.editingAuthor?.id ?? '', formData).subscribe(res => {
         this.updateListOfAuthors(res);
 
-        this.showSuccessMessageOnUpdateOrCreateAuthor("Update");
+        this.showSuccessMessageOnUpdateOrCreateAuthor('Update');
       },
         err => {
-          this.showErrorMessageOnUpdateOrCreateAuthor("Update");
+          this.showErrorMessageOnUpdateOrCreateAuthor('Update');
         });
     }
     else {
       this.authorService.create(formData).subscribe(res => {
         this.updateListOfAuthors(res);
 
-        this.showSuccessMessageOnUpdateOrCreateAuthor("Create");
+        this.showSuccessMessageOnUpdateOrCreateAuthor('Create');
       },
         err => {
-          this.showErrorMessageOnUpdateOrCreateAuthor("Create");
+          this.showErrorMessageOnUpdateOrCreateAuthor('Create');
         });
     }
-  };
+  }
 
   authorDeletionConfirmed(): void {
     this.resetAuthors();
-  };
+  }
 
-  uploadFile(e, form: any): void {
+  uploadFile(e: any, form: any): void {
     const imageURL = URL.createObjectURL(e.files[0]);
 
     this.image = this.domSanitizer.bypassSecurityTrustUrl(imageURL);
@@ -151,16 +151,16 @@ export class AuthorListComponent implements OnInit {
   }
   get authors(): Author[] {
     return this.authorService.authors;
-  };
+  }
 
   get editing(): boolean {
     return !!this.editingAuthor;
-  };
+  }
 
-  private updateListOfAuthors(author: Author) {
-    let index: number = this.authors.findIndex(auth => auth.id === author.id);
+  private updateListOfAuthors(author: Author): void {
+    const index: number = this.authors.findIndex(auth => auth.id === author.id);
 
-    if (index != -1) {
+    if (index !== -1) {
       this.authors[index] = author;
     }
     else {
@@ -168,7 +168,7 @@ export class AuthorListComponent implements OnInit {
     }
   }
 
-  private showErrorMessageOnUpdateOrCreateAuthor(operation: string) {
+  private showErrorMessageOnUpdateOrCreateAuthor(operation: string): void {
     this.messageService.add({
       id: 'toast-container',
       severity: 'error',
@@ -177,7 +177,7 @@ export class AuthorListComponent implements OnInit {
     });
   }
 
-  private showSuccessMessageOnUpdateOrCreateAuthor(operation: string) {
+  private showSuccessMessageOnUpdateOrCreateAuthor(operation: string): void {
     this.messageService.add({
       id: 'toast-container',
       severity: 'success',

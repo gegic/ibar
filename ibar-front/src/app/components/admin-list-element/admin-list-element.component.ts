@@ -44,7 +44,7 @@ export class AdminListElementComponent implements OnInit {
   }
 
   private deletionConfirmed(): void {
-    this.adminService.delete(this.admin?.id ?? "").subscribe((res) => {
+    this.adminService.delete(this.admin?.id ?? '').subscribe((res) => {
       if (res) {
         this.showToastWhenDeleteCategorySucceed();
       }

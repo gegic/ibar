@@ -80,7 +80,7 @@ export class BookListComponent implements OnInit {
   }
 
   get canModify(): boolean {
-    return this.tokenService.getToken()?.authorities.some(au => au.name === ADMIN);
+    return !!this.tokenService.getToken()?.authorities?.some(au => au.name === ADMIN);
   }
 
   get books(): Book[] {

@@ -104,9 +104,9 @@
         <div>
           <h3 class="p-text-light p-mb-4">Provide the content:</h3>
           <div class="p-grid p-mx-0 p-px-0">
-            <h4 class="p-text-light" *ngIf="!formGroup.get('bookType').value">Firstly choose a book type</h4>
+            <h4 class="p-text-light" *ngIf="!formGroup.get('bookType')?.value">Firstly choose a book type</h4>
             <p-fileUpload mode="basic"
-                          *ngIf="formGroup.get('bookType').value === 'E_BOOK'"
+                          *ngIf="formGroup.get('bookType')?.value === 'E_BOOK'"
                           chooseLabel="Choose PDF"
                           uploadLabel="Upload"
                           [customUpload]="true"
@@ -118,7 +118,7 @@
                           [uploadIcon]="!contentFile ? 'pi pi-upload' : 'pi pi-check'"
             ></p-fileUpload>
             <p-fileUpload mode="basic"
-                          *ngIf="formGroup.get('bookType').value === 'AUDIO_BOOK'"
+                          *ngIf="formGroup.get('bookType')?.value === 'AUDIO_BOOK'"
                           chooseLabel="Choose audio"
                           uploadLabel="Upload"
                           [customUpload]="true"

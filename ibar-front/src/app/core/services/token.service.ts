@@ -11,7 +11,7 @@ export class TokenService {
   readonly TOKEN_KEY = 'auth';
 
   getToken(): AuthToken {
-    return JSON.parse(localStorage.getItem(this.TOKEN_KEY));
+    return JSON.parse(localStorage.getItem(this.TOKEN_KEY) ?? '');
   }
 
   setToken(token: AuthToken): void{

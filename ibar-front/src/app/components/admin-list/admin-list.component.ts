@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
 
-import { MessageService } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
+import {MessageService} from 'primeng/api';
+import {DialogService} from 'primeng/dynamicdialog';
 
-import { User } from 'src/app/core/model/user';
+import {User} from 'src/app/core/model/user';
 
-import { AdminService } from 'src/app/core/services/admin.service';
-import { TokenService } from 'src/app/core/services/token.service';
+import {AdminService} from 'src/app/core/services/admin.service';
+import {TokenService} from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-admin',
@@ -18,7 +18,7 @@ export class AdminListComponent implements OnInit {
 
   isAddDialogOpen = false;
 
-  private userId: string = "";
+  userId = '';
 
   emailControl = new FormControl('', [Validators.required]);
   firstNameControl = new FormControl('', [Validators.required]);
@@ -28,7 +28,7 @@ export class AdminListComponent implements OnInit {
     private adminService: AdminService,
     private messageService: MessageService,
     private tokenService: TokenService) {
-    this.userId = tokenService.getToken().userId;
+    this.userId = tokenService.getToken()?.userId ?? '';
   }
 
   ngOnInit(): void {
@@ -56,34 +56,34 @@ export class AdminListComponent implements OnInit {
         }
       }
     );
-  };
+  }
 
   openAddDialog(): void {
     this.isAddDialogOpen = true;
-  };
+  }
 
   onHideAddDialog(): void {
     this.emailControl.reset();
     this.firstNameControl.reset();
     this.lastNameControl.reset();
-  };
+  }
 
   saveAdmin(): void {
     if (!this.emailControl.valid) {
       this.messageService.add(
-        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Email is required.' }
+        {id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Email is required.'}
       );
     }
 
     if (!this.firstNameControl.valid) {
       this.messageService.add(
-        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'First name is required.' }
+        {id: 'toast-container', severity: 'error', summary: 'Required', detail: 'First name is required.'}
       );
     }
 
     if (!this.lastNameControl.valid) {
       this.messageService.add(
-        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Last name is required.' }
+        {id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Last name is required.'}
       );
     }
 
@@ -91,7 +91,7 @@ export class AdminListComponent implements OnInit {
     const firstName = this.firstNameControl.value;
     const lastName = this.lastNameControl.value;
 
-    let admin: User = new User();
+    const admin: User = new User();
 
     admin.email = email;
     admin.firstName = firstName;
@@ -99,33 +99,33 @@ export class AdminListComponent implements OnInit {
     admin.userType = 0;
 
     this.adminService.create(admin).subscribe(res => {
-      this.admins.push(res);
+        this.admins.push(res);
 
-      this.showSuccessMessageOnUpdateOrCreateAdmin("Create");
-    },
+        this.showSuccessMessageOnUpdateOrCreateAdmin('Create');
+      },
       err => {
-        this.showErrorMessageOnUpdateOrCreateAdmin("Create");
+        this.showErrorMessageOnUpdateOrCreateAdmin('Create');
       });
-  };
+  }
 
   adminDeletionConfirmed(): void {
     this.resetAdmins();
-  };
+  }
 
   get admins(): User[] {
     return this.adminService.admins;
-  };
+  }
 
-  private showErrorMessageOnUpdateOrCreateAdmin(operation: string) {
+  private showErrorMessageOnUpdateOrCreateAdmin(operation: string): void {
     this.messageService.add({
       id: 'toast-container',
       severity: 'error',
       summary: `${operation} unsuccessful`,
-      detail: "User's email is already in use, please use a different email."
+      detail: 'User\'s email is already in use, please use a different email.'
     });
   }
 
-  private showSuccessMessageOnUpdateOrCreateAdmin(operation: string) {
+  private showSuccessMessageOnUpdateOrCreateAdmin(operation: string): void {
     this.messageService.add({
       id: 'toast-container',
       severity: 'success',

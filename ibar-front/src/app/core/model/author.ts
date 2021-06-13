@@ -1,9 +1,9 @@
 export class Author {
-    id: string;
-    name: string;
-    description: string;
-    dateOfBirth: Date;
-    dateOfDeath: Date;
-    averageRating: number;
-    image: string;
+    id?: string;
+    name?: string;
+    description?: string;
+    dateOfBirth?: string | number;
+    dateOfDeath?: string | number;
+    averageRating?: number;
+    image?: string;
 }

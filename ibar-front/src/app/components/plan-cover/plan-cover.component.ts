@@ -11,7 +11,7 @@ import {NavbarService} from '../../core/services/navbar.service';
 export class PlanCoverComponent implements OnInit {
 
   @Input()
-  plan: Plan;
+  plan: Plan = new Plan();
   @Output()
   purchaseConfirmed: EventEmitter<Plan> = new EventEmitter<Plan>();
 

@@ -1,4 +1,4 @@
 export class ContentFile {
-  path: string;
-  quantity: number;
+  path?: string;
+  quantity?: number;
 }

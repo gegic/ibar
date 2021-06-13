@@ -14,7 +14,7 @@ import {ADMIN} from '../../core/utils/consts';
 export class BookListElementComponent implements OnInit {
 
   @Input()
-  book: Book;
+  book: Book = new Book();
   @Input()
   index = 0;
   @Output()
@@ -44,7 +44,7 @@ export class BookListElementComponent implements OnInit {
   }
 
   get canModify(): boolean {
-    return this.tokenService.getToken()?.authorities.some(au => au.name === ADMIN);
+    return !!this.tokenService.getToken()?.authorities?.some(au => au.name === ADMIN);
   }
 
   get coverUrl(): string {

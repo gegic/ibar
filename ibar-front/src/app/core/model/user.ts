@@ -6,13 +6,13 @@ export enum UserType {
 }
 
 export class User {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  enabled: boolean;
-  userType: UserType;
-  authorities: Authority[];
-  age: Number;
-  male: boolean;
+  id?: string;
+  email?: string;
+  firstName?: string;
+  lastName?: string;
+  enabled?: boolean;
+  userType?: UserType;
+  authorities?: Authority[];
+  age?: number;
+  male?: boolean;
 }

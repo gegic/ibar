@@ -5,7 +5,7 @@ import {
   HttpEvent,
   HttpInterceptor, HttpResponse, HttpErrorResponse
 } from '@angular/common/http';
-import {Observable, of, throwError} from 'rxjs';
+import {EMPTY, Observable, of, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
 import {Router} from '@angular/router';
 
@@ -19,7 +19,7 @@ export class PlanInterceptor implements HttpInterceptor {
       (err: HttpErrorResponse) => {
         if (err.status === 403) {
           this.router.navigate(['plan']);
-          return of(null);
+          return EMPTY;
         }
         return throwError(err);
     }));

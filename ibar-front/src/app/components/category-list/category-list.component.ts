@@ -86,7 +86,7 @@ export class CategoryListComponent implements OnInit {
     c.name = name;
 
     if (!!this.editingCategory) {
-      this.categoryService.update(this.editingCategory.id, c).subscribe(res => {
+      this.categoryService.update(this.editingCategory.id ?? '', c).subscribe(res => {
         this.updateListOfCategories(res);
 
         this.showSuccessMessageOnUpdateOrCreateCategory('Update');

@@ -28,7 +28,7 @@ export class RegistrationComponent implements OnInit {
     });
   }
 
-  ngOnInit() { };
+  ngOnInit() { }
 
   registration(): void {
     if (this.registrationForm.invalid) {
@@ -37,11 +37,11 @@ export class RegistrationComponent implements OnInit {
 
     const newUser = new User();
 
-    newUser.email = this.registrationForm.controls['email'].value;
-    newUser.firstName = this.registrationForm.controls['firstName'].value;
-    newUser.lastName = this.registrationForm.controls['lastName'].value;
-    newUser.age = this.registrationForm.controls['age'].value;
-    newUser.male = this.registrationForm.controls['sex'].value === "Male" ? true : false;
+    newUser.email = this.registrationForm.controls.email.value;
+    newUser.firstName = this.registrationForm.controls.firstName.value;
+    newUser.lastName = this.registrationForm.controls.lastName.value;
+    newUser.age = this.registrationForm.controls.age.value;
+    newUser.male = this.registrationForm.controls.sex.value === 'Male' ? true : false;
     newUser.userType = 1;
 
     this.authService.registration(newUser).subscribe(res => {
@@ -51,7 +51,7 @@ export class RegistrationComponent implements OnInit {
     }, er => {
       this.showErrorMessageOnSignup();
     });
-  };
+  }
 
   private showErrorMessageOnSignup(): void {
     this.messageService.add({
@@ -60,7 +60,7 @@ export class RegistrationComponent implements OnInit {
       summary: `Signed up unsuccessful`,
       detail: 'Email address already in use.'
     });
-  };
+  }
 
   private showSuccessMessageOnSignUp(): void {
     this.messageService.add({
@@ -69,5 +69,5 @@ export class RegistrationComponent implements OnInit {
       summary: `Signed up successfully`,
       detail: `You have signed up successfully! We send you email with your password.`
     });
-  };
+  }
 }

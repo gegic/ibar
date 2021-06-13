@@ -41,7 +41,7 @@ export class LoginComponent {
       (token: AuthToken) => {
         this.loading = false;
         if (token) {
-          if (token.authorities.some((au: Authority) => au.name === ADMIN || au.name === READER)) {
+          if (token.authorities?.some((au: Authority) => au.name === ADMIN || au.name === READER)) {
             this.tokenService.setToken(token);
             this.router.navigate(['']);
           }

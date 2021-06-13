@@ -1,3 +1,3 @@
 export class Cover {
-  path: string;
+  path?: string;
 }

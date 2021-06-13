@@ -58,7 +58,7 @@ export class BookReadingComponent implements OnInit, OnDestroy {
     this.detailsService.getReadingProgress(id).subscribe(
       (data: ReadingProgress) => {
         this.detailsService.readingProgress.next(data);
-        this.currentPage = this.readingProgress.progress;
+        this.currentPage = this.readingProgress?.progress ?? 0;
         this.isLoading = false;
         setInterval(() => this.postProgress(),  3 * 60 * 1000);
       }
@@ -66,11 +66,14 @@ export class BookReadingComponent implements OnInit, OnDestroy {
   }
 
   postProgress(): void {
-    if (this.currentPage > this.readingProgress.progress) {
+    if (this.currentPage > (this.readingProgress?.progress ?? 0)) {
       const readingProgress = this.readingProgress;
+      if (!readingProgress) {
+        return;
+      }
       readingProgress.progress = this.currentPage;
       this.detailsService.postReadingProgress(readingProgress).subscribe(
-        (data: ReadingProgress) => {
+        (data: ReadingProgress | undefined) => {
           this.detailsService.readingProgress.next(data);
         }
       );
@@ -78,24 +81,24 @@ export class BookReadingComponent implements OnInit, OnDestroy {
   }
 
   backToBook(): void {
-    this.router.navigate(['book', this.book.id]);
+    this.router.navigate(['book', this.book?.id ?? '']);
   }
 
 
-  get book(): Book {
-    return this.detailsService.book.getValue();
+  get book(): Book | undefined {
+    return this.detailsService.book?.getValue();
   }
 
-  get readingProgress(): ReadingProgress {
-    return this.detailsService.readingProgress.getValue();
+  get readingProgress(): ReadingProgress | undefined {
+    return this.detailsService.readingProgress?.getValue();
   }
 
   get pdfUrl(): string {
-    return `/pdf/${this.book.pdf}.pdf`;
+    return `/pdf/${this.book?.pdf ?? ''}.pdf`;
   }
 
   get token(): string {
-    return this.tokenService.getToken()?.accessToken;
+    return this.tokenService.getToken()?.accessToken ?? '';
   }
 
   ngOnDestroy(): void {

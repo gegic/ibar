@@ -11,10 +11,10 @@ import {RESPONSIVE_OPTIONS} from '../../core/utils/consts';
 })
 export class BrowseBooksComponent implements OnInit {
 
-  topRated: Book[];
+  topRated: Book[] = [];
   loadingTopRated = true;
 
-  recommended: Book[];
+  recommended: Book[] = [];
   loadingRecommended = true;
   responsiveOptions = RESPONSIVE_OPTIONS;
 

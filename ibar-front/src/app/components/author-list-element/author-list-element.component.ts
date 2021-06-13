@@ -44,7 +44,7 @@ export class AuthorListElementComponent implements OnInit {
   }
 
   private deletionConfirmed(): void {
-    this.authorService.delete(this.author?.id ?? "").subscribe((res) => {
+    this.authorService.delete(this.author?.id ?? '').subscribe((res) => {
       if (res) {
         this.showToastWhenDeleteAuthorSucceed();
       }

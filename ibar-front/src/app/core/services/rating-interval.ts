@@ -1,6 +1,6 @@
 export class RatingInterval {
-  min: number;
-  max: number;
+  min = 0;
+  max = 5;
   interval = [0, 5];
 
   public applyInterval(): RatingInterval {

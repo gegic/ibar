@@ -11,7 +11,7 @@ export class BookAboutComponent {
 
   constructor(private detailsService: BookDetailsService) { }
 
-  get book(): Book {
+  get book(): Book | undefined {
     return this.detailsService.book.getValue();
   }
 }

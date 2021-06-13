@@ -1,4 +1,4 @@
 export class ReviewNumber {
-  rating: number;
-  numReviews: number;
+  rating?: number;
+  numReviews?: number;
 }

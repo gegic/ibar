@@ -84,18 +84,18 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   }
 
   onClickRead(): void {
-    this.router.navigate(['reading', this.book.id]);
+    this.router.navigate(['reading', this.book?.id ?? '']);
   }
 
   get canRead(): boolean {
-    return this.tokenService.getToken()?.authorities.some(au => au.name === READER) && !!this.book.pdf;
+    return (!!this.tokenService.getToken()?.authorities?.some(au => au.name === READER)) && !!this.book?.pdf;
   }
 
   get canModify(): boolean {
-    return this.tokenService.getToken()?.authorities.some(au => au.name === ADMIN);
+    return !!this.tokenService.getToken()?.authorities?.some(au => au.name === ADMIN);
   }
 
-  get readingProgress(): ReadingProgress {
+  get readingProgress(): ReadingProgress | undefined {
     return this.detailsService.readingProgress.getValue();
   }
 
@@ -107,7 +107,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
     }
   }
 
-  get book(): Book {
+  get book(): Book | undefined {
     return this.detailsService.book.getValue();
   }
 

@@ -34,7 +34,7 @@ export class BookReviewsComponent implements OnInit {
               private messageService: MessageService) { }
 
   ngOnInit(): void {
-    this.detailsService.book.subscribe((val: Book) => {
+    this.detailsService.book.subscribe((val: Book | undefined) => {
       if (!!val) {
         this.resetReviews();
       }
@@ -63,13 +63,13 @@ export class BookReviewsComponent implements OnInit {
         const userId = this.tokenService.getToken()?.userId ?? null;
         let addedReviews: Review[];
         if (!!userId) {
-          addedReviews = reviewPage.content.filter(rv => rv.userId !== userId);
+          addedReviews = reviewPage.content?.filter(rv => rv.userId !== userId) ?? [];
         } else {
-          addedReviews = reviewPage.content;
+          addedReviews = reviewPage.content ?? [];
         }
         this.reviews = this.reviews.concat(addedReviews);
-        this.page = reviewPage.pageable.pageNumber;
-        this.totalPages = reviewPage.totalPages;
+        this.page = reviewPage.pageable?.pageNumber ?? 0;
+        this.totalPages = reviewPage?.totalPages ?? 0;
         this.isReviewsLoading = false;
       });
   }
@@ -80,19 +80,19 @@ export class BookReviewsComponent implements OnInit {
       for (const reviewNum of rn) {
         switch (reviewNum.rating) {
           case 1:
-            this.reviewNumbers.oneStar = reviewNum.numReviews;
+            this.reviewNumbers.oneStar = reviewNum?.numReviews ?? 0;
             break;
           case 2:
-            this.reviewNumbers.twoStars = reviewNum.numReviews;
+            this.reviewNumbers.twoStars = reviewNum?.numReviews ?? 0;
             break;
           case 3:
-            this.reviewNumbers.threeStars = reviewNum.numReviews;
+            this.reviewNumbers.threeStars = reviewNum?.numReviews ?? 0;
             break;
           case 4:
-            this.reviewNumbers.fourStars = reviewNum.numReviews;
+            this.reviewNumbers.fourStars = reviewNum?.numReviews ?? 0;
             break;
           case 5:
-            this.reviewNumbers.fiveStars = reviewNum.numReviews;
+            this.reviewNumbers.fiveStars = reviewNum?.numReviews ?? 0;
             break;
           default:
         }
@@ -122,7 +122,7 @@ export class BookReviewsComponent implements OnInit {
     }
 
     this.userReview.userId = this.tokenService.getToken()?.userId;
-    this.userReview.bookId = this.book.id;
+    this.userReview.bookId = this.book?.id ?? '';
 
     if (!this.userReview.userId || !this.userReview.bookId) {
       this.messageService.add({
@@ -192,11 +192,11 @@ export class BookReviewsComponent implements OnInit {
   }
 
   get canAddReview(): boolean {
-    return this.tokenService.getToken()?.authorities.some(au => au.name === READER) &&
-      !!this.readingProgress && this.readingProgress.percentage > 80;
+    return !!(this.tokenService.getToken()?.authorities?.some(au => au.name === READER) &&
+      !!this.readingProgress && (this.readingProgress.percentage ?? 0) > 80);
   }
 
-  get readingProgress(): ReadingProgress {
+  get readingProgress(): ReadingProgress | undefined {
     return this.detailsService.readingProgress.getValue();
   }
 
@@ -204,7 +204,7 @@ export class BookReviewsComponent implements OnInit {
     return (Math.round((this.book?.averageRating ?? 0) * 10) / 10).toFixed(1);
   }
 
-  get book(): Book {
+  get book(): Book | undefined{
     return this.detailsService.book.getValue();
   }
 }

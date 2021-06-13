@@ -17,7 +17,7 @@ import { BookService } from '../../core/services/book.service';
 })
 export class NavbarComponent implements OnInit {
 
-  public isChangePasswordDialogOpen: boolean = false;
+  public isChangePasswordDialogOpen = false;
 
   searchQuery = '';
 
@@ -39,8 +39,8 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit(): void {
     this.navbarService.navigation.subscribe(
-      (val: NavigationItem[]) => {
-        this.navbarItems = val;
+      (val: NavigationItem[] | null) => {
+        this.navbarItems = val ?? [];
       }
     );
     this.navbarService.hasSearch.subscribe(
@@ -76,7 +76,7 @@ export class NavbarComponent implements OnInit {
   }
 
   authoritiesContain(authorityName: string): boolean {
-    return this.tokenService.getToken().authorities.some((au: Authority) => au.name === authorityName);
+    return !!this.tokenService.getToken()?.authorities?.some((au: Authority) => au.name === authorityName);
   }
 
   isLinkActive(url: string): boolean {
@@ -101,8 +101,8 @@ export class NavbarComponent implements OnInit {
     this.isChangePasswordDialogOpen = false;
   }
 
-  get initials(): string {
-    return this.tokenService.getToken().userInitials;
+  get initials(): string | undefined {
+    return this.tokenService.getToken()?.userInitials;
   }
 
 }

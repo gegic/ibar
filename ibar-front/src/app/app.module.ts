@@ -61,7 +61,6 @@ import {SelectButtonModule} from 'primeng/selectbutton';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {MultiSelectModule} from 'primeng/multiselect';
 import {DropdownModule} from 'primeng/dropdown';
-import { RadioButtonModule } from 'primeng/radiobutton';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { MessageModule } from 'primeng/message';
 
