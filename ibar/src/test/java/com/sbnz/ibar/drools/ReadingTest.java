@@ -31,13 +31,15 @@ public class ReadingTest {
 //        readingSession.addEventListener(new DebugAgendaEventListener());
 //        readingSession.addEventListener(new DebugProcessEventListener());
         Reader r = createReader();
+        Category c = createCategory();
 
-        OnSubscribed onSubscribed = new OnSubscribed(r);
+        Plan p = createPlan(c);
+
+        OnSubscribed onSubscribed = new OnSubscribed(r, p);
         readingSession.insert(onSubscribed);
 
         Set<Author> a = new HashSet<>();
         a.add(createAuthor());
-        Category c = createCategory();
         List<Book> books = new ArrayList<>();
         for (int i = 0; i < 9; ++i) {
             books.add(createBook(c, a));
@@ -63,6 +65,16 @@ public class ReadingTest {
         );
     }
 
+    private Plan createPlan(Category c) {
+        return new Plan(
+                UUID.randomUUID(),
+                "Plan",
+                100,
+                Set.of(c),
+                "opis",
+                10L
+        );
+    }
     private Author createAuthor() {
         return new Author(
                 UUID.randomUUID(),

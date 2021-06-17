@@ -8,5 +8,5 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class CoverDto {
-    UUID path;
+    private UUID path;
 }

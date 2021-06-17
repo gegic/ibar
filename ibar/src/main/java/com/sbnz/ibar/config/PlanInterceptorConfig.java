@@ -16,9 +16,7 @@ public class PlanInterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(planInterceptor)
                 .addPathPatterns("/pdf/**")
-                .addPathPatterns("/covers/**")
                 .addPathPatterns("/audio/**")
-                .addPathPatterns("/photos/**")
                 .addPathPatterns("/api/**")
                 .excludePathPatterns("/api/plans/**");
     }

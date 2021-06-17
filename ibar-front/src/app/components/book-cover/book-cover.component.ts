@@ -7,12 +7,22 @@ import {Router} from '@angular/router';
   templateUrl: './book-cover.component.html',
   styleUrls: ['./book-cover.component.scss']
 })
-export class BookCoverComponent {
+export class BookCoverComponent implements OnInit{
+
+  COVERS_API = '/covers';
 
   @Input()
   book: Book = new Book();
 
+  topStyle?: {background: string};
+
   constructor(private router: Router) { }
+
+  ngOnInit(): void {
+    this.topStyle = {
+      background: `url(${this.COVERS_API}/${this.book.cover}.png) no-repeat center center`
+    };
+  }
 
   openDetails(): void {
     this.router.navigate(['/book', this.book.id]);

@@ -46,13 +46,11 @@ public class ReadingProgressService {
 
     public ReadingProgressDto get(UUID bookId) throws EntityDoesNotExistException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-
+        if (!(user instanceof Reader)) {
+            return null;
+        }
         Book b = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityDoesNotExistException(Book.class.getName(), bookId));
-
-        if (!(user instanceof Reader)) {
-            throw new EntityDoesNotExistException(Reader.class.getName(), user.getId());
-        }
 
         Reader r = (Reader) user;
 

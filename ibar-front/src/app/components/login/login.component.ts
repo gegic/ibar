@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {TokenService} from '../../core/services/token.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
@@ -61,8 +61,5 @@ export class LoginComponent {
           detail: er?.error?.errorMessage ?? 'Please check your credentials'
         });
       });
-  }
-
-  printsomething(): void {
   }
 }

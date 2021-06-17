@@ -1,4 +1,4 @@
-package rules.login;
+package rules.reading;
 
 import java.lang.String;
 import com.sbnz.ibar.rto.events.*;

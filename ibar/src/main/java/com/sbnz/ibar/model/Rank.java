@@ -1,21 +1,19 @@
 package com.sbnz.ibar.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.kie.api.definition.type.Position;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.UUID;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Achievement {
+@RequiredArgsConstructor
+@EqualsAndHashCode
+public class Rank {
 
 	@Id
 	@GeneratedValue(generator = "UUID")
@@ -25,7 +23,17 @@ public class Achievement {
 	)
 	private UUID id;
 
+	@NonNull
 	@Column(nullable = false)
 	private String name;
+
+	@NonNull
+	@Column(nullable = false)
+	@EqualsAndHashCode.Exclude
+	private Long points;
+
+	@OneToOne
+	@EqualsAndHashCode.Exclude
+	private Rank higherRank;
 
 }

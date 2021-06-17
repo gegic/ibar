@@ -29,4 +29,8 @@ public class ReadingListItem {
     @ManyToOne
     private Reader reader;
 
+    public ReadingListItem(Book book, Reader r) {
+        this.book = book;
+        this.reader = r;
+    }
 }

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
@@ -26,10 +27,11 @@ public class BookDto {
 	@NotNull(message = "Category cannot be null.")
 	private UUID categoryId;
 
-	private BookType bookType;
+	private BookType type;
 
+	private Set<UUID> authorIds;
+	private Set<String> authorNames;
 	private String categoryName;
-	private String authorName;
 	private UUID cover;
 	private Long numReviews;
 	private Double averageRating;

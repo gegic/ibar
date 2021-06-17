@@ -13,12 +13,14 @@ import {ADMIN} from '../../core/utils/consts';
 })
 export class BookListElementComponent implements OnInit {
 
+  COVERS_API = '/covers';
+
   @Input()
   book: Book = new Book();
   @Input()
   index = 0;
   @Output()
-  bookDeleted: EventEmitter<any> = new EventEmitter<any>();
+  deleteClicked: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private router: Router,
               private bookService: BookService,
@@ -38,9 +40,19 @@ export class BookListElementComponent implements OnInit {
   }
 
   onClickEdit(event: MouseEvent): void {
+    event.stopPropagation();
+    this.router.navigate(['edit-book', this.book.id]);
   }
 
   onClickDelete(event: MouseEvent): void {
+    event.stopPropagation();
+    this.confirmationService.confirm(
+      {
+        message: `Are you sure that you want to delete ${this.book.name}`,
+        header: 'Delete',
+        accept: () => this.deleteClicked.emit(this.book)
+      }
+    );
   }
 
   get canModify(): boolean {
@@ -48,6 +60,6 @@ export class BookListElementComponent implements OnInit {
   }
 
   get coverUrl(): string {
-    return 'https://edit.org/img/blog/m68-book-cover-templates.jpg';
+    return `${this.COVERS_API}/${this.book.cover}.png`;
   }
 }

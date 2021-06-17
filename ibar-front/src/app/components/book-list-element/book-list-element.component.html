@@ -1,7 +1,7 @@
 <p-card class="offering-card" (click)="onClickCard()">
   <div class="p-grid p-m-0 p-p-0 p-justify-around">
     <div class="p-col-fixed p-p-0" style="width: 100px; height: 100px">
-      <img class="thumbnail-img" [src]="coverUrl" alt="thumbnail">
+      <img class="thumbnail-img" [src]="coverUrl" alt="cover">
     </div>
     <div class="p-col-12 p-sm-4 p-lg-6 p-ml-4">
       <h5 class="p-text-normal p-m-0 category-subcategory">
@@ -19,8 +19,8 @@
     </div>
     <div class="p-col-12 p-sm-4 p-lg-3 p-text-right p-as-end">
       <button class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
-              icon="pi pi-map-marker"
-              label="ADD TO READING LIST"
+              icon="pi pi-copy"
+              label="READ"
               (click)="onClickRead()"
               pButton
       ></button>

@@ -10,8 +10,12 @@ export class TokenService {
 
   readonly TOKEN_KEY = 'auth';
 
-  getToken(): AuthToken {
-    return JSON.parse(localStorage.getItem(this.TOKEN_KEY) ?? '');
+  getToken(): AuthToken | null {
+    const token = localStorage.getItem(this.TOKEN_KEY);
+    if (!token) {
+      return null;
+    }
+    return JSON.parse(token);
   }
 
   setToken(token: AuthToken): void{

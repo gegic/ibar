@@ -65,4 +65,8 @@ export class BookService {
     formData.append('audio', file);
     return this.httpClient.post<ContentFile>(`${this.BOOK_API}/add-audio`, formData);
   }
+
+  delete(bookId: string): Observable<void> {
+    return this.httpClient.delete<void>(`${this.BOOK_API}/${bookId}`);
+  }
 }

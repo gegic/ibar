@@ -10,4 +10,7 @@
 	<kbase name="reading" eventProcessingMode="stream" packages="rules.reading">
 		<ksession name="reading-session"/>
 	</kbase>
+	<kbase name="ranks" eventProcessingMode="stream" packages="rules.ranks">
+		<ksession name="ranks-session"/>
+	</kbase>
 </kmodule>

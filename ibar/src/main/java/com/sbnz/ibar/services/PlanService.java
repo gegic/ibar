@@ -44,8 +44,8 @@ public class PlanService {
 		if (subscriptionRepository.existsByBuyerId(u.getId())) {
 			throw new EntityAlreadyExistsException(Subscription.class.getName(), u.getId());
 		}
-		Optional<Plan> optionalPlan =planRepository.findById(dto.getId());
-		if (!optionalPlan.isPresent()) {
+		Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
+		if (optionalPlan.isEmpty()) {
 			throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
 		}
 		Reader r = (Reader) userRepository.findById(u.getId())
@@ -59,10 +59,13 @@ public class PlanService {
 
 		OnSubscribed event = new OnSubscribed();
 		event.setUser(r);
+		event.setPlan(p);
 		KieSession readingSession = kieService.getReadingSession();
 		readingSession.insert(event);
 		readingSession.fireAllRules();
-
+		KieSession ranksSession = kieService.getRanksSession();
+		ranksSession.insert(event);
+		ranksSession.fireAllRules();
 		subscriptionRepository.save(s);
 	}
 

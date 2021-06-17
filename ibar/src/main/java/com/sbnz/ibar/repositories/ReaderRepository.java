@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -18,7 +19,6 @@ public interface ReaderRepository extends JpaRepository<Reader, UUID> {
 	Page<Reader> findByEmailOrFirstNameOrLastNameContainingIgnoreCase(String value,
                                                                                 Pageable pageable);
 
-	@Query(value = "SELECT * FROM users_table a WHERE a.type='RU' AND achievement_id=?1", nativeQuery = true)
-	Iterable<Reader> findByAchievementId(UUID titleId);
+	List<Reader> findByRankId(UUID rankId);
 
 }

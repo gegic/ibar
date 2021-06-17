@@ -63,6 +63,10 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import {DropdownModule} from 'primeng/dropdown';
 import { ChangePasswordComponent } from './components/change-password/change-password.component';
 import { MessageModule } from 'primeng/message';
+import { RankListComponent } from './components/rank-list/rank-list.component';
+import {ToolbarModule} from 'primeng/toolbar';
+import {TableModule} from 'primeng/table';
+import {InputNumberModule} from 'primeng/inputnumber';
 
 @NgModule({
   declarations: [
@@ -92,6 +96,7 @@ import { MessageModule } from 'primeng/message';
     AuthorListElementComponent,
     BookCreateComponent,
     ChangePasswordComponent,
+    RankListComponent,
   ],
   imports: [
     BrowserModule,
@@ -128,7 +133,10 @@ import { MessageModule } from 'primeng/message';
     SelectButtonModule,
     NgSelectModule,
     MultiSelectModule,
-    DropdownModule
+    DropdownModule,
+    ToolbarModule,
+    TableModule,
+    InputNumberModule
   ],
   providers: [
     {

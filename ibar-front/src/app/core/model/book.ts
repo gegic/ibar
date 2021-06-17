@@ -1,10 +1,12 @@
+import {Author} from './author';
+
 export class Book {
   id?: string;
   name?: string;
   description?: string;
   categoryId?: string;
   categoryName?: string;
-  authorName?: string;
+  authorNames?: string[];
   cover?: string;
   numReviews?: number;
   averageRating?: number;
@@ -13,4 +15,5 @@ export class Book {
   pdf?: string;
   type?: string;
   quantity?: number;
+  authorIds?: string[];
 }

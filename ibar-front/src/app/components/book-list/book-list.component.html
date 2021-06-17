@@ -29,10 +29,11 @@
       </div>
     </div>
     <div *ngIf="books.length > 0; else noBooks">
-      <app-book-list-element class='culturalOffer' *ngFor="let book of books; let index = index;"
-                        [book]="book"
-                        (bookDeleted)="bookDeleted()"
-                        [index]="index"
+      <app-book-list-element class='culturalOffer'
+                             *ngFor="let book of books; let index = index;"
+                             [book]="book"
+                             (deleteClicked)="bookDeleted($event)"
+                             [index]="index"
       >
       </app-book-list-element>
     </div>

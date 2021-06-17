@@ -7,6 +7,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {BookDetailsService} from '../../core/services/book-details.service';
 import {Title} from '@angular/platform-browser';
 import {ReadingProgress} from '../../core/model/reading-progress';
+import {ConfirmationService} from 'primeng/api';
+import {BookService} from '../../core/services/book.service';
 
 @Component({
   selector: 'app-book-details',
@@ -34,7 +36,9 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
               private activatedRoute: ActivatedRoute,
               private detailsService: BookDetailsService,
               private titleService: Title,
-              private router: Router) { }
+              private router: Router,
+              private confirmationService: ConfirmationService,
+              private bookService: BookService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.pipe(distinctUntilChanged()).subscribe(
@@ -72,9 +76,25 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
 
 
   onClickEdit(): void {
+    this.router.navigate(['edit-book', this.book?.id ?? '']);
   }
 
   onClickDelete(): void {
+    this.confirmationService.confirm(
+      {
+        message: `Are you sure that you want to delete ${this.book?.name}`,
+        header: 'Delete',
+        accept: () => this.bookDeleted()
+      }
+    );
+  }
+
+  bookDeleted(): void {
+    this.bookService.delete(this.book?.id ?? '').subscribe(
+      () => {
+        this.router.navigate(['list']);
+      }
+    );
   }
 
   onClickAddToReadingList(): void {

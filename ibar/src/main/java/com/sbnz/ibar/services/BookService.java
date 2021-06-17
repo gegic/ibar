@@ -69,12 +69,16 @@ public class BookService {
     public BookDto getById(UUID id) throws EntityDoesNotExistException {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Optional<Book> book = bookRepository.findById(id);
-        Subscription s = subscriptionRepository.findByBuyerId(user.getId())
-                .orElseThrow(() -> new EntityDoesNotExistException(Subscription.class.getName(), user.getId()));
         Book b = book.orElseThrow(EntityNotFoundException::new);
-        if (!s.getPurchasedPlan().getCategories().contains(b.getCategory())) {
-            b.setPdf(null);
+
+        if (user instanceof Reader) {
+            Subscription s = subscriptionRepository.findByBuyerId(user.getId())
+                    .orElseThrow(() -> new EntityDoesNotExistException(Subscription.class.getName(), user.getId()));
+            if (!s.getPurchasedPlan().getCategories().contains(b.getCategory())) {
+                b.setPdf(null);
+            }
         }
+
         return this.toBookDto(b);
     }
 
@@ -207,6 +211,7 @@ public class BookService {
                 .newOutputStream(Path.of(Paths.get(filesConfig.getPdfPath(), id.toString()) + ".pdf"))) {
             PDDocument doc = PDDocument.load(pdfFile.getBytes());
             numPages = doc.getNumberOfPages();
+            doc.close();
             os.write(pdfFile.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -257,7 +262,10 @@ public class BookService {
         Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() -> new EntityDoesNotExistException(Category.class.getName(), dto.getCategoryId()));
 
+        Set<Author> authors = new HashSet<>(authorRepository.findAllById(dto.getAuthorIds()));
+
         book.setCategory(category);
+        book.setAuthors(authors);
 
         book = bookRepository.save(book);
 

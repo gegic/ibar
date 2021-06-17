@@ -1,11 +1,11 @@
 <div class="wrapper">
   <div class="container" (click)="openDetails()">
-    <div class="top"></div>
+    <div class="top" [style]="topStyle"></div>
     <div class="bottom">
       <div class="left">
         <div class="details">
           <h5>{{book.name | truncate : 22 : true}}</h5>
-          <h5 class="p-text-light">{{book.authorName}}</h5>
+          <h5 class="p-text-light">{{book.authorNames?.join(', ')}}</h5>
         </div>
         <div class="add-to-reading-list"><i class="pi pi-tag"></i></div>
       </div>

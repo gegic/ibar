@@ -9,6 +9,7 @@
                id="name"
                autocomplete="off"
                placeholder="Name"
+               [style]="{width: '100%'}"
                pInputText
         >
       </div>
@@ -30,6 +31,7 @@
                         [filter]="false"
                         optionLabel="name"
                         placeholder="Category"
+                        formControlName="selectedCategory"
                         [style]="{width: '100%'}"
                         id="category"
             ></p-dropdown>
@@ -40,6 +42,7 @@
                            placeholder="Authors"
                            [style]="{width: '100%'}"
                            [filter]="false"
+                           formControlName="authors"
             ></p-multiSelect>
           </div>
 
@@ -106,7 +109,7 @@
           <div class="p-grid p-mx-0 p-px-0">
             <h4 class="p-text-light" *ngIf="!formGroup.get('bookType')?.value">Firstly choose a book type</h4>
             <p-fileUpload mode="basic"
-                          *ngIf="formGroup.get('bookType')?.value === 'E_BOOK'"
+                          *ngIf="formGroup.get('bookType')?.value === 'E_BOOK' && !contentFile"
                           chooseLabel="Choose PDF"
                           uploadLabel="Upload"
                           [customUpload]="true"
@@ -115,10 +118,9 @@
                           maxFileSize="1000000"
                           (uploadHandler)="pdfChosen($event)"
                           [disabled]="contentFileLoading"
-                          [uploadIcon]="!contentFile ? 'pi pi-upload' : 'pi pi-check'"
             ></p-fileUpload>
             <p-fileUpload mode="basic"
-                          *ngIf="formGroup.get('bookType')?.value === 'AUDIO_BOOK'"
+                          *ngIf="formGroup.get('bookType')?.value === 'AUDIO_BOOK' && !contentFile"
                           chooseLabel="Choose audio"
                           uploadLabel="Upload"
                           [customUpload]="true"
@@ -127,8 +129,12 @@
                           maxFileSize="1000000"
                           (uploadHandler)="audioChosen($event)"
                           [disabled]="contentFileLoading"
-                          [uploadIcon]="!contentFile ? 'pi pi-upload' : 'pi pi-check'"
             ></p-fileUpload>
+            <button *ngIf="!!contentFile"
+                    label="Change content"
+                    icon="pi pi-check"
+                    class="p-button p-button-success p-button-icon"
+                    pButton></button>
             <p-progressSpinner class="p-ml-2"
                                *ngIf="contentFileLoading"
                                [style]="{width: '35px', height: '35px'}"

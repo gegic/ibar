@@ -19,9 +19,11 @@ public class BookMapper {
 		dto.setCategoryId(entity.getCategory().getId());
 		dto.setCategoryName(entity.getCategory().getName());
 		dto.setCover(entity.getCover());
+		dto.setType(entity.getType());
 		dto.setNumReviews(entity.getNumReviews());
 		dto.setAverageRating(entity.getAverageRating());
-		dto.setAuthorName(entity.getAuthors().stream().map(Author::getName).collect(Collectors.joining(", ")));
+		dto.setAuthorIds(entity.getAuthors().stream().map(Author::getId).collect(Collectors.toSet()));
+		dto.setAuthorNames(entity.getAuthors().stream().map(Author::getName).collect(Collectors.toSet()));
 		dto.setPdf(entity.getPdf());
 		return dto;
 	}
@@ -34,6 +36,7 @@ public class BookMapper {
 		book.setQuantity(dto.getQuantity());
 		book.setCover(dto.getCover());
 		book.setPdf(dto.getPdf());
+		book.setType(dto.getType());
 		return book;
 	}
 

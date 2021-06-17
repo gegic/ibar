@@ -43,6 +43,7 @@ export class BookCreateComponent implements OnInit {
       description: new FormControl(undefined, Validators.maxLength(1000)),
       bookType: new FormControl(undefined, Validators.required),
       selectedCategory: new FormControl(undefined, Validators.required),
+      authors: new FormControl(undefined, Validators.required)
     }
   );
 
@@ -68,9 +69,9 @@ export class BookCreateComponent implements OnInit {
         this.mode = val.mode;
       }
     });
-    this.getEditMode();
     this.getCategories();
     this.getAuthors();
+    this.getEditMode();
   }
 
   saveBook(): void {
@@ -115,6 +116,7 @@ export class BookCreateComponent implements OnInit {
     this.book.type = this.formGroup.get('bookType')?.value;
     this.book.categoryId = (this.formGroup.get('selectedCategory')?.value as Category).id;
     this.book.description = this.formGroup.get('description')?.value;
+    this.book.authorIds = (this.formGroup.get('authors')?.value as Author[]).filter(a => !!a && !!a.id).map(a => a?.id ?? '') ?? [];
     this.book.cover = this.cover.path;
     this.book.pdf = this.contentFile.path;
     this.book.quantity = this.contentFile.quantity;
@@ -125,10 +127,10 @@ export class BookCreateComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Successfully added',
-            detail: 'The cultural offering was added successfully',
-            id: 'offering-added-toast'
+            detail: 'The book was added successfully',
+            id: 'book-added-toast'
           });
-          this.router.navigate([`/cultural-offering/${data.id}`]);
+          this.router.navigate([`/book/${data.id}`]);
         }
       );
     } else {
@@ -137,10 +139,10 @@ export class BookCreateComponent implements OnInit {
           this.messageService.add({
             severity: 'success',
             summary: 'Successfully edited',
-            detail: 'The cultural offering was edited successfully',
-            id: 'offering-edited-toast'
+            detail: 'The book was edited successfully',
+            id: 'book-edited-toast'
           });
-          this.router.navigate([`/cultural-offering/${data.id}`]);
+          this.router.navigate([`/book/${data.id}`]);
         }
       );
     }
@@ -176,13 +178,17 @@ export class BookCreateComponent implements OnInit {
 
   getBook(id: string): void {
     this.bookService.getBook(id).subscribe((book: Book) => {
-      this.bookService.book.next(book);
+      const bookAuthors = this.authors.filter(au => book.authorIds?.includes(au?.id ?? ''));
+      this.book = book;
       this.formGroup.patchValue({
         name: book.name,
         description: book.description,
         bookType: book.type,
         selectedCategory: {id: book.categoryId, name: book.categoryName},
+        authors: bookAuthors
       });
+      this.contentFile = new ContentFile(book.pdf, book.quantity);
+      this.cover = new Cover(book.cover);
     });
   }
 

@@ -17,6 +17,7 @@ import {AuthorListComponent} from './components/author-list/author-list.componen
 import {CategoryListComponent} from './components/category-list/category-list.component';
 import {AdminListComponent} from './components/admin-list/admin-list.component';
 import {BookCreateComponent} from './components/book-create/book-create.component';
+import {RankListComponent} from './components/rank-list/rank-list.component';
 
 const routes: Routes = [
   {
@@ -92,8 +93,20 @@ const routes: Routes = [
         canActivate: [AuthGuard],
       },
       {
+        path: 'edit-book/:id',
+        component: BookCreateComponent,
+        data: { roles: [ADMIN], mode: 'edit' },
+        canActivate: [AuthGuard],
+      },
+      {
         path: 'admins',
         component: AdminListComponent,
+        data: { roles: [ADMIN] },
+        canActivate: [AuthGuard],
+      },
+      {
+        path: 'ranks',
+        component: RankListComponent,
         data: { roles: [ADMIN] },
         canActivate: [AuthGuard],
       },

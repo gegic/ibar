@@ -76,7 +76,15 @@ export class BookListComponent implements OnInit {
     this.isFilterDialogOpen = false;
   }
 
-  bookDeleted(): void {
+  bookDeleted(book: Book): void {
+    if (!book || !book.id) {
+      return;
+    }
+    this.bookService.delete(book.id).subscribe(
+      () => {
+        this.resetBooks();
+      }
+    );
   }
 
   get canModify(): boolean {

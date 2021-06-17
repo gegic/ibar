@@ -12,8 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import static com.sbnz.ibar.utils.Utils.LOGIN_SESSION;
-import static com.sbnz.ibar.utils.Utils.READING_SESSION;
+import static com.sbnz.ibar.utils.Utils.*;
 
 @Configuration
 @EnableTransactionManagement
@@ -43,6 +42,14 @@ public class KieConfig {
         KieSession readingSession = kieContainer().newKieSession(READING_SESSION);
         readingSession.setGlobal("userRepository", userRepository);
         return readingSession;
+    }
+
+    @Bean(name = "ranksSession")
+    public KieSession ranksSession() {
+        KieSession ranksSession = kieContainer().newKieSession(RANKS_SESSION);
+        ranksSession.setGlobal("userRepository", userRepository);
+        ranksSession.setGlobal("durationThreshold", 10L);
+        return ranksSession;
     }
 
 }
