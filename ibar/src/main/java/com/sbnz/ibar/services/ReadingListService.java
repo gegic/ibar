@@ -15,11 +15,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class ReadingListService {
 
     private final ReadingListItemRepository listItemRepository;

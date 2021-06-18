@@ -6,13 +6,15 @@ import com.sbnz.ibar.model.*;
 
 global java.lang.Long minAge;
 global java.lang.Long maxAge;
-
+global com.sbnz.ibar.repositories.UserRepository userRepository;
 rule "Classify male reader"
     when
         $reader: Reader($age: age, male);
         $ac: AgeClass(minAge <= $age, maxAge > $age);
     then
         $reader.setUserCategory($ac.getName() + " male");
+        userRepository.save($reader);
+        delete($reader);
 end
 
 rule "Classify female reader"
@@ -21,4 +23,6 @@ rule "Classify female reader"
         $ac: AgeClass(minAge <= $age, maxAge > $age);
     then
         $reader.setUserCategory($ac.getName() + " female");
+        userRepository.save($reader);
+        delete($reader);
 end

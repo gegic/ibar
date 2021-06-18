@@ -11,4 +11,12 @@ import lombok.NoArgsConstructor;
 public class BookResponse {
     private Book book;
     private double points = 0;
+
+    public void setPoints(double points) {
+        if (points < 0) {
+            this.points = 0;
+        } else {
+            this.points = points;
+        }
+    }
 }

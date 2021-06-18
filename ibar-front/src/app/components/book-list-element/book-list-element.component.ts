@@ -5,6 +5,7 @@ import {BookService} from '../../core/services/book.service';
 import {ConfirmationService, MessageService} from 'primeng/api';
 import {TokenService} from '../../core/services/token.service';
 import {ADMIN} from '../../core/utils/consts';
+import {ReadingListService} from '../../core/services/reading-list.service';
 
 @Component({
   selector: 'app-book-list-element',
@@ -22,11 +23,14 @@ export class BookListElementComponent implements OnInit {
   @Output()
   deleteClicked: EventEmitter<any> = new EventEmitter<any>();
 
+  readingListLoading = false;
+
   constructor(private router: Router,
               private bookService: BookService,
               private messageService: MessageService,
               private confirmationService: ConfirmationService,
-              private tokenService: TokenService) { }
+              private tokenService: TokenService,
+              private readingListService: ReadingListService) { }
 
   ngOnInit(): void {
   }
@@ -51,6 +55,32 @@ export class BookListElementComponent implements OnInit {
         message: `Are you sure that you want to delete ${this.book.name}`,
         header: 'Delete',
         accept: () => this.deleteClicked.emit(this.book)
+      }
+    );
+  }
+
+  onClickAddToReadingList(event: MouseEvent): void {
+    event.stopPropagation();
+    this.readingListLoading = true;
+    this.readingListService.addToReadingList(this.book?.id ?? '').subscribe(
+      () => {
+        if (this.book) {
+          this.book.inReadingList = true;
+        }
+        this.readingListLoading = false;
+      }
+    );
+  }
+
+  onClickRemoveFromReadingList(event: MouseEvent): void {
+    event.stopPropagation();
+    this.readingListLoading = true;
+    this.readingListService.removeFromReadingList(this.book?.id ?? '').subscribe(
+      () => {
+        if (this.book) {
+          this.book.inReadingList = false;
+        }
+        this.readingListLoading = false;
       }
     );
   }

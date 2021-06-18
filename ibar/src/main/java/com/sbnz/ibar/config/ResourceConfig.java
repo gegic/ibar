@@ -7,6 +7,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Configuration
 @AllArgsConstructor
@@ -22,8 +24,5 @@ public class ResourceConfig implements WebMvcConfigurer {
                 .addResourceLocations(String.format("file:%s", filesConfig.getCoverPath()));
         registry.addResourceHandler("/pdf/**")
                 .addResourceLocations(String.format("file:%s", filesConfig.getPdfPath()));
-        registry.addResourceHandler("/audio/**")
-                .addResourceLocations(String.format("file:%s", filesConfig.getAudioPath()));
-
     }
 }

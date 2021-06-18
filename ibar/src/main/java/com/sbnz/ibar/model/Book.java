@@ -1,6 +1,5 @@
 package com.sbnz.ibar.model;
 
-import com.sbnz.ibar.model.enums.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,9 +40,6 @@ public class Book {
 	private UUID cover;
 
 	private UUID pdf;
-
-	@Column(nullable = false)
-	private BookType type;
 
 	// represents pages if an ebook, seconds if an audio book
 	private long quantity;

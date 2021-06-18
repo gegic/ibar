@@ -48,17 +48,6 @@
 
         </div>
       </div>
-      <div class="p-mt-5">
-        <h3 class="p-text-light p-mb-2">Choose the book type</h3>
-        <div class="p-text-center">
-          <p-selectButton [options]="bookTypeOptions"
-                          formControlName="bookType"
-                          optionLabel="label"
-                          optionValue="value"
-                          class="blue-select-button"
-          ></p-selectButton>
-        </div>
-      </div>
       <div class="p-grid p-mt-5 p-mx-0">
         <h3 class="p-text-light p-mb-2">Now we gotta see those book covers</h3>
 
@@ -107,9 +96,7 @@
         <div>
           <h3 class="p-text-light p-mb-4">Provide the content:</h3>
           <div class="p-grid p-mx-0 p-px-0">
-            <h4 class="p-text-light" *ngIf="!formGroup.get('bookType')?.value">Firstly choose a book type</h4>
             <p-fileUpload mode="basic"
-                          *ngIf="formGroup.get('bookType')?.value === 'E_BOOK' && !contentFile"
                           chooseLabel="Choose PDF"
                           uploadLabel="Upload"
                           [customUpload]="true"
@@ -119,22 +106,13 @@
                           (uploadHandler)="pdfChosen($event)"
                           [disabled]="contentFileLoading"
             ></p-fileUpload>
-            <p-fileUpload mode="basic"
-                          *ngIf="formGroup.get('bookType')?.value === 'AUDIO_BOOK' && !contentFile"
-                          chooseLabel="Choose audio"
-                          uploadLabel="Upload"
-                          [customUpload]="true"
-                          accept="audio/*"
-                          styleClass="blue-button"
-                          maxFileSize="1000000"
-                          (uploadHandler)="audioChosen($event)"
-                          [disabled]="contentFileLoading"
-            ></p-fileUpload>
             <button *ngIf="!!contentFile"
                     label="Change content"
                     icon="pi pi-check"
                     class="p-button p-button-success p-button-icon"
-                    pButton></button>
+                    (click)="changeContent()"
+                    pButton
+            ></button>
             <p-progressSpinner class="p-ml-2"
                                *ngIf="contentFileLoading"
                                [style]="{width: '35px', height: '35px'}"

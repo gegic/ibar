@@ -1,7 +1,6 @@
 package com.sbnz.ibar.drools;
 
 import com.sbnz.ibar.model.*;
-import com.sbnz.ibar.model.enums.BookType;
 import com.sbnz.ibar.rto.BookResponse;
 import com.sbnz.ibar.rto.BookResponseFilter;
 import org.junit.Before;
@@ -324,7 +323,6 @@ public class BookRecommendationTest {
                 1L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -338,7 +336,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -352,7 +349,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -366,7 +362,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors1
@@ -380,7 +375,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors2
@@ -450,7 +444,6 @@ public class BookRecommendationTest {
                 1L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -464,7 +457,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -478,7 +470,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -492,7 +483,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors1
@@ -506,7 +496,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors2
@@ -576,7 +565,6 @@ public class BookRecommendationTest {
                 1L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -590,7 +578,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -604,7 +591,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -618,7 +604,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors1
@@ -632,7 +617,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors2
@@ -704,7 +688,6 @@ public class BookRecommendationTest {
                 1,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -718,7 +701,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -732,7 +714,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -746,7 +727,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors1
@@ -760,7 +740,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors2
@@ -829,7 +808,6 @@ public class BookRecommendationTest {
                 1,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -843,7 +821,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -857,7 +834,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -871,7 +847,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors1
@@ -885,7 +860,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors2
@@ -943,7 +917,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -957,7 +930,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -971,7 +943,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category1,
                 authors1
@@ -985,7 +956,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors1
@@ -999,7 +969,6 @@ public class BookRecommendationTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category2,
                 authors2

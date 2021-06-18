@@ -24,9 +24,12 @@ declare UserCategoryRecommendation
 	activated: boolean
 end
 
-rule "Gain author info"
+declare MoviesRecommended
+    recommended: boolean
+end
 
-    agenda-group "recommendations"
+rule "Gain author info"
+    salience 90
 
     when
         $author: Author();
@@ -64,6 +67,7 @@ rule "Gain author info"
     then
 
         insert(new AuthorFact($author, $numRead, $numUnread, $numReadingList, $numReviews, $averageRating));
+        delete($author);
         System.out.println("AUTHOR INFO");
         System.out.printf(
                 "LOG -> AuthorFact ( authorId=%s, numRead=%d, numUnread=%d, " +
@@ -73,8 +77,7 @@ end
 
 
 rule "Gain category info"
-
-    agenda-group "recommendations"
+    salience 90
 
     when
         $category: Category();
@@ -108,6 +111,7 @@ rule "Gain category info"
     then
 
         insert(new CategoryFact($category, $numRead, $numUnread, $numReadingList, $numReviews, $averageRating));
+        delete($category);
         System.out.println("CATEGORY INFO");
         System.out.printf(
                 "LOG -> CategoryFact ( categoryId=%s, numRead=%d, numUnread=%d, " +
@@ -116,8 +120,7 @@ rule "Gain category info"
 end
 
 rule "Add points for authors' high rating (number of reviews is also important)"
-
-    agenda-group "recommendations"
+    salience 80
 
     when
         $book: Book($authors: authors);
@@ -141,8 +144,7 @@ rule "Add points for authors' high rating (number of reviews is also important)"
 end
 
 rule "Add points for authors' average rating (number of reviews is also important)"
-
-    agenda-group "recommendations"
+    salience 80
 
     when
         $book: Book($authors: authors);
@@ -166,8 +168,7 @@ rule "Add points for authors' average rating (number of reviews is also importan
 end
 
 rule "Deduct points for authors' poor rating (number of reviews is also important)"
-
-    agenda-group "recommendations"
+    salience 80
 
     when
         $book: Book($authors: authors);
@@ -190,8 +191,7 @@ rule "Deduct points for authors' poor rating (number of reviews is also importan
 end
 
 rule "Add points for read authors"
-
-    agenda-group "recommendations"
+    salience 80
 
     when
         $book: Book($authors: authors);
@@ -210,8 +210,7 @@ rule "Add points for read authors"
 end
 
 rule "Deduct points for unread authors"
-
-    agenda-group "recommendations"
+    salience 80
 
     when
         $book: Book($authors: authors);
@@ -229,8 +228,7 @@ rule "Deduct points for unread authors"
 end
 
 rule "Add points for author in reading list"
-    agenda-group "recommendations"
-
+    salience 80
     when
         $book: Book($authors: authors);
         $authorFacts: List() from collect(AuthorFact());
@@ -247,9 +245,8 @@ rule "Add points for author in reading list"
 end
 
 rule "Gather all points for a book"
-    agenda-group "recommendations"
-	salience -1
-	lock-on-active
+    salience 70
+    lock-on-active
 
     when
     	$book : Book();
@@ -260,13 +257,22 @@ rule "Gather all points for a book"
     then
 
     	insert(new BookResponse($book, $totalPoints));
+    	delete($book);
     	System.out.println("GATHER ALL POINTS");
     	System.out.printf("LOG -> BookResponse ( bookId=%s, points=%f )%n", $book.getId(), $totalPoints);
 end
 
+rule "Delete points when BookResponse inserted"
+	salience 60
+	when
+		$br: BookResponse($book: book);
+		$rp: RecommendationPoints(book.getId() == $book.getId());
+	then
+		delete($rp);
+end
+
 rule "Recommendation collection finished successfully"
-    agenda-group "recommendations"
-	salience -3
+    salience 50
 
     when
     	Number(intValue >= recommendationThreshold) from accumulate(
@@ -274,27 +280,27 @@ rule "Recommendation collection finished successfully"
         	count($br)
         );
     then
+        insert(new MoviesRecommended(true));
     	System.out.println("MOVIES RECOMMENDED");
 end
 
 rule "Recommendation collection finished unsuccessfully"
-    agenda-group "recommendations"
-	salience -3
-
+    salience 50
     when
-    	Number(intValue < 15) from accumulate(
+        BookResponse();
+    	Number(intValue < recommendationThreshold) from accumulate(
         	$br: BookResponse(points > 0),
         	count($br)
         );
-        not UserCategoryRecommendation();
+        not(UserCategoryRecommendation());
+        not(MoviesRecommended());
     then
     	System.out.println("USER CATEGORY RECOMMENDATION STARTING");
     	insert(new UserCategoryRecommendation(true));
 end
 
 rule "Reading list for readers of the same category"
-	agenda-group "recommendations"
-	no-loop
+	salience 40
 	lock-on-active
 
     when
@@ -302,16 +308,19 @@ rule "Reading list for readers of the same category"
         $response: BookResponse($points: points, $book: book);
         $readingList: List() from collect(ReadingListItem(book.getId().equals($book.getId())));
         Number(intValue > 0, $numReadingList: intValue) from accumulate (
-        	$similarReadingList: ReadingListItem(reader.getCategory().equals(loggedReader.getCategory()))
+        	$similarReadingList: ReadingListItem(reader.getUserCategory().equals(loggedReader.getUserCategory()))
         	from $readingList,
-        	count($similarReadingList));
+        	count($similarReadingList)
+        );
+        not(MoviesRecommended());
     then
         System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numReadingList, $book.getId());
         modify($response){setPoints($points + $numReadingList)}
 end
 
 rule "Read books for readers of the same category"
-	agenda-group "recommendations"
+	salience 40
+
 	lock-on-active
 
     when
@@ -319,16 +328,18 @@ rule "Read books for readers of the same category"
         $response: BookResponse($points: points, $book: book);
         $readingProgressList: List() from collect(ReadingProgress(book.getId().equals($book.getId())));
         Number(intValue > 0, $numRead: intValue) from accumulate (
-        	$similarReadingProgress: ReadingProgress(getPercentage() > 80, reader.getCategory().equals(loggedReader.getCategory())) from $readingProgressList,
+        	$similarReadingProgress: ReadingProgress(getPercentage() > 80, reader.getUserCategory().equals(loggedReader.getUserCategory())) from $readingProgressList,
         	count($similarReadingProgress)
         );
+        not(MoviesRecommended());
     then
         System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numRead, $book.getId());
         modify($response){setPoints($points + $numRead)}
 end
 
 rule "Highly rated books for readers of the same category"
-	agenda-group "recommendations"
+	salience 40
+
 	lock-on-active
 
     when
@@ -336,10 +347,130 @@ rule "Highly rated books for readers of the same category"
         $response: BookResponse($points: points, $book: book);
         $reviewList: List() from collect(Review(book.getId().equals($book.getId())));
         Number(doubleValue > 4.5, $numHighlyReviewed: doubleValue) from accumulate (
-        	$similarReviews: Review(reader.getCategory().equals(loggedReader.getCategory())) from $reviewList,
+        	$similarReviews: Review(reader.getUserCategory().equals(loggedReader.getUserCategory())) from $reviewList,
         	average($similarReviews)
         );
+        not(MoviesRecommended());
     then
         System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numHighlyReviewed, $book.getId());
         modify($response){setPoints($points + $numHighlyReviewed)}
+end
+
+rule "Movies recommended - sort responses"
+    salience $points
+
+    when
+        MoviesRecommended();
+        $resultList: List($sz: size());
+        $response: BookResponse($points: points);
+        eval($sz < recommendationThreshold);
+    then
+        System.out.println("List has " + $sz + " elements");
+        System.out.println("Rec threshold is " + recommendationThreshold);
+        $resultList.add($response);
+        delete($response);
+end
+
+rule "Clear author's facts"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $af: AuthorFact();
+    then
+        System.out.println("DELETE AUTHOR FACT");
+        delete($af);
+end
+
+rule "Clear category facts"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $cf: CategoryFact();
+    then
+        System.out.println("DELETE CATEGORY FACT");
+        delete($cf);
+end
+
+rule "Clear book responses"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $br: BookResponse();
+    then
+        System.out.println("DELETE BOOK RESPONSE");
+        delete($br);
+end
+
+rule "Clear user category recommendation fact"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $ucr: UserCategoryRecommendation();
+    then
+        System.out.println("DELETE USER CATEGORY RECOMMENDATION");
+        delete($ucr);
+end
+
+rule "Clear reviews"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $r: Review();
+    then
+        System.out.println("DELETE REVIEW");
+        delete($r);
+end
+
+rule "Clear reading progress"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $rp: ReadingProgress();
+    then
+        System.out.println("DELETE READING PROGRESS");
+        delete($rp);
+end
+
+rule "Clear reading list"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $rli: ReadingListItem();
+    then
+        System.out.println("DELETE READING LIST ITEM");
+        delete($rli);
+end
+
+
+rule "Clear result list"
+    salience -10
+
+    when
+        MoviesRecommended();
+        $rl: List();
+    then
+        System.out.println("DELETE RESULT LIST");
+        delete($rl);
+end
+
+rule "Clear movies recommended fact"
+    salience -10
+
+    when
+        $mr: MoviesRecommended();
+        not(AuthorFact());
+        not(CategoryFact());
+        not(BookResponse());
+        not(UserCategoryRecommendation());
+        not(List());
+    then
+        System.out.println("DELETING MOVIESRECOMMENDED");
+        delete($mr);
 end

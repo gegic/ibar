@@ -13,7 +13,6 @@ export class Book {
   inReadingList?: boolean;
   numRead?: number;
   pdf?: string;
-  type?: string;
   quantity?: number;
   authorIds?: string[];
 }

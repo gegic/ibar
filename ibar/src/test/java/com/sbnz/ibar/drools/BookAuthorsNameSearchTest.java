@@ -3,7 +3,6 @@ package com.sbnz.ibar.drools;
 import com.sbnz.ibar.model.Author;
 import com.sbnz.ibar.model.Book;
 import com.sbnz.ibar.model.Category;
-import com.sbnz.ibar.model.enums.BookType;
 import org.drools.template.DataProvider;
 import org.drools.template.DataProviderCompiler;
 import org.drools.template.objects.ArrayDataProvider;
@@ -171,7 +170,6 @@ public class BookAuthorsNameSearchTest {
                 0L,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category,
                 authors1
@@ -185,7 +183,6 @@ public class BookAuthorsNameSearchTest {
                 0L,
                 null,
                 null,
-                BookType.AUDIO_BOOK,
                 300,
                 category,
                 authors2

@@ -11,6 +11,7 @@ import { NavbarService } from '../../core/services/navbar.service';
 import { BookService } from '../../core/services/book.service';
 import {Rank} from '../../core/model/rank';
 import {RankService} from '../../core/services/rank.service';
+import {READER} from '../../core/utils/consts';
 
 @Component({
   selector: 'app-navbar',
@@ -115,6 +116,10 @@ export class NavbarComponent implements OnInit {
 
   get userRankName(): string {
     return this.rankService.userRank.getValue()?.name ?? 'NAR';
+  }
+
+  get hasRank(): boolean {
+    return !!this.tokenService.getToken()?.authorities?.some(au => au.name === READER);
   }
 
 }

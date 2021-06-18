@@ -77,15 +77,8 @@ public class BookController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(path="/add-pdf", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ContentFileDto> setPdf(@RequestParam("pdf") MultipartFile pdfFile){
+    ResponseEntity<ContentFileDto> setPdf(@RequestParam("pdf") MultipartFile pdfFile) {
         ContentFileDto saved = this.bookService.setPdf(pdfFile);
-        return ResponseEntity.created(URI.create(saved.getPath().toString())).body(saved);
-    }
-
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(path="/add-audio", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    ResponseEntity<ContentFileDto> setAudio(@RequestParam("audio") MultipartFile audioFile){
-        ContentFileDto saved = this.bookService.setAudio(audioFile);
         return ResponseEntity.created(URI.create(saved.getPath().toString())).body(saved);
     }
 

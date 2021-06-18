@@ -36,12 +36,10 @@ export class BookCreateComponent implements OnInit {
 
   mode = 'add';
 
-  bookTypeOptions: any[] = [{label: 'eBook', value: 'E_BOOK'}, {label: 'Audio book', value: 'AUDIO_BOOK'}];
   formGroup: FormGroup = new FormGroup(
     {
       name: new FormControl(undefined, [Validators.required, Validators.pattern(/[\p{L} \d]+/u)]),
       description: new FormControl(undefined, Validators.maxLength(1000)),
-      bookType: new FormControl(undefined, Validators.required),
       selectedCategory: new FormControl(undefined, Validators.required),
       authors: new FormControl(undefined, Validators.required)
     }
@@ -113,7 +111,6 @@ export class BookCreateComponent implements OnInit {
     }
 
     this.book.name = this.formGroup.get('name')?.value;
-    this.book.type = this.formGroup.get('bookType')?.value;
     this.book.categoryId = (this.formGroup.get('selectedCategory')?.value as Category).id;
     this.book.description = this.formGroup.get('description')?.value;
     this.book.authorIds = (this.formGroup.get('authors')?.value as Author[]).filter(a => !!a && !!a.id).map(a => a?.id ?? '') ?? [];
@@ -183,7 +180,6 @@ export class BookCreateComponent implements OnInit {
       this.formGroup.patchValue({
         name: book.name,
         description: book.description,
-        bookType: book.type,
         selectedCategory: {id: book.categoryId, name: book.categoryName},
         authors: bookAuthors
       });
@@ -213,10 +209,8 @@ export class BookCreateComponent implements OnInit {
     this.contentChosen(file, observable);
   }
 
-  audioChosen(event: any): void {
-    const file = event.files[0];
-    const observable = this.bookService.addAudio(file);
-    this.contentChosen(file, observable);
+  changeContent(): void {
+    this.contentFile = undefined;
   }
 
   contentChosen(file: File, observable: Observable<ContentFile>): void {

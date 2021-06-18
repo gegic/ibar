@@ -8,6 +8,6 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class ContentFileDto {
-    private UUID path;
+    private String path;
     private long quantity;
 }

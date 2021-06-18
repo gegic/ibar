@@ -1,6 +1,5 @@
 package com.sbnz.ibar.dto;
 
-import com.sbnz.ibar.model.enums.BookType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,8 +26,6 @@ public class BookDto {
 	@NotNull(message = "Category cannot be null.")
 	private UUID categoryId;
 
-	private BookType type;
-
 	private Set<UUID> authorIds;
 	private Set<String> authorNames;
 	private String categoryName;
@@ -38,5 +35,4 @@ public class BookDto {
 	private boolean inReadingList;
 	private Long numRead;
 	private UUID pdf;
-
 }

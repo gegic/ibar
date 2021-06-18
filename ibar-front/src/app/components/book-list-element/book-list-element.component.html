@@ -18,12 +18,23 @@
       </div>
     </div>
     <div class="p-col-12 p-sm-4 p-lg-3 p-text-right p-as-end">
-      <button class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
-              icon="pi pi-copy"
-              label="READ"
-              (click)="onClickRead()"
+      <button *ngIf="!!book && !book.inReadingList; else removeFromReadingList"
+              class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
+              icon="pi pi-tag"
+              label="ADD TO READING LIST"
+              (click)="onClickAddToReadingList($event)"
+              [disabled]="readingListLoading"
               pButton
       ></button>
+      <ng-template #removeFromReadingList>
+        <button class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
+                icon="pi pi-tag"
+                label="REMOVE FROM READING LIST"
+                (click)="onClickRemoveFromReadingList($event)"
+                [disabled]="readingListLoading"
+                pButton
+        ></button>
+      </ng-template>
       <div class="p-d-block p-mb-3">
         <div *ngIf="canModify; else subscribeButton">
           <button class="p-button p-button-rounded p-button-icon p-button-danger p-ml-3"
@@ -41,8 +52,8 @@
         <ng-template #subscribeButton>
           <button class="p-button blue-button subscribe-btn"
                   [disabled]="!book.pdf"
-                  label="Subscribe"
-                  icon="pi pi-bell"
+                  label="Read"
+                  icon="pi pi-copy"
                   (click)="onClickRead()"
                   pButton
           ></button>

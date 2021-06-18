@@ -7,6 +7,7 @@ import com.sbnz.ibar.mapper.BookMapper;
 import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.mapper.ReadingProgressMapper;
 import com.sbnz.ibar.model.*;
+import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.repositories.*;
 import com.sbnz.ibar.rto.BookResponse;
 import com.sbnz.ibar.rto.BookResponseFilter;
@@ -28,10 +29,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.sound.sampled.*;
 import javax.transaction.Transactional;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -132,36 +130,25 @@ public class BookService {
 
         Reader r = (Reader) this.userRepository.findById(userId).orElseThrow(IllegalArgumentException::new);
 
+        KieSession booksSession = kieService.getBooksSession();
+        booksSession.setGlobal("loggedReader", r);
 
-        KieSession kieSession = this.kieService.getSession(Utils.BOOKS_SESSION, Utils.RECOMMENDATIONS_AGENDA);
+        List<BookResponse> responses = new ArrayList<>();
+        booksSession.insert(responses);
 
-        kieSession.setGlobal("highRatingPoints", 10L);
-        kieSession.setGlobal("averageRatingPoints", 3L);
-        kieSession.setGlobal("lowRatingPoints", 2L);
-        kieSession.setGlobal("readPoints", 2L);
-        kieSession.setGlobal("readingListPoints", 15L);
-        kieSession.setGlobal("recommendationThreshold", this.RECOMMENDATION_THRESHOLD);
-        kieSession.setGlobal("loggedReader", r);
-
-        this.authorRepository.getReadAuthors(userId).forEach(kieSession::insert);
-        this.categoryRepository.getReadCategories(userId).forEach(kieSession::insert);
+        this.authorRepository.getReadAuthors(userId).forEach(booksSession::insert);
+        this.categoryRepository.getReadCategories(userId).forEach(booksSession::insert);
         this.reviewRepository.getReviewsByReaderIdAndReaderCategory(userId, r.isMale())
-                .forEach(kieSession::insert);
+                .forEach(booksSession::insert);
         this.readingProgressRepository.getReadingProgressByReaderIdAndReaderCategory(userId, r.isMale())
-                .forEach(kieSession::insert);
+                .forEach(booksSession::insert);
         this.readingListItemRepository.getReadingListByReaderIdAndReaderCategory(userId, r.isMale())
-                .forEach(kieSession::insert);
-        this.bookRepository.getUnread(userId).forEach(kieSession::insert);
+                .forEach(booksSession::insert);
+        this.bookRepository.getUnread(userId).forEach(booksSession::insert);
 
-        kieSession.fireAllRules();
+        booksSession.fireAllRules();
 
-        Collection<?> bookResponses = kieSession.getObjects(bookResponseFilter);
-
-        kieSession.dispose();
-
-        return bookResponses.stream().map(qm -> (BookResponse) qm)
-                .sorted(Comparator.comparingDouble(BookResponse::getPoints)).limit(this.RECOMMENDATION_THRESHOLD)
-                .map(br -> this.toBookDto(br.getBook())).collect(Collectors.toList());
+        return responses.stream().map(br -> this.toBookDto(br.getBook())).limit(10).collect(Collectors.toList());
 
     }
 
@@ -205,10 +192,10 @@ public class BookService {
             throw new NullPointerException();
         }
 
-        UUID id = UUID.randomUUID();
+        String id = UUID.randomUUID() + ".pdf";
         long numPages = -1;
         try (OutputStream os = Files
-                .newOutputStream(Path.of(Paths.get(filesConfig.getPdfPath(), id.toString()) + ".pdf"))) {
+                .newOutputStream(Paths.get(filesConfig.getPdfPath(), id))) {
             PDDocument doc = PDDocument.load(pdfFile.getBytes());
             numPages = doc.getNumberOfPages();
             doc.close();
@@ -218,32 +205,6 @@ public class BookService {
         }
         return new ContentFileDto(id, numPages);
     }
-
-    public ContentFileDto setAudio(MultipartFile audioFile) {
-
-        if (audioFile == null) {
-            throw new NullPointerException();
-        }
-
-        UUID id = UUID.randomUUID();
-
-        long seconds = -1;
-        try {
-            OutputStream outputStream = Files.newOutputStream(Paths.get(filesConfig.getAudioPath(), id.toString()));
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioFile.getInputStream());
-            AudioFormat format = audioInputStream.getFormat();
-            long audioFileLength = audioFile.getBytes().length;
-            int frameSize = format.getFrameSize();
-            float frameRate = format.getFrameRate();
-            seconds = (long) (audioFileLength / (frameSize * frameRate));
-            AudioSystem.write(audioInputStream, AudioFileFormat.Type.WAVE, outputStream);
-        } catch (UnsupportedAudioFileException | IOException e) {
-            e.printStackTrace();
-        }
-
-        return new ContentFileDto(id, seconds);
-    }
-
 
 
     public BookDto create(BookDto dto) throws EntityDoesNotExistException {

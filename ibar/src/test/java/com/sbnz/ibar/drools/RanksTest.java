@@ -1,23 +1,13 @@
 package com.sbnz.ibar.drools;
 
 import com.sbnz.ibar.model.*;
-import com.sbnz.ibar.model.enums.BookType;
-import com.sbnz.ibar.repositories.RankRepository;
 import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.rto.RankCheckFact;
-import com.sbnz.ibar.rto.events.OnReview;
 import com.sbnz.ibar.rto.events.OnSubscribed;
-import org.drools.core.event.DebugAgendaEventListener;
-import org.drools.core.event.DebugProcessEventListener;
-import org.drools.core.event.DefaultRuleRuntimeEventListener;
-import org.drools.core.time.impl.JDKTimerService;
-import org.drools.core.time.impl.JDKTimerServiceTest;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.time.SessionClock;
-import org.kie.api.time.SessionPseudoClock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,7 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -165,7 +154,6 @@ public class RanksTest {
                 1,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category,
                 authors

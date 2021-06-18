@@ -27,8 +27,8 @@ rule "Add points for purchasing a plan for the first time"
         not(Reader(id.equals($user.getId())));
     then
         System.out.println("LOG -> FIRST PURCHASE NOT IN SYSTEM");
-        System.out.println("User acquired points " + $plan.getPrice() / 100);
-        $user.setPoints($user.getPoints() + $plan.getPrice() / 100);
+        System.out.println("User acquired points " + $plan.getPrice() / 20);
+        $user.setPoints($user.getPoints() + $plan.getPrice() / 20);
         insert($user);
 
 end
@@ -47,7 +47,7 @@ rule "Add points for purchasing a new plan"
         System.out.println("LOG -> NEW PURCHASE NOT IN SYSTEM");
         Double points = ($plan.getDayDuration() + durationThreshold - Math.abs(ChronoUnit.DAYS
                                   .between(Instant.ofEpochMilli($se1.getTimestamp()), Instant.ofEpochMilli($se2.getTimestamp()))))
-                       * $plan.getPrice() / 100;
+                       * $plan.getPrice() / 25;
         System.out.println("User acquired points " + points);
         $user.setPoints($user.getPoints() + points);
         insert($user);

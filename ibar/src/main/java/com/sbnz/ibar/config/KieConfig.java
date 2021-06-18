@@ -44,12 +44,33 @@ public class KieConfig {
         return readingSession;
     }
 
+    @Bean(name = "booksSession")
+    public KieSession booksSession() {
+        KieSession booksSession = kieContainer().newKieSession(BOOKS_SESSION);
+        booksSession.setGlobal("highRatingPoints", 10L);
+        booksSession.setGlobal("averageRatingPoints", 3L);
+        booksSession.setGlobal("lowRatingPoints", 2L);
+        booksSession.setGlobal("readPoints", 2L);
+        booksSession.setGlobal("readingListPoints", 15L);
+        booksSession.setGlobal("recommendationThreshold", 10L);
+        return booksSession;
+    }
+
     @Bean(name = "ranksSession")
     public KieSession ranksSession() {
         KieSession ranksSession = kieContainer().newKieSession(RANKS_SESSION);
         ranksSession.setGlobal("userRepository", userRepository);
         ranksSession.setGlobal("durationThreshold", 10L);
         return ranksSession;
+    }
+
+    @Bean(name = "classifySession")
+    public KieSession classifySession() {
+        KieSession classifySession = kieContainer().newKieSession(CLASSIFY_SESSION);
+        classifySession.setGlobal("userRepository", userRepository);
+        classifySession.setGlobal("minAge", 13L);
+        classifySession.setGlobal("maxAge", 120L);
+        return classifySession;
     }
 
 }

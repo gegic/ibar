@@ -13,6 +13,7 @@ public class Utils {
     public static final String LOGIN_SESSION = "login-session";
     public static final String READING_SESSION = "reading-session";
     public static final String RANKS_SESSION = "ranks-session";
+    public static final String CLASSIFY_SESSION = "classify-session";
 
     public static String getCategory(Reader r) {
         return String.format("%s", r.isMale() ? "male" : "female");

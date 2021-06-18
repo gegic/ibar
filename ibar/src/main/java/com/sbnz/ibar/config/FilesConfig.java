@@ -11,5 +11,4 @@ public class FilesConfig {
     private String photosPath;
     private String coverPath;
     private String pdfPath;
-    private String audioPath;
 }

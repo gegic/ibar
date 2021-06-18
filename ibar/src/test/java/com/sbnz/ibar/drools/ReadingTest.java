@@ -1,10 +1,8 @@
 package com.sbnz.ibar.drools;
 
 import com.sbnz.ibar.model.*;
-import com.sbnz.ibar.model.enums.BookType;
 import com.sbnz.ibar.rto.events.OnReview;
 import com.sbnz.ibar.rto.events.OnSubscribed;
-import org.drools.core.event.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
@@ -101,7 +99,6 @@ public class ReadingTest {
                 1,
                 null,
                 null,
-                BookType.E_BOOK,
                 300,
                 category,
                 authors

@@ -9,6 +9,8 @@ import {Title} from '@angular/platform-browser';
 import {ReadingProgress} from '../../core/model/reading-progress';
 import {ConfirmationService} from 'primeng/api';
 import {BookService} from '../../core/services/book.service';
+import {ReadingListService} from '../../core/services/reading-list.service';
+import {ReadingListItem} from '../../core/model/reading-list-item';
 
 @Component({
   selector: 'app-book-details',
@@ -31,6 +33,7 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   ];
 
   isLoading = true;
+  readingListLoading = false;
 
   constructor(private tokenService: TokenService,
               private activatedRoute: ActivatedRoute,
@@ -38,7 +41,8 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
               private titleService: Title,
               private router: Router,
               private confirmationService: ConfirmationService,
-              private bookService: BookService) { }
+              private bookService: BookService,
+              private readingListService: ReadingListService) { }
 
   ngOnInit(): void {
     this.activatedRoute.params.pipe(distinctUntilChanged()).subscribe(
@@ -98,9 +102,27 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
   }
 
   onClickAddToReadingList(): void {
+    this.readingListLoading = true;
+    this.readingListService.addToReadingList(this.book?.id ?? '').subscribe(
+      () => {
+        if (this.book) {
+          this.book.inReadingList = true;
+        }
+        this.readingListLoading = false;
+      }
+    );
   }
 
   onClickRemoveFromReadingList(): void {
+    this.readingListLoading = true;
+    this.readingListService.removeFromReadingList(this.book?.id ?? '').subscribe(
+      () => {
+        if (this.book) {
+          this.book.inReadingList = false;
+        }
+        this.readingListLoading = false;
+      }
+    );
   }
 
   onClickRead(): void {

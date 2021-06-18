@@ -43,6 +43,10 @@ public class KieService {
     @Qualifier("classifySession")
     private final KieSession classifySession;
 
+    @Getter
+    @Qualifier("booksSession")
+    private final KieSession booksSession;
+
     public KieSession getSession() {
         return this.kieContainer.newKieSession();
     }
