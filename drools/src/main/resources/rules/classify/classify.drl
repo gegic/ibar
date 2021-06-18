@@ -1,0 +1,24 @@
+package rules.classify;
+
+import java.lang.String;
+import com.sbnz.ibar.rto.*;
+import com.sbnz.ibar.model.*;
+
+global java.lang.Long minAge;
+global java.lang.Long maxAge;
+
+rule "Classify male reader"
+    when
+        $reader: Reader($age: age, male);
+        $ac: AgeClass(minAge <= $age, maxAge > $age);
+    then
+        $reader.setUserCategory($ac.getName() + " male");
+end
+
+rule "Classify female reader"
+    when
+        $reader: Reader($age: age, !male);
+        $ac: AgeClass(minAge <= $age, maxAge > $age);
+    then
+        $reader.setUserCategory($ac.getName() + " female");
+end

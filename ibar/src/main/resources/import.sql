@@ -75,15 +75,48 @@
 -- 10f69009-494b-4247-b590-636ec0740f1e
 -- 55f589d4-86e4-4c6d-b294-dc88e47c0bfb
 -- 60edc452-e367-41e2-8d14-1c5e32d42e91
+-- RANKS
+-- 98c5e7cf-874d-44f8-85c6-7007b315d80c
+-- 00f335dd-42cb-4f0c-89d9-90a2d571e20e
+-- ac550e28-3284-4ed0-9961-7349096bcde5
+-- c42fd7d6-eafe-422a-aced-1c321d192d0c
+-- 620f9433-03c0-4cd7-8634-b4e2ffffde6a
+-- 70028ece-23f9-44bf-906f-c06a2e6007a6
+-- 73daf9e2-6dda-46b1-9ddd-88ca61d06417
+-- 6101a86c-ea12-45f4-bb53-96b81cb17930
+-- 71f6ac75-ccb8-4f94-9e14-392bc310a34b
+-- 3a824c8e-e31e-4872-bc29-1303edfba6e4
+-- Age Clasess
+-- f0a1ec83-bc32-427d-9d2a-543bb54bb00c
+-- 8dd24eea-5d49-4fe6-85e7-15303577ba2a
+-- 081bea92-e166-4ca7-a1d6-b3cd9f273a03
+-- c2597175-7c56-4bae-a3dc-a2f3d3938d74
+-- c1e9800b-b3a6-4816-a8b5-79214523ae1e
 
 /*------------------------ROLE-----------------------------------------*/
 INSERT INTO "authority" (name) VALUES ('ROLE_READER');
 INSERT INTO "authority" (name) VALUES ('ROLE_ADMIN');
 
+/*------------------------age classes-----------------------------------------*/
+insert into age_class values ('c1e9800b-b3a6-4816-a8b5-79214523ae1e', 120,   65, 'Elderly');
+insert into age_class values ('c2597175-7c56-4bae-a3dc-a2f3d3938d74', 65,    50, 'Aged');
+insert into age_class values ('081bea92-e166-4ca7-a1d6-b3cd9f273a03', 55,    30, 'Middle aged');
+insert into age_class values ('8dd24eea-5d49-4fe6-85e7-15303577ba2a', 30,    19, 'Young adult');
+insert into age_class values ('f0a1ec83-bc32-427d-9d2a-543bb54bb00c', 19,    13, 'Teen');
+/*------------------------RANK-----------------------------------------*/
+insert into rank values ('71f6ac75-ccb8-4f94-9e14-392bc310a34b', 'Haris',       200,    null);
+insert into rank values ('6101a86c-ea12-45f4-bb53-96b81cb17930', 'Doctor',      90,     '71f6ac75-ccb8-4f94-9e14-392bc310a34b');
+insert into rank values ('73daf9e2-6dda-46b1-9ddd-88ca61d06417', 'Master',      60,     '6101a86c-ea12-45f4-bb53-96b81cb17930');
+insert into rank values ('70028ece-23f9-44bf-906f-c06a2e6007a6', 'Bachelor',    50,     '73daf9e2-6dda-46b1-9ddd-88ca61d06417');
+insert into rank values ('620f9433-03c0-4cd7-8634-b4e2ffffde6a', 'Senior',      45,     '70028ece-23f9-44bf-906f-c06a2e6007a6');
+insert into rank values ('c42fd7d6-eafe-422a-aced-1c321d192d0c', 'Junior',      35,     '620f9433-03c0-4cd7-8634-b4e2ffffde6a');
+insert into rank values ('ac550e28-3284-4ed0-9961-7349096bcde5', 'Sophomore',   25,     'c42fd7d6-eafe-422a-aced-1c321d192d0c');
+insert into rank values ('00f335dd-42cb-4f0c-89d9-90a2d571e20e', 'Freshman',    15,     'ac550e28-3284-4ed0-9961-7349096bcde5');
+insert into rank values ('98c5e7cf-874d-44f8-85c6-7007b315d80c', 'Newbie',       0,     '00f335dd-42cb-4f0c-89d9-90a2d571e20e');
 /*------------------------reader-----------------------------------------*/
 
 insert into "user" values ('b39f0709-574b-4e62-82b4-6dd98eca93a6',	'harry.gegic@gmail.com',	true,	'Haris',	'Gegic',	null,	'$2a$10$TfA5Evj/8pQr0GIrFmWeRe.w0jWZD.1zoFl5MkpyzPZmvbPYWJds.');
-insert into reader values (20,	true,	'b39f0709-574b-4e62-82b4-6dd98eca93a6');
+insert into reader values (20,	true, 0,	'b39f0709-574b-4e62-82b4-6dd98eca93a6', '98c5e7cf-874d-44f8-85c6-7007b315d80c');
 insert into user_authority values ('b39f0709-574b-4e62-82b4-6dd98eca93a6',	1);
 
 /*------------------------admin-----------------------------------------*/
@@ -99,16 +132,20 @@ insert into category values ('0daa21f6-dd7f-48ee-9d39-2c4ba6b2bdec', 'Druga kate
 
 /*------------------------plan-----------------------------------------*/
 
-insert into plan values ('a8f0fd4e-982b-42db-bf72-f94ee26c2d5d', 3, 'Our plan for beginners', 'Starter', 2.99);
+
+insert into plan values ('a8f0fd4e-982b-42db-bf72-f94ee26c2d5d', 3, 'Our plan for beginners', 'Starter', 2.99, '98c5e7cf-874d-44f8-85c6-7007b315d80c');
 insert into plan_categories values ('a8f0fd4e-982b-42db-bf72-f94ee26c2d5d', '22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
 
-
-insert into plan values ('981b8f72-60b9-4c31-a880-1abab63c4d15', 10, 'Our second plan', 'Silver', 4.99);
+insert into plan values ('981b8f72-60b9-4c31-a880-1abab63c4d15', 10, 'Our second plan', 'Silver', 4.99, '98c5e7cf-874d-44f8-85c6-7007b315d80c');
 insert into plan_categories values ('981b8f72-60b9-4c31-a880-1abab63c4d15', '22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
 
-insert into plan values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', 30, 'Our recommended plan', 'Gold', 9.99);
+insert into plan values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', 30, 'Our recommended plan', 'Gold', 9.99, '98c5e7cf-874d-44f8-85c6-7007b315d80c');
 insert into plan_categories values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', '22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
 insert into plan_categories values ('9cb3e2d9-9799-4777-9d7c-26ab5b5c51be', '0daa21f6-dd7f-48ee-9d39-2c4ba6b2bdec');
+
+insert into plan values ('4f0bcdbd-ba02-479c-bb55-daff7a6b5dd2', 60, 'Our best plan only for best users', 'Gold+', 10.99, '620f9433-03c0-4cd7-8634-b4e2ffffde6a');
+insert into plan_categories values ('4f0bcdbd-ba02-479c-bb55-daff7a6b5dd2', '22e4c2d7-cbdc-4513-98cd-917d24c3d32d');
+insert into plan_categories values ('4f0bcdbd-ba02-479c-bb55-daff7a6b5dd2', '0daa21f6-dd7f-48ee-9d39-2c4ba6b2bdec');
 
 /*-----------------------author--------------------------------------------*/
 INSERT INTO author VALUES('68d0f630-808c-42e3-a97c-75150203ff6c',	0,	'1900-08-07 00:00:00',	'1969-08-07 00:00:00',	'Some description',	'/photos/kristi.png',	'Agata Kristi');

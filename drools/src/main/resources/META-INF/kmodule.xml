@@ -4,6 +4,9 @@
 	<kbase name="books" packages="rules.books">
 		<ksession name="books-session"/>
 	</kbase>
+	<kbase name="classify" packages="rules.classify">
+		<ksession name="classify-session"/>
+	</kbase>
 	<kbase name="login" eventProcessingMode="stream" packages="rules.login">
 		<ksession name="login-session"/>
 	</kbase>

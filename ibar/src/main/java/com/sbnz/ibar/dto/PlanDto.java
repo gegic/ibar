@@ -1,5 +1,6 @@
 package com.sbnz.ibar.dto;
 
+import com.sbnz.ibar.model.Rank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,8 @@ public class PlanDto {
     private double price;
     private Set<String> categoryNames;
     private Set<UUID> categoryIds;
+    private UUID rankId;
+    private String rankName;
     private String description;
     private Long dayDuration;
 }

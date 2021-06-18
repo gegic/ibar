@@ -35,9 +35,7 @@ public class Reader extends User {
     @ManyToOne(optional = false)
     private Rank rank;
 
-    public String getCategory() {
-        return Utils.getCategory(this);
-    }
+    private String userCategory;
 
     public Reader(UUID id, String email, String password, String firstName, String lastName, long lastPasswordResetDate, ArrayList<Authority> authorities, boolean enabled) {
         super(id, email, password, firstName, lastName, lastPasswordResetDate, authorities, enabled);

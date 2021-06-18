@@ -10,6 +10,9 @@
         {{categoryName}}
       </ng-container>
     </li>
+    <li><i class="pi pi-check-circle"> </i>
+      Only for users ranked <p-tag class="p-mr-1" [value]="plan.rankName"></p-tag>
+    </li>
     <li><i class="pi pi-info-circle"> </i>{{plan.description}}</li>
   </ul>
   <div class="plan-select"><a (click)="confirmPlan()">Select Plan</a ></div>

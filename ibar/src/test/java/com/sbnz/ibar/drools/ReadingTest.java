@@ -71,6 +71,7 @@ public class ReadingTest {
                 "Plan",
                 100,
                 Set.of(c),
+                null,
                 "opis",
                 10L
         );

@@ -5,13 +5,12 @@ import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.mapper.PlanMapper;
 import com.sbnz.ibar.model.*;
-import com.sbnz.ibar.repositories.CategoryRepository;
-import com.sbnz.ibar.repositories.PlanRepository;
-import com.sbnz.ibar.repositories.SubscriptionRepository;
-import com.sbnz.ibar.repositories.UserRepository;
+import com.sbnz.ibar.repositories.*;
+import com.sbnz.ibar.rto.RankCheckFact;
 import com.sbnz.ibar.rto.events.OnSubscribed;
 import lombok.AllArgsConstructor;
 import org.kie.api.runtime.KieSession;
+import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +27,7 @@ public class PlanService {
 	private final CategoryRepository categoryRepository;
 	private final SubscriptionRepository subscriptionRepository;
 	private final UserRepository userRepository;
+	private final RankRepository rankRepository;
 	private final KieService kieService;
 
 	public List<PlanDto> getAll() {
@@ -52,6 +52,16 @@ public class PlanService {
 				.orElseThrow(() -> new EntityDoesNotExistException(Reader.class.getName(), u.getId()));
 
 		Plan p = optionalPlan.get();
+
+		KieSession ranksSession = kieService.getRanksSession();
+		RankCheckFact rcf = new RankCheckFact(r, p.getRank(), false);
+		ranksSession.insert(rcf);
+		ranksSession.fireAllRules();
+
+		if (!rcf.isHigher()) {
+			throw new EntityDoesNotExistException(Rank.class.getName(), "rank too low");
+		}
+
 		Subscription s = new Subscription();
 		s.setBuyer(r);
 		s.setPurchasedPlan(p);
@@ -63,7 +73,7 @@ public class PlanService {
 		KieSession readingSession = kieService.getReadingSession();
 		readingSession.insert(event);
 		readingSession.fireAllRules();
-		KieSession ranksSession = kieService.getRanksSession();
+
 		ranksSession.insert(event);
 		ranksSession.fireAllRules();
 		subscriptionRepository.save(s);
@@ -84,6 +94,18 @@ public class PlanService {
 
 		Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
 		entity.setCategories(categories);
+
+		if (dto.getRankId() == null) {
+			throw new EntityDoesNotExistException(Rank.class.getName(), null);
+		}
+		Optional<Rank> optionalRank = rankRepository.findById(dto.getRankId());
+
+		if (optionalRank.isEmpty()) {
+			throw new EntityDoesNotExistException(Rank.class.getName(), dto.getRankId());
+		}
+
+		Rank rank = optionalRank.get();
+		entity.setRank(rank);
 
 		entity = planRepository.save(entity);
 

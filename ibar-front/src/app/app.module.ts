@@ -67,6 +67,8 @@ import { RankListComponent } from './components/rank-list/rank-list.component';
 import {ToolbarModule} from 'primeng/toolbar';
 import {TableModule} from 'primeng/table';
 import {InputNumberModule} from 'primeng/inputnumber';
+import {ChipModule} from 'primeng/chip';
+import {TagModule} from 'primeng/tag';
 
 @NgModule({
   declarations: [
@@ -136,7 +138,9 @@ import {InputNumberModule} from 'primeng/inputnumber';
     DropdownModule,
     ToolbarModule,
     TableModule,
-    InputNumberModule
+    InputNumberModule,
+    ChipModule,
+    TagModule
   ],
   providers: [
     {

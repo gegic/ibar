@@ -33,25 +33,30 @@ rule "Gain author info"
         $reviews : List() from collect(Review(reader.getId().equals(loggedReader.getId())));
         $readingList: List() from collect(ReadingListItem(reader.getId().equals(loggedReader.getId())));
         $readingProgressList: List() from collect(ReadingProgress(reader.getId().equals(loggedReader.getId())))
+        // read
         Number($numRead: longValue) from accumulate (
             $readingProgress: ReadingProgress(getPercentage() > 80, $author memberOf book.getAuthors())
             from $readingProgressList,
             count($readingProgress)
         );
+        // unread
         Number($numUnread: longValue) from accumulate (
             $readingProgress: ReadingProgress(getPercentage() < 10 &&
                 lastOpened.plus(7, ChronoUnit.DAYS).isBefore(Instant.now()), $author memberOf book.getAuthors())
             from $readingProgressList,
             count($readingProgress)
         );
+        // average rating
         Number($averageRating: doubleValue) from accumulate (
             $review: Review($bookRating: rating, $author memberOf book.getAuthors()) from $reviews,
             average($bookRating)
         );
+        // num reviews
         Number($numReviews: longValue) from accumulate (
             $review: Review($author memberOf book.getAuthors()) from $reviews,
             count($review)
         );
+        // number in reading list
         Number($numReadingList: longValue) from accumulate(
             $readingListItem: ReadingListItem($author memberOf book.getAuthors()) from $readingList,
             count($readingListItem)
@@ -294,7 +299,7 @@ rule "Reading list for readers of the same category"
 
     when
     	UserCategoryRecommendation();
-        $response : BookResponse($points: points, $book: book);
+        $response: BookResponse($points: points, $book: book);
         $readingList: List() from collect(ReadingListItem(book.getId().equals($book.getId())));
         Number(intValue > 0, $numReadingList: intValue) from accumulate (
         	$similarReadingList: ReadingListItem(reader.getCategory().equals(loggedReader.getCategory()))
@@ -303,4 +308,38 @@ rule "Reading list for readers of the same category"
     then
         System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numReadingList, $book.getId());
         modify($response){setPoints($points + $numReadingList)}
+end
+
+rule "Read books for readers of the same category"
+	agenda-group "recommendations"
+	lock-on-active
+
+    when
+    	UserCategoryRecommendation();
+        $response: BookResponse($points: points, $book: book);
+        $readingProgressList: List() from collect(ReadingProgress(book.getId().equals($book.getId())));
+        Number(intValue > 0, $numRead: intValue) from accumulate (
+        	$similarReadingProgress: ReadingProgress(getPercentage() > 80, reader.getCategory().equals(loggedReader.getCategory())) from $readingProgressList,
+        	count($similarReadingProgress)
+        );
+    then
+        System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numRead, $book.getId());
+        modify($response){setPoints($points + $numRead)}
+end
+
+rule "Highly rated books for readers of the same category"
+	agenda-group "recommendations"
+	lock-on-active
+
+    when
+    	UserCategoryRecommendation();
+        $response: BookResponse($points: points, $book: book);
+        $reviewList: List() from collect(Review(book.getId().equals($book.getId())));
+        Number(doubleValue > 4.5, $numHighlyReviewed: doubleValue) from accumulate (
+        	$similarReviews: Review(reader.getCategory().equals(loggedReader.getCategory())) from $reviewList,
+        	average($similarReviews)
+        );
+    then
+        System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numHighlyReviewed, $book.getId());
+        modify($response){setPoints($points + $numHighlyReviewed)}
 end

@@ -9,6 +9,8 @@ import { Authority } from '../../core/model/authority';
 import { NavigationItem } from '../../core/model/navigation-item';
 import { NavbarService } from '../../core/services/navbar.service';
 import { BookService } from '../../core/services/book.service';
+import {Rank} from '../../core/model/rank';
+import {RankService} from '../../core/services/rank.service';
 
 @Component({
   selector: 'app-navbar',
@@ -35,7 +37,8 @@ export class NavbarComponent implements OnInit {
     private router: Router,
     private tokenService: TokenService,
     private navbarService: NavbarService,
-    private bookService: BookService) { }
+    private bookService: BookService,
+    private rankService: RankService) { }
 
   ngOnInit(): void {
     this.navbarService.navigation.subscribe(
@@ -48,6 +51,11 @@ export class NavbarComponent implements OnInit {
         this.hasSearch = val;
       }
     );
+    this.rankService.getUserRank().subscribe(
+      (val: Rank) => {
+        this.rankService.userRank.next(val);
+      }
+    )
   }
 
   onClickLogout(): void {
@@ -103,6 +111,10 @@ export class NavbarComponent implements OnInit {
 
   get initials(): string | undefined {
     return this.tokenService.getToken()?.userInitials;
+  }
+
+  get userRankName(): string {
+    return this.rankService.userRank.getValue()?.name ?? 'NAR';
   }
 
 }

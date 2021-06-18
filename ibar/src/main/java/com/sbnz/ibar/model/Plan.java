@@ -34,6 +34,9 @@ public class Plan {
 	@ManyToMany
 	private Set<Category> categories;
 
+	@ManyToOne
+	private Rank rank;
+
 	@Lob
 	@Type(type = "org.hibernate.type.TextType")
 	private String description;

@@ -6,4 +6,6 @@ export class Plan {
   dayDuration?: number;
   categoryNames?: string[];
   categoryIds?: string[];
+  rankName?: string;
+  rankId?: string;
 }

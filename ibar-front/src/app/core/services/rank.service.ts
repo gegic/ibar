@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {Rank} from '../model/rank';
 
 @Injectable({
@@ -10,10 +10,16 @@ export class RankService {
 
   private readonly API_URL = '/api/ranks';
 
+  userRank: BehaviorSubject<Rank | undefined> = new BehaviorSubject<Rank | undefined>(undefined);
+
   constructor(private httpClient: HttpClient) { }
 
   getRanks(): Observable<Rank[]> {
     return this.httpClient.get<Rank[]>(`${this.API_URL}`);
+  }
+
+  getUserRank(): Observable<Rank> {
+    return this.httpClient.get<Rank>(`${this.API_URL}/reader`);
   }
 
   create(rank: Rank): Observable<Rank> {

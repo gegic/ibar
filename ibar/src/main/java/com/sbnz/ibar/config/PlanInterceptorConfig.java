@@ -18,6 +18,7 @@ public class PlanInterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/pdf/**")
                 .addPathPatterns("/audio/**")
                 .addPathPatterns("/api/**")
+                .excludePathPatterns("/api/ranks/**")
                 .excludePathPatterns("/api/plans/**");
     }
 

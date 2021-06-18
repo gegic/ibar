@@ -46,4 +46,10 @@ public class RankController {
 		return ResponseEntity.ok().build();
 	}
 
+	@PreAuthorize("hasRole('READER')")
+	@GetMapping(value = "/reader")
+	public ResponseEntity<Rank> getUserRank() {
+		return ResponseEntity.ok(rankService.getUserRank());
+	}
+
 }

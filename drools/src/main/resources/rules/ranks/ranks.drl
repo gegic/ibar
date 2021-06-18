@@ -105,6 +105,19 @@ rule "Check user rank"
         $rcf: RankCheckFact($readerRank: reader.getRank(), $rank: rank);
         lowerToHigher($rank, $readerRank;);
     then
+        System.out.println("LOG -> CHECK USER RANK");
+        System.out.println($readerRank.getName() + " is higher than " + $rank.getName());
+        $rcf.setHigher(true);
+        delete($rcf);
+end
+
+rule "User rank is equal"
+    when
+        $rcf: RankCheckFact($readerRank: reader.getRank(), $rank: rank);
+        eval($readerRank == $rank);
+    then
+        System.out.println("LOG -> CHECK USER RANK");
+        System.out.println($readerRank.getName() + " is equal to " + $rank.getName());
         $rcf.setHigher(true);
         delete($rcf);
 end

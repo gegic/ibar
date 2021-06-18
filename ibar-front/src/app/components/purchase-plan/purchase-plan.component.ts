@@ -43,8 +43,15 @@ export class PurchasePlanComponent implements OnInit, OnDestroy {
           severity: 'success',
           summary: 'Success',
           detail: `${plan.name} was purchased sucessfully`
-      });
+        });
         this.router.navigate(['']);
+      },
+      () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Rank too low',
+          detail: `This plan can be purchased only by readers with rank ${plan.rankName} or higher`
+        });
       }
     );
   }

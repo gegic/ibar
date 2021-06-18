@@ -4,10 +4,12 @@ import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.model.Rank;
 import com.sbnz.ibar.model.Reader;
+import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.RankRepository;
 import com.sbnz.ibar.repositories.ReaderRepository;
 import lombok.AllArgsConstructor;
 import org.kie.api.runtime.rule.FactHandle;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
@@ -31,6 +33,11 @@ public class RankService {
 		Optional<Rank> achievement = rankRepository.findById(id);
 
 		return achievement.orElse(null);
+	}
+
+	public Rank getUserRank() {
+		Reader reader = (Reader) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		return reader.getRank();
 	}
 
 	public Rank create(Rank entity) throws Exception {
