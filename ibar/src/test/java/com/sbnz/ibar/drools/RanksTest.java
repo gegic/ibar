@@ -4,6 +4,7 @@ import com.sbnz.ibar.model.*;
 import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.rto.RankCheckFact;
 import com.sbnz.ibar.rto.events.OnSubscribed;
+import com.sbnz.ibar.utils.Factory;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,6 +34,9 @@ public class RanksTest {
 
     private UserRepository userRepository;
 
+    @Autowired
+    private Factory factory;
+
 
     @Before
     public void setup(){
@@ -44,14 +48,14 @@ public class RanksTest {
     @Test
     public void testRank() {
 
-        Reader r = createReader();
+        Reader r = factory.createReader();
         when(userRepository.save(Mockito.any(Reader.class))).thenAnswer(i -> i.<Reader>getArgument(0));
         r = userRepository.save(r);
-        Category c = createCategory();
-        Rank rank0 = createRank("Rank0", 0, null);
-        Rank rank1 = createRank("Rank1", 10, rank0);
-        Rank rank2 = createRank("Rank2", 13, rank1);
-        Rank rank3 = createRank("Rank3", 15, rank2);
+        Category c = new Category(UUID.randomUUID(), "Kategorija");
+        Rank rank0 = factory.createRank("Rank0", 0, null);
+        Rank rank1 = factory.createRank("Rank1", 10, rank0);
+        Rank rank2 = factory.createRank("Rank2", 13, rank1);
+        Rank rank3 = factory.createRank("Rank3", 15, rank2);
 
         r.setRank(rank0);
 
@@ -60,12 +64,12 @@ public class RanksTest {
         ranksSession.insert(rank2);
         ranksSession.insert(rank3);
 
-        Plan p = createPlan(c);
+        Plan p = factory.createPlan(c);
         OnSubscribed onSubscribed1 = new OnSubscribed(r, p);
         ranksSession.insert(onSubscribed1);
         ranksSession.fireAllRules();
 
-        assertEquals(1, r.getPoints(), 0.1);
+        assertEquals(3.3, r.getPoints(), 0.1);
         assertEquals(rank0, r.getRank());
 
         OnSubscribed onSubscribed2 = new OnSubscribed(r, p);
@@ -73,17 +77,25 @@ public class RanksTest {
         ranksSession.insert(onSubscribed2);
         ranksSession.fireAllRules();
 
-        assertEquals(7, r.getPoints(), 0.1);
-        assertEquals(rank1, r.getRank());
+        assertEquals(5.3, r.getPoints(), 0.1);
+        assertEquals(rank3, r.getRank());
 
-        OnSubscribed onSubscribed3 = new OnSubscribed(r, p);
-        onSubscribed3.setTimestamp(Instant.now().plus(5, ChronoUnit.DAYS).toEpochMilli());
-        ranksSession.insert(onSubscribed3);
-        ranksSession.fireAllRules();
+    }
 
-        assertEquals(13, r.getPoints(), 0.1);
-        assertEquals(rank2, r.getRank());
+    @Test
+    public void testCheckRank() {
+        Reader r = factory.createReader();
 
+        Rank rank0 = factory.createRank("Rank0", 0, null);
+        Rank rank1 = factory.createRank("Rank1", 10, rank0);
+        Rank rank2 = factory.createRank("Rank2", 13, rank1);
+        Rank rank3 = factory.createRank("Rank3", 15, rank2);
+
+        ranksSession.insert(rank0);
+        ranksSession.insert(rank1);
+        ranksSession.insert(rank2);
+        ranksSession.insert(rank3);
+        r.setRank(rank3);
         RankCheckFact rcf = new RankCheckFact(r, rank1, false);
         ranksSession.insert(rcf);
         ranksSession.fireAllRules();
@@ -91,83 +103,8 @@ public class RanksTest {
         assertTrue(rcf.isHigher());
     }
 
-    private Rank createRank(String name, long points, Rank previousRank) {
-        Rank r = new Rank();
-        r.setId(UUID.randomUUID());
-        r.setName(name);
-        r.setPoints(points);
-        if (previousRank != null) {
-            previousRank.setHigherRank(r);
-        }
-        return r;
-    }
-    private Reader createReader() {
-        Reader r = new Reader(
-                UUID.randomUUID(),
-                "email@gmail.com",
-                "password123",
-                "Milan",
-                "Marinkovic",
-                0L,
-                new ArrayList<>(),
-                true
-        );
-        r.setMale(true);
-        r.setAge(22);
-        return r;
-    }
 
-    private Plan createPlan(Category c) {
-        return new Plan(
-                UUID.randomUUID(),
-                "Plan",
-                100,
-                Set.of(c),
-                null,
-                "opis",
-                10L
-        );
-    }
 
-    private Author createAuthor() {
-        return new Author(
-                UUID.randomUUID(),
-                "Author",
-                "Some description",
-                null,
-                null,
-                1,
-                null
-        );
-    }
 
-    private Category createCategory() {
-        return new Category(UUID.randomUUID(), "Category");
-    }
 
-    private Book createBook(Category category, Set<Author> authors) {
-        return new Book(
-                UUID.randomUUID(),
-                "Book 1",
-                "Some description",
-                1,
-                1,
-                null,
-                null,
-                300,
-                category,
-                authors
-        );
-    }
-
-    private Review createReview(int rating, Book book, Reader reader) {
-        return new Review(
-                UUID.randomUUID(),
-                "content",
-                rating,
-                book,
-                reader,
-                Instant.now()
-        );
-    }
 }

@@ -81,7 +81,7 @@ public class BookRecommendationTest {
 
         booksSession.fireAllRules();
 
-        assertEquals(0, recommendations.size());
+        assertEquals(5, recommendations.size());
     }
 
     @Test

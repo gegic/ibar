@@ -4,6 +4,7 @@ import com.sbnz.ibar.model.*;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
 import java.util.*;
 
 @Component
@@ -22,7 +23,7 @@ public class Factory {
 
         authors.add(new Author(
                 UUID.randomUUID(),
-                "Author 1",
+                "Author 12",
                 "Some description",
                 null,
                 null,
@@ -73,6 +74,21 @@ public class Factory {
         ));
 
         return books;
+    }
+
+    public Book createBook(Category category, Set<Author> authors) {
+        return new Book(
+                UUID.randomUUID(),
+                "Book 1",
+                "Some description",
+                1,
+                1,
+                null,
+                null,
+                300,
+                category,
+                authors
+        );
     }
 
     public void createDataWithNegativeReview(KieSession kieSession) {
@@ -403,5 +419,55 @@ public class Factory {
         kieSession.insert(book3);
         kieSession.insert(book4);
         kieSession.insert(book5);
+    }
+
+    public Rank createRank(String name, long points, Rank previousRank) {
+        Rank r = new Rank();
+        r.setId(UUID.randomUUID());
+        r.setName(name);
+        r.setPoints(points);
+        if (previousRank != null) {
+            previousRank.setHigherRank(r);
+        }
+        return r;
+    }
+
+    public Reader createReader() {
+        Reader r = new Reader(
+                UUID.randomUUID(),
+                "email@gmail.com",
+                "password123",
+                "Milan",
+                "Marinkovic",
+                0L,
+                new ArrayList<>(),
+                true
+        );
+        r.setMale(true);
+        r.setAge(22);
+        return r;
+    }
+
+    public Plan createPlan(Category c) {
+        return new Plan(
+                UUID.randomUUID(),
+                "Plan",
+                10,
+                Set.of(c),
+                null,
+                "opis",
+                10L
+        );
+    }
+
+    public Review createReview(int rating, Book book, Reader reader) {
+        return new Review(
+                UUID.randomUUID(),
+                "content",
+                rating,
+                book,
+                reader,
+                Instant.now()
+        );
     }
 }

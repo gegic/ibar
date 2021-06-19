@@ -133,12 +133,23 @@ export class BookReviewsComponent implements OnInit {
       return;
     }
     if (!this.userReview.id) {
-      this.reviewService.post(this.userReview).subscribe(addedReview => {
-        this.resetOffering();
-        this.resetReviews();
-        this.userReview = addedReview;
-        this.isAddDialogOpen = false;
-      });
+      this.reviewService.post(this.userReview).subscribe(
+        addedReview => {
+          this.resetOffering();
+          this.resetReviews();
+          this.userReview = addedReview;
+          this.isAddDialogOpen = false;
+        },
+        () => {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Blocked account',
+            detail: 'Your account has been permanently blocked'
+          });
+          this.tokenService.removeToken();
+          this.router.navigate(['login']);
+        }
+      );
     } else {
       this.reviewService.put(this.userReview).subscribe(editedReview => {
         this.resetOffering();

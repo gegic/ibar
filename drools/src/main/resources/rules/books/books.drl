@@ -301,8 +301,6 @@ end
 
 rule "Reading list for readers of the same category"
 	salience 40
-	lock-on-active
-
     when
     	UserCategoryRecommendation();
         $response: BookResponse($points: points, $book: book);
@@ -315,14 +313,11 @@ rule "Reading list for readers of the same category"
         not(MoviesRecommended());
     then
         System.out.printf("LOG -> READING LIST SIMILAR USER ADDED %s POINTS FOR BOOK %s%n", $numReadingList, $book.getId());
-        modify($response){setPoints($points + $numReadingList)}
+        $response.setPoints($points + $numReadingList);
 end
 
 rule "Read books for readers of the same category"
 	salience 40
-
-	lock-on-active
-
     when
     	UserCategoryRecommendation();
         $response: BookResponse($points: points, $book: book);
@@ -334,14 +329,11 @@ rule "Read books for readers of the same category"
         not(MoviesRecommended());
     then
         System.out.printf("LOG -> READ SIMILAR USER - %s POINTS FOR BOOK %s%n", $numRead, $book.getId());
-        modify($response){setPoints($points + $numRead)}
+        $response.setPoints($points + $numRead);
 end
 
 rule "Highly rated books for readers of the same category"
 	salience 40
-
-	lock-on-active
-
     when
     	UserCategoryRecommendation();
         $response: BookResponse($points: points, $book: book);
@@ -353,12 +345,11 @@ rule "Highly rated books for readers of the same category"
         not(MoviesRecommended());
     then
         System.out.printf("LOG -> RATINGS SIMILAR USER %s POINTS FOR BOOK %s%n", $numHighlyReviewed, $book.getId());
-        modify($response){setPoints($points + $numHighlyReviewed)}
+        $response.setPoints($points + $numHighlyReviewed);
 end
 
 rule "Not all books but finished recommendation"
-    salience 30
-
+    salience -10
     when
         UserCategoryRecommendation();
         not(MoviesRecommended());

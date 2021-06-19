@@ -28,6 +28,7 @@ public abstract class User implements UserDetails {
     		name = "UUID",
 			strategy = "org.hibernate.id.UUIDGenerator"
 	)
+	@EqualsAndHashCode.Include
 	private UUID id;
 
 	@Column(unique = true, nullable = false)

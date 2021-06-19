@@ -44,6 +44,7 @@ rule "Disabling malicious user accounts where a new user targets one particular 
                  $user.getId(),
                  $author.getId());
         $user.setEnabled(false);
+        userRepository.save($user);
         update($se);
 end
 
