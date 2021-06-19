@@ -314,7 +314,7 @@ rule "Reading list for readers of the same category"
         );
         not(MoviesRecommended());
     then
-        System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numReadingList, $book.getId());
+        System.out.printf("LOG -> READING LIST SIMILAR USER ADDED %s POINTS FOR BOOK %s%n", $numReadingList, $book.getId());
         modify($response){setPoints($points + $numReadingList)}
 end
 
@@ -333,7 +333,7 @@ rule "Read books for readers of the same category"
         );
         not(MoviesRecommended());
     then
-        System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numRead, $book.getId());
+        System.out.printf("LOG -> READ SIMILAR USER - %s POINTS FOR BOOK %s%n", $numRead, $book.getId());
         modify($response){setPoints($points + $numRead)}
 end
 
@@ -347,14 +347,25 @@ rule "Highly rated books for readers of the same category"
         $response: BookResponse($points: points, $book: book);
         $reviewList: List() from collect(Review(book.getId().equals($book.getId())));
         Number(doubleValue > 4.5, $numHighlyReviewed: doubleValue) from accumulate (
-        	$similarReviews: Review(reader.getUserCategory().equals(loggedReader.getUserCategory())) from $reviewList,
-        	average($similarReviews)
+        	Review(reader.getUserCategory().equals(loggedReader.getUserCategory()), $rating: rating) from $reviewList,
+        	average($rating)
         );
         not(MoviesRecommended());
     then
-        System.out.printf("LOG -> READING LIST ADDED %s POINTS FOR BOOK %s%n", $numHighlyReviewed, $book.getId());
+        System.out.printf("LOG -> RATINGS SIMILAR USER %s POINTS FOR BOOK %s%n", $numHighlyReviewed, $book.getId());
         modify($response){setPoints($points + $numHighlyReviewed)}
 end
+
+rule "Not all books but finished recommendation"
+    salience 30
+
+    when
+        UserCategoryRecommendation();
+        not(MoviesRecommended());
+    then
+        insert(new MoviesRecommended(true));
+end
+
 
 rule "Movies recommended - sort responses"
     salience $points
