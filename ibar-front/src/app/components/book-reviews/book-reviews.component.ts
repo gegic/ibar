@@ -193,11 +193,6 @@ export class BookReviewsComponent implements OnInit {
     }
   }
 
-
-  onScrollDown(): void {
-    this.getReviews();
-  }
-
   getReviewNumberPercentage(numReviews: number): number {
     return numReviews / (this.book?.numReviews ?? 1) * 100;
   }

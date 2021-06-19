@@ -96,8 +96,7 @@
         </div>
       </div>
       <hr class="p-mx-6 p-my-5">
-      <div infinite-scroll
-           (scrolled)="onScrollDown()">
+      <div infinite-scroll>
         <div *ngFor="let review of reviews">
           <app-book-review-element [review]="review" (reviewDeleted)="onReviewDeleted()"></app-book-review-element>
         </div>

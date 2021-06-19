@@ -26,9 +26,9 @@ public class Subscription {
 	@Column(nullable = false)
 	private Instant dateOfPurchase;
 
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private Reader buyer;
 
-	@OneToOne(fetch = FetchType.EAGER, optional = false)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	private Plan purchasedPlan;
 }

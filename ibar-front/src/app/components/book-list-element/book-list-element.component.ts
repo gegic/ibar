@@ -40,7 +40,7 @@ export class BookListElementComponent implements OnInit {
   }
 
   onClickRead(): void {
-    this.router.navigate(['reading', this.book.pdf]);
+    this.router.navigate(['reading', this.book?.id ?? '']);
   }
 
   onClickEdit(event: MouseEvent): void {
