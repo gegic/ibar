@@ -12,7 +12,7 @@ rule "Unsuccessful login attempts - User account is suspicious"
     when
         $le: OnLoggedIn($user: user, user != null);
         Number(intValue >= 5) from accumulate(
-			$ale: OnLoggedIn(user.getId() == $user.getId(), success == false) over window:time(2m), count($ale)
+			$ale: OnLoggedIn(user == $user, success == false) over window:time(2m), count($ale)
 		);
 		not(OnSuspiciousEmail(email.equals($user.getEmail())));
     then

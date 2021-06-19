@@ -2,6 +2,7 @@ package com.sbnz.ibar.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name="\"User\"")
 @Inheritance(strategy = InheritanceType.JOINED)
+@EqualsAndHashCode
 public abstract class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
