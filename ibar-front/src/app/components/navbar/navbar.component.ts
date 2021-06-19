@@ -1,16 +1,16 @@
-import {Component, OnInit} from '@angular/core';
-import {MenuItem} from 'primeng/api';
-import {AuthService} from '../../core/services/auth.service';
-import {Router} from '@angular/router';
-import {environment} from '../../../environments/environment';
-import {TokenService} from '../../core/services/token.service';
-import {Authority} from '../../core/model/authority';
-import {NavigationItem} from '../../core/model/navigation-item';
-import {NavbarService} from '../../core/services/navbar.service';
-import {BookService} from '../../core/services/book.service';
-import {Rank} from '../../core/model/rank';
-import {RankService} from '../../core/services/rank.service';
-import {READER} from '../../core/utils/consts';
+import { Component, OnInit } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { AuthService } from '../../core/services/auth.service';
+import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
+import { TokenService } from '../../core/services/token.service';
+import { Authority } from '../../core/model/authority';
+import { NavigationItem } from '../../core/model/navigation-item';
+import { NavbarService } from '../../core/services/navbar.service';
+import { BookService } from '../../core/services/book.service';
+import { Rank } from '../../core/model/rank';
+import { RankService } from '../../core/services/rank.service';
+import { READER } from '../../core/utils/consts';
 
 @Component({
   selector: 'app-navbar',
@@ -51,13 +51,15 @@ export class NavbarComponent implements OnInit {
         this.hasSearch = val;
       }
     );
-    this.rankService.getUserRank().subscribe(
-      (val: Rank) => {
-        this.rankService.userRank.next(val);
-      }
-    );
+
     if (this.isReader) {
-      this.menuItems.splice(2, 0,{ label: 'Purchase a new plan', icon: 'pi pi-shopping-cart', routerLink: ['/plan']});
+      this.rankService.getUserRank().subscribe(
+        (val: Rank) => {
+          this.rankService.userRank.next(val);
+        }
+      );
+
+      this.menuItems.splice(2, 0, { label: 'Purchase a new plan', icon: 'pi pi-shopping-cart', routerLink: ['/plan'] });
     }
   }
 

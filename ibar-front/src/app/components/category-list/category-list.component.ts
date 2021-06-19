@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
-import {MessageService} from 'primeng/api';
-import {DialogService} from 'primeng/dynamicdialog';
+import { MessageService } from 'primeng/api';
+import { DialogService } from 'primeng/dynamicdialog';
 
-import {Category} from 'src/app/core/model/category';
+import { Category } from 'src/app/core/model/category';
 
-import {CategoryService} from 'src/app/core/services/category.service';
+import { CategoryService } from 'src/app/core/services/category.service';
 
 @Component({
   selector: 'app-category',
@@ -70,6 +70,8 @@ export class CategoryListComponent implements OnInit {
       this.messageService.add(
         { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Name is required.' }
       );
+
+      return;
     }
 
     const name = this.nameControl.value;
@@ -130,7 +132,7 @@ export class CategoryListComponent implements OnInit {
     }
   }
 
-  private showErrorMessageOnUpdateOrCreateCategory(operation: string): void{
+  private showErrorMessageOnUpdateOrCreateCategory(operation: string): void {
     this.messageService.add({
       id: 'toast-container',
       severity: 'error',

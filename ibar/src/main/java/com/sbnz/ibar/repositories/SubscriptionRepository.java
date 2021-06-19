@@ -11,7 +11,10 @@ import java.util.UUID;
 
 @Repository
 public interface SubscriptionRepository extends JpaRepository<Subscription, UUID> {
+
     Optional<Subscription> findByBuyerId(UUID uuid);
+
+    Optional<Subscription> findByPurchasedPlanId(UUID uuid);
 
     boolean existsByBuyerId(UUID id);
 

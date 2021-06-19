@@ -1,0 +1,107 @@
+<div>
+  <div class="list-header p-d-flex p-ai-center">
+    <h2 class="p-text-light">Showing all plans</h2>
+    <button
+      id="newPlan"
+      class="p-button blue-button p-ml-auto"
+      label="NEW PLAN"
+      (click)="openAddDialog()"
+      pButton
+    ></button>
+  </div>
+  <div class="list-content">
+    <app-plan-list
+      *ngFor="let plan of plans"
+      [plan]="plan"
+      (planDeleted)="planDeletionConfirmed()"
+      (clickEdit)="openAddDialog(true, $event)"
+    >
+    </app-plan-list>
+  </div>
+  <p-dialog
+    [modal]="true"
+    [header]="editing ? 'Edit plan' : 'Add a new plan'"
+    [(visible)]="isAddDialogOpen"
+    (onHide)="onHideAddDialog()"
+    [resizable]="false"
+  >
+    <div>
+      <form [formGroup]="planForm" (ngSubmit)="savePlan()">
+        <span class="p-float-label p-mt-5">
+          <input
+            type="text"
+            id="name"
+            name="name"
+            autocomplete="off"
+            formControlName="name"
+            pInputText
+          />
+          <label for="email">Name</label>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <input
+            type="number"
+            id="price"
+            name="price"
+            autocomplete="off"
+            formControlName="price"
+            pInputText
+          />
+          <label for="price">Price</label>
+        </span>
+        <span style="width: 195.6px" class="p-float-label p-mt-5">
+          <p-multiSelect
+            [options]="categories"
+            optionLabel="name"
+            [style]="{ width: '100%' }"
+            [filter]="false"
+            formControlName="categories"
+          ></p-multiSelect>
+          <label for="categories">Categories</label>
+        </span>
+        <span style="width: 195.6px" class="p-float-label p-mt-5">
+          <p-dropdown
+            [style]="{ minWidth: '100%' }"
+            [options]="ranks"
+            optionLabel="name"
+            [showClear]="true"
+            [autoDisplayFirst]="false"
+            formControlName="rank"
+          >
+          </p-dropdown>
+          <label for="rank">Rank</label>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <input
+            type="number"
+            id="durationInDays"
+            name="durationInDays"
+            autocomplete="off"
+            formControlName="durationInDays"
+            pInputText
+          />
+          <label for="durationInDays">Duration in days</label>
+        </span>
+        <span class="p-float-label p-mt-5">
+          <textarea
+            id="description"
+            name="description"
+            formControlName="description"
+            pInputTextarea
+            [rows]="11"
+            [cols]="50"
+          >
+          </textarea>
+          <label for="description">Description</label>
+        </span>
+        <button
+          type="submit"
+          id="addPlan"
+          class="p-button blue-button p-d-block p-ml-auto p-mt-4"
+          label="Save"
+          pButton
+        ></button>
+      </form>
+    </div>
+  </p-dialog>
+</div>

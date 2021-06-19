@@ -81,66 +81,83 @@ public class PlanService {
 		subscriptionRepository.save(s);
 	}
 
-	public PlanDto create(PlanDto dto) throws Exception {
-		Optional<Plan> optionalPlan = planRepository.findByName(dto.getName());
+    public PlanDto create(PlanDto dto) throws Exception {
+        Optional<Plan> optionalPlan = planRepository.findByName(dto.getName());
 
-		if (optionalPlan.isPresent()) {
-			throw new EntityAlreadyExistsException(Plan.class.getName(), dto.getName());
-		}
+        if (optionalPlan.isPresent()) {
+            throw new EntityAlreadyExistsException(Plan.class.getName(), dto.getName());
+        }
 
-		Plan entity = new Plan();
-		entity.setName(dto.getName());
-		entity.setPrice(dto.getPrice());
-		entity.setDayDuration(dto.getDayDuration());
-		entity.setDescription(dto.getDescription());
+        Plan entity = new Plan();
 
-		Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
-		entity.setCategories(categories);
+        entity.setName(dto.getName());
+        entity.setPrice(dto.getPrice());
+        entity.setDayDuration(dto.getDayDuration());
+        entity.setDescription(dto.getDescription());
 
-		if (dto.getRankId() == null) {
-			throw new EntityDoesNotExistException(Rank.class.getName(), null);
-		}
-		Optional<Rank> optionalRank = rankRepository.findById(dto.getRankId());
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
+        entity.setCategories(categories);
 
-		if (optionalRank.isEmpty()) {
-			throw new EntityDoesNotExistException(Rank.class.getName(), dto.getRankId());
-		}
+        if (dto.getRankId() == null) {
+            throw new EntityDoesNotExistException(Rank.class.getName(), null);
+        }
 
-		Rank rank = optionalRank.get();
-		entity.setRank(rank);
+        Optional<Rank> optionalRank = rankRepository.findById(dto.getRankId());
 
-		entity = planRepository.save(entity);
+        if (optionalRank.isEmpty()) {
+            throw new EntityDoesNotExistException(Rank.class.getName(), dto.getRankId());
+        }
 
-		return planMapper.toDto(entity);
-	}
+        Rank rank = optionalRank.get();
+        entity.setRank(rank);
 
-	public void delete(UUID id) {
-		try {
-			planRepository.deleteById(id);
-		} catch (Exception ignored) {
-		}
-	}
+        entity = planRepository.save(entity);
 
-	public PlanDto update(PlanDto dto) throws Exception {
-		Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
+        return planMapper.toDto(entity);
+    }
 
-		if (!optionalPlan.isPresent()) {
-			throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
-		}
+    public boolean delete(UUID id) {
+        if (isAnyUserSubscribedOnThisPlan(id)) {
+            return false;
+        }
 
-		Plan entity = optionalPlan.get();
+        planRepository.deleteById(id);
 
-		entity.setName(dto.getName());
-		entity.setDescription(dto.getDescription());
-		entity.setPrice(dto.getPrice());
-		entity.setDayDuration(dto.getDayDuration());
+        return true;
+    }
 
-		Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
-		entity.setCategories(categories);
+    public PlanDto update(UUID id, PlanDto dto) throws Exception {
+        Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
 
-		entity = planRepository.save(entity);
+        if (!optionalPlan.isPresent()) {
+            throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
+        }
 
-		return planMapper.toDto(entity);
-	}
+        Plan entity = optionalPlan.get();
 
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setDayDuration(dto.getDayDuration());
+
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
+        entity.setCategories(categories);
+
+        Optional<Rank> optionalRank = rankRepository.findById(dto.getRankId());
+
+        if (optionalRank.isEmpty()) {
+            throw new EntityDoesNotExistException(Rank.class.getName(), dto.getRankId());
+        }
+
+        Rank rank = optionalRank.get();
+        entity.setRank(rank);
+
+        entity = planRepository.save(entity);
+
+        return planMapper.toDto(entity);
+    }
+
+    private boolean isAnyUserSubscribedOnThisPlan(UUID planId) {
+        return this.subscriptionRepository.findByPurchasedPlanId(planId).isPresent();
+    }
 }

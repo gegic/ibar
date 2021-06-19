@@ -1,0 +1,33 @@
+<p-card class="plan-card">
+    <div class="p-d-flex p-m-0 p-p-0">
+      <div class="p-col p-as-center">
+        <div class="p-d-flex">
+          <div class="p-col p-as-center">
+            <h2 [id]="'p' + plan.name" class="p-m-0 p-text-light">
+              {{ plan.name }}
+            </h2>
+          </div>
+        </div>
+      </div>
+  
+      <div class="p-col p-text-right p-as-end">
+        <div class="p-d-block button-group p-mb-3">
+          <button
+            class="p-button p-button-rounded p-button-icon p-button-danger p-ml-3"
+            icon="pi pi-trash"
+            [id]="'delete' + plan.name"
+            (click)="onClickDelete()"
+            pButton
+          ></button>
+          <button
+            class="p-button blue-button p-button-rounded p-button-icon p-ml-3"
+            icon="pi pi-pencil"
+            [id]="'edit' + plan.name"
+            (click)="onClickEdit()"
+            pButton
+          ></button>
+        </div>
+      </div>
+    </div>
+  </p-card>
+  
