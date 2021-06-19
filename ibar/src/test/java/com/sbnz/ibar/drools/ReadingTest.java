@@ -1,11 +1,15 @@
 package com.sbnz.ibar.drools;
 
 import com.sbnz.ibar.model.*;
+import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.rto.events.OnReview;
 import com.sbnz.ibar.rto.events.OnSubscribed;
+import com.sbnz.ibar.utils.Factory;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.api.runtime.KieSession;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,6 +18,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
 import java.util.*;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -23,11 +30,21 @@ public class ReadingTest {
     @Qualifier("readingSession")
     private KieSession readingSession;
 
+    @Autowired
+    private Factory factory;
+
+    private UserRepository userRepository;
+
+    @Before
+    public void setup(){
+        userRepository = mock(UserRepository.class);
+        readingSession.setGlobal("userRepository", userRepository);
+    }
+
     @Test
     public void testLowReviews() {
-//        readingSession.addEventListener(new DefaultRuleRuntimeEventListener());
-//        readingSession.addEventListener(new DebugAgendaEventListener());
-//        readingSession.addEventListener(new DebugProcessEventListener());
+        when(userRepository.save(Mockito.any(Reader.class))).thenAnswer(i -> i.<Reader>getArgument(0));
+
         Reader r = createReader();
         Category c = createCategory();
 
@@ -40,14 +57,100 @@ public class ReadingTest {
         a.add(createAuthor());
         List<Book> books = new ArrayList<>();
         for (int i = 0; i < 9; ++i) {
-            books.add(createBook(c, a));
+            books.add(factory.createBook(c, a));
         }
         for (Book book : books) {
-            Review review = createReview(1, book, r);
+            Review review = factory.createReview(1, book, r);
             OnReview onReview = new OnReview(review);
             readingSession.insert(onReview);
             readingSession.fireAllRules();
         }
+
+        assertFalse(r.isEnabled());
+    }
+
+    @Test
+    public void testHighReviews() {
+        when(userRepository.save(Mockito.any(Reader.class))).thenAnswer(i -> i.<Reader>getArgument(0));
+
+        Reader r = createReader();
+        Category c = createCategory();
+
+        Plan p = createPlan(c);
+
+        OnSubscribed onSubscribed = new OnSubscribed(r, p);
+        readingSession.insert(onSubscribed);
+
+        Set<Author> a = new HashSet<>();
+        a.add(createAuthor());
+        List<Book> books = new ArrayList<>();
+        for (int i = 0; i < 9; ++i) {
+            books.add(factory.createBook(c, a));
+        }
+        for (Book book : books) {
+            Review review = factory.createReview(5, book, r);
+            OnReview onReview = new OnReview(review);
+            readingSession.insert(onReview);
+            readingSession.fireAllRules();
+        }
+
+        assertFalse(r.isEnabled());
+    }
+
+    @Test
+    public void testSevenLowReviews() {
+        when(userRepository.save(Mockito.any(Reader.class))).thenAnswer(i -> i.<Reader>getArgument(0));
+
+        Reader r = createReader();
+        Category c = createCategory();
+
+        Plan p = createPlan(c);
+
+        OnSubscribed onSubscribed = new OnSubscribed(r, p);
+        readingSession.insert(onSubscribed);
+
+        Set<Author> a = new HashSet<>();
+        a.add(createAuthor());
+        List<Book> books = new ArrayList<>();
+        for (int i = 0; i < 6; ++i) {
+            books.add(factory.createBook(c, a));
+        }
+        for (Book book : books) {
+            Review review = factory.createReview(1, book, r);
+            OnReview onReview = new OnReview(review);
+            readingSession.insert(onReview);
+            readingSession.fireAllRules();
+        }
+
+        assertTrue(r.isEnabled());
+    }
+
+    @Test
+    public void testSevenHighReviews() {
+        when(userRepository.save(Mockito.any(Reader.class))).thenAnswer(i -> i.<Reader>getArgument(0));
+
+        Reader r = createReader();
+        Category c = createCategory();
+
+        Plan p = createPlan(c);
+
+        OnSubscribed onSubscribed = new OnSubscribed(r, p);
+        readingSession.insert(onSubscribed);
+
+        Set<Author> a = new HashSet<>();
+        a.add(createAuthor());
+        List<Book> books = new ArrayList<>();
+        for (int i = 0; i < 6; ++i) {
+            books.add(factory.createBook(c, a));
+        }
+        for (Book book : books) {
+            Review review = factory.createReview(5, book, r);
+            OnReview onReview = new OnReview(review);
+            readingSession.insert(onReview);
+            readingSession.fireAllRules();
+        }
+
+        assertTrue(r.isEnabled());
     }
 
     private Reader createReader() {
@@ -90,29 +193,6 @@ public class ReadingTest {
         return new Category(UUID.randomUUID(), "Category");
     }
 
-    private Book createBook(Category category, Set<Author> authors) {
-        return new Book(
-                UUID.randomUUID(),
-                "Book 1",
-                "Some description",
-                1,
-                1,
-                null,
-                null,
-                300,
-                category,
-                authors
-        );
-    }
 
-    private Review createReview(int rating, Book book, Reader reader) {
-        return new Review(
-                UUID.randomUUID(),
-                "content",
-                rating,
-                book,
-                reader,
-                Instant.now()
-        );
-    }
+
 }

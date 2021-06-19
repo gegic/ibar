@@ -52,12 +52,15 @@ export class NavbarComponent implements OnInit {
       }
     );
 
-    if (this.tokenService.getToken()?.authorities?.findIndex(auth => auth.name === 'ROLE_READER') != -1)
+    if (this.isReader) {
       this.rankService.getUserRank().subscribe(
         (val: Rank) => {
           this.rankService.userRank.next(val);
         }
-      )
+      );
+
+      this.menuItems.splice(2, 0, { label: 'Purchase a new plan', icon: 'pi pi-shopping-cart', routerLink: ['/plan'] });
+    }
   }
 
   onClickLogout(): void {
@@ -85,28 +88,6 @@ export class NavbarComponent implements OnInit {
     return !!this.tokenService.getToken();
   }
 
-  authoritiesContain(authorityName: string): boolean {
-    return !!this.tokenService.getToken()?.authorities?.some((au: Authority) => au.name === authorityName);
-  }
-
-  isLinkActive(url: string): boolean {
-    const queryParamsIndex = this.router.url.indexOf('?');
-    let baseUrl = queryParamsIndex === -1 ? this.router.url : this.router.url.slice(0, queryParamsIndex);
-    if (baseUrl === url) {
-      return true;
-    }
-    if (baseUrl.startsWith('/')) {
-      baseUrl = baseUrl.slice(1);
-    }
-    if (baseUrl === url) {
-      return true;
-    }
-    if (baseUrl.endsWith('/')) {
-      baseUrl = baseUrl.slice(0, -1);
-    }
-    return baseUrl === url;
-  }
-
   closeDialog(): void {
     this.isChangePasswordDialogOpen = false;
   }
@@ -119,7 +100,7 @@ export class NavbarComponent implements OnInit {
     return this.rankService.userRank.getValue()?.name ?? 'NAR';
   }
 
-  get hasRank(): boolean {
+  get isReader(): boolean {
     return !!this.tokenService.getToken()?.authorities?.some(au => au.name === READER);
   }
 

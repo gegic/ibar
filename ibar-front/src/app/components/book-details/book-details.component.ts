@@ -18,6 +18,8 @@ import {ReadingListService} from '../../core/services/reading-list.service';
 })
 export class BookDetailsComponent implements OnInit, OnDestroy {
 
+  COVERS_API = '/covers';
+
   readonly navigationItems = [
     {
       label: 'About',
@@ -150,6 +152,10 @@ export class BookDetailsComponent implements OnInit, OnDestroy {
 
   get book(): Book | undefined {
     return this.detailsService.book.getValue();
+  }
+
+  get coverUrl(): string {
+    return `${this.COVERS_API}/${this.book?.cover ?? ''}.png`;
   }
 
   ngOnDestroy(): void {

@@ -193,10 +193,10 @@ public class BookService {
             throw new NullPointerException();
         }
 
-        String id = UUID.randomUUID() + ".pdf";
+        UUID id = UUID.randomUUID();
         long numPages = -1;
         try (OutputStream os = Files
-                .newOutputStream(Paths.get(filesConfig.getPdfPath(), id))) {
+                .newOutputStream(Path.of(Paths.get(filesConfig.getPdfPath(), id.toString()) + ".pdf"))) {
             PDDocument doc = PDDocument.load(pdfFile.getBytes());
             numPages = doc.getNumberOfPages();
             doc.close();

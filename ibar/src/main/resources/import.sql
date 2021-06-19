@@ -93,6 +93,17 @@
 -- c2597175-7c56-4bae-a3dc-a2f3d3938d74
 -- c1e9800b-b3a6-4816-a8b5-79214523ae1e
 
+-- 86b94e66-6b2f-4248-8293-f94bc1ca7d58
+-- 514737cd-83ba-4461-94fa-68cb98fcf66c
+-- 5bcc74a0-ac4c-43e2-b4fa-5ee431b64fe1
+-- 89f391d1-a509-4085-9ec8-cb9a1434307c
+-- ac4f1baf-2051-4575-a296-99779415ab1d
+-- e24781f6-8609-4187-adfb-b7be9d42be60
+-- d1518b0d-b349-4dbe-8b75-0ab8b59f1984
+-- 131646af-2d39-4b2f-90a5-92a871197f2e
+-- ef02ce38-2b99-4f5a-9ebf-c3a5a9193863
+-- d2177a46-b46f-48c5-818a-5c6041c12fcf
+
 /*------------------------ROLE-----------------------------------------*/
 INSERT INTO "authority" (name) VALUES ('ROLE_READER');
 INSERT INTO "authority" (name) VALUES ('ROLE_ADMIN');
@@ -118,6 +129,10 @@ insert into rank values ('98c5e7cf-874d-44f8-85c6-7007b315d80c', 'Newbie',      
 insert into "user" values ('b39f0709-574b-4e62-82b4-6dd98eca93a6',	'haris.gegic@uns.ac.rs',	true,	'Haris',	'Gegic',	null,	'$2a$10$TfA5Evj/8pQr0GIrFmWeRe.w0jWZD.1zoFl5MkpyzPZmvbPYWJds.');
 insert into reader values (20,	true, 0, null,	'b39f0709-574b-4e62-82b4-6dd98eca93a6', '98c5e7cf-874d-44f8-85c6-7007b315d80c');
 insert into user_authority values ('b39f0709-574b-4e62-82b4-6dd98eca93a6',	1);
+
+insert into "user" values ('0ec3fda4-28ef-44d6-828a-0fa18a5db488',	'harry.gegic@gmail.com',	true,	'Haris',	'Gegic',	null,	'$2a$10$TfA5Evj/8pQr0GIrFmWeRe.w0jWZD.1zoFl5MkpyzPZmvbPYWJds.');
+insert into reader values (20,	true, 0, null,	'0ec3fda4-28ef-44d6-828a-0fa18a5db488', '98c5e7cf-874d-44f8-85c6-7007b315d80c');
+insert into user_authority values ('0ec3fda4-28ef-44d6-828a-0fa18a5db488',	1);
 
 /*------------------------admin-----------------------------------------*/
 
@@ -206,6 +221,17 @@ INSERT INTO reading_progress VALUES('f5f61a38-cdb8-4271-954c-460bd0f56349',	'202
 INSERT INTO reading_progress VALUES('aa3a181e-2e55-4dc8-861c-ad3a86401d38',	'2021-05-23 12:20:00',	110,	'0c2a1eb0-3d92-4dee-8fa7-e06d49c63b2c',	'b39f0709-574b-4e62-82b4-6dd98eca93a6');
 INSERT INTO reading_progress VALUES('d9bc4821-beb8-4a25-86ed-8cf6032b6cb7',	'2021-05-23 12:20:00',	112,	'3ec4e897-bc9d-441b-9cea-215a1a0e7018',	'b39f0709-574b-4e62-82b4-6dd98eca93a6');
 INSERT INTO reading_progress VALUES('380e08e1-7ae8-42fb-8599-9ffa4a9967e2',	'2021-05-23 12:20:00',	101, 	'e8b7719a-2bdd-4365-96a4-079a75e53898',	'b39f0709-574b-4e62-82b4-6dd98eca93a6');
+
+
+INSERT INTO reading_progress VALUES('86b94e66-6b2f-4248-8293-f94bc1ca7d58',	'2021-05-23 12:20:00',	110, 	'a57c82bc-24f5-4358-b303-6c789609b48b',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('514737cd-83ba-4461-94fa-68cb98fcf66c',	'2021-05-23 12:20:00',	104, 	'48459a83-99de-4899-893d-f73a0b48488f',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('5bcc74a0-ac4c-43e2-b4fa-5ee431b64fe1',	'2021-05-23 12:20:00',	110,	'7d093d94-44fd-4514-8e7f-7e00810d40be',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('89f391d1-a509-4085-9ec8-cb9a1434307c',	'2021-05-23 12:20:00',	105,	'dd31fdc0-e882-4e15-8deb-73d2984e8315',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('ac4f1baf-2051-4575-a296-99779415ab1d',	'2021-05-23 12:20:00',	106, 	'3ec4e897-bc9d-441b-9cea-215a1a0e7018',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('e24781f6-8609-4187-adfb-b7be9d42be60',	'2021-05-23 12:20:00',	105, 	'f9b1891c-c507-4027-9946-991c54b17bd2',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('d1518b0d-b349-4dbe-8b75-0ab8b59f1984',	'2021-05-23 12:20:00',	104, 	'28d17353-7c03-4833-b46d-3c11e118294a',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('131646af-2d39-4b2f-90a5-92a871197f2e',	'2021-05-23 12:20:00',	110,	'7401a322-5d43-4abf-90dd-126515c08057',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
+INSERT INTO reading_progress VALUES('ef02ce38-2b99-4f5a-9ebf-c3a5a9193863',	'2021-05-23 12:20:00',	112,	'054865b6-262c-4ab7-9dad-72b0c43c1be8',	'0ec3fda4-28ef-44d6-828a-0fa18a5db488');
 
 /*-------------review---------------------------------*/
 INSERT INTO review VALUES('1c8db6c5-6514-42a0-9ee1-00a1f95e0f09',	'Mislim da je knjiga zaista sjajna. Sve preporuke!',	5,	'2021-05-23 12:20:00',	'099f22b5-d839-4b60-be60-c4c299726f15',	'b39f0709-574b-4e62-82b4-6dd98eca93a6');

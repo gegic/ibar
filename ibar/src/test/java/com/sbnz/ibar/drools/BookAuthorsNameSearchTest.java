@@ -42,7 +42,7 @@ public class BookAuthorsNameSearchTest {
         DataProviderCompiler converter = new DataProviderCompiler();
 
         DataProvider dataProvider = new ArrayDataProvider(new String[][]{
-                new String[]{"fjod"}
+                new String[]{"1"}
         });
 
         String drl = converter.compile(dataProvider, template);
@@ -62,7 +62,7 @@ public class BookAuthorsNameSearchTest {
 
         kieSession.dispose();
 
-        assertEquals(2, result.size());
+        assertEquals(3, result.size());
     }
 
     @Test
@@ -74,7 +74,7 @@ public class BookAuthorsNameSearchTest {
         DataProviderCompiler converter = new DataProviderCompiler();
 
         DataProvider dataProvider = new ArrayDataProvider(new String[][]{
-                new String[]{"kap"}
+                new String[]{"2"}
         });
 
         String drl = converter.compile(dataProvider, template);

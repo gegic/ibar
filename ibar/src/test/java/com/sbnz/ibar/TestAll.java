@@ -1,6 +1,7 @@
 package com.sbnz.ibar;
 
 import com.sbnz.ibar.drools.*;
+import com.sbnz.ibar.model.Reader;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -10,7 +11,9 @@ import org.junit.runners.Suite;
         BookRatingSearchTest.class,
         BookAuthorsNameSearchTest.class,
         LoginTest.class,
-        BookRecommendationTest.class
+        BookRecommendationTest.class,
+        RanksTest.class,
+        ReadingTest.class
 })
 public class TestAll {
 

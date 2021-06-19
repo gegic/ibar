@@ -87,7 +87,9 @@ public class ReviewService {
         KieSession readingSession = kieService.getReadingSession();
         readingSession.insert(onReview);
         readingSession.fireAllRules();
-
+        if (!u.isEnabled()) {
+            throw new EntityDoesNotExistException(Reader.class.getName(), "user blocked");
+        }
         return reviewMapper.toDto(r);
     }
 
