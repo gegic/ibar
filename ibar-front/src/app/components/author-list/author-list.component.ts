@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
-import {MessageService} from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
-import {Author} from 'src/app/core/model/author';
+import { Author } from 'src/app/core/model/author';
 
-import {AuthorService} from 'src/app/core/services/author.service';
+import { AuthorService } from 'src/app/core/services/author.service';
 
 @Component({
   selector: 'app-author',
@@ -84,8 +84,10 @@ export class AuthorListComponent implements OnInit {
   saveAuthor(): void {
     if (!this.authorForm.valid) {
       this.messageService.add(
-        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Name is required.' }
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Please, fill in all required fields.' }
       );
+
+      return;
     }
 
 

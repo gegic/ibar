@@ -21,123 +21,140 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class PlanService {
 
-	private final PlanMapper planMapper;
-	private final PlanRepository planRepository;
-	private final CategoryRepository categoryRepository;
-	private final SubscriptionRepository subscriptionRepository;
-	private final UserRepository userRepository;
-	private final RankRepository rankRepository;
-	private final KieService kieService;
+    private final PlanMapper planMapper;
+    private final PlanRepository planRepository;
+    private final CategoryRepository categoryRepository;
+    private final SubscriptionRepository subscriptionRepository;
+    private final UserRepository userRepository;
+    private final RankRepository rankRepository;
+    private final KieService kieService;
 
-	public List<PlanDto> getAll() {
-		return planRepository.findAll().stream().map(planMapper::toDto).collect(Collectors.toList());
-	}
+    public List<PlanDto> getAll() {
+        return planRepository.findAll().stream().map(planMapper::toDto).collect(Collectors.toList());
+    }
 
-	public PlanDto getById(UUID id) throws EntityDoesNotExistException {
-		return planRepository.findById(id).map(planMapper::toDto).
-				orElseThrow(() -> new EntityDoesNotExistException(Plan.class.getName(), id));
-	}
+    public PlanDto getById(UUID id) throws EntityDoesNotExistException {
+        return planRepository.findById(id).map(planMapper::toDto).
+                orElseThrow(() -> new EntityDoesNotExistException(Plan.class.getName(), id));
+    }
 
-	public void subscribe(PlanDto dto) throws EntityAlreadyExistsException, EntityDoesNotExistException {
-		User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (subscriptionRepository.existsByBuyerId(u.getId())) {
-			throw new EntityAlreadyExistsException(Subscription.class.getName(), u.getId());
-		}
-		Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
-		if (optionalPlan.isEmpty()) {
-			throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
-		}
-		Reader r = (Reader) userRepository.findById(u.getId())
-				.orElseThrow(() -> new EntityDoesNotExistException(Reader.class.getName(), u.getId()));
+    public void subscribe(PlanDto dto) throws EntityAlreadyExistsException, EntityDoesNotExistException {
+        User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (subscriptionRepository.existsByBuyerId(u.getId())) {
+            throw new EntityAlreadyExistsException(Subscription.class.getName(), u.getId());
+        }
+        Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
+        if (optionalPlan.isEmpty()) {
+            throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
+        }
+        Reader r = (Reader) userRepository.findById(u.getId())
+                .orElseThrow(() -> new EntityDoesNotExistException(Reader.class.getName(), u.getId()));
 
-		Plan p = optionalPlan.get();
+        Plan p = optionalPlan.get();
 
-		KieSession ranksSession = kieService.getRanksSession();
-		RankCheckFact rcf = new RankCheckFact(r, p.getRank(), false);
-		ranksSession.insert(rcf);
-		ranksSession.fireAllRules();
+        KieSession ranksSession = kieService.getRanksSession();
+        RankCheckFact rcf = new RankCheckFact(r, p.getRank(), false);
+        ranksSession.insert(rcf);
+        ranksSession.fireAllRules();
 
-		if (!rcf.isHigher()) {
-			throw new EntityDoesNotExistException(Rank.class.getName(), "rank too low");
-		}
+        if (!rcf.isHigher()) {
+            throw new EntityDoesNotExistException(Rank.class.getName(), "rank too low");
+        }
 
-		Subscription s = new Subscription();
-		s.setBuyer(r);
-		s.setPurchasedPlan(p);
-		s.setDateOfPurchase(Instant.now());
+        Subscription s = new Subscription();
+        s.setBuyer(r);
+        s.setPurchasedPlan(p);
+        s.setDateOfPurchase(Instant.now());
 
-		OnSubscribed event = new OnSubscribed();
-		event.setUser(r);
-		event.setPlan(p);
-		KieSession readingSession = kieService.getReadingSession();
-		readingSession.insert(event);
-		readingSession.fireAllRules();
+        OnSubscribed event = new OnSubscribed();
+        event.setUser(r);
+        event.setPlan(p);
+        KieSession readingSession = kieService.getReadingSession();
+        readingSession.insert(event);
+        readingSession.fireAllRules();
 
-		ranksSession.insert(event);
-		ranksSession.fireAllRules();
-		subscriptionRepository.save(s);
-	}
+        ranksSession.insert(event);
+        ranksSession.fireAllRules();
+        subscriptionRepository.save(s);
+    }
 
-	public PlanDto create(PlanDto dto) throws Exception {
-		Optional<Plan> optionalPlan = planRepository.findByName(dto.getName());
+    public PlanDto create(PlanDto dto) throws Exception {
+        Optional<Plan> optionalPlan = planRepository.findByName(dto.getName());
 
-		if (optionalPlan.isPresent()) {
-			throw new EntityAlreadyExistsException(Plan.class.getName(), dto.getName());
-		}
+        if (optionalPlan.isPresent()) {
+            throw new EntityAlreadyExistsException(Plan.class.getName(), dto.getName());
+        }
 
-		Plan entity = new Plan();
-		entity.setName(dto.getName());
-		entity.setPrice(dto.getPrice());
-		entity.setDayDuration(dto.getDayDuration());
-		entity.setDescription(dto.getDescription());
+        Plan entity = new Plan();
 
-		Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
-		entity.setCategories(categories);
+        entity.setName(dto.getName());
+        entity.setPrice(dto.getPrice());
+        entity.setDayDuration(dto.getDayDuration());
+        entity.setDescription(dto.getDescription());
 
-		if (dto.getRankId() == null) {
-			throw new EntityDoesNotExistException(Rank.class.getName(), null);
-		}
-		Optional<Rank> optionalRank = rankRepository.findById(dto.getRankId());
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
+        entity.setCategories(categories);
 
-		if (optionalRank.isEmpty()) {
-			throw new EntityDoesNotExistException(Rank.class.getName(), dto.getRankId());
-		}
+        if (dto.getRankId() == null) {
+            throw new EntityDoesNotExistException(Rank.class.getName(), null);
+        }
 
-		Rank rank = optionalRank.get();
-		entity.setRank(rank);
+        Optional<Rank> optionalRank = rankRepository.findById(dto.getRankId());
 
-		entity = planRepository.save(entity);
+        if (optionalRank.isEmpty()) {
+            throw new EntityDoesNotExistException(Rank.class.getName(), dto.getRankId());
+        }
 
-		return planMapper.toDto(entity);
-	}
+        Rank rank = optionalRank.get();
+        entity.setRank(rank);
 
-	public void delete(UUID id) {
-		try {
-			planRepository.deleteById(id);
-		} catch (Exception ignored) {
-		}
-	}
+        entity = planRepository.save(entity);
 
-	public PlanDto update(PlanDto dto) throws Exception {
-		Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
+        return planMapper.toDto(entity);
+    }
 
-		if (!optionalPlan.isPresent()) {
-			throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
-		}
+    public boolean delete(UUID id) {
+        if (isAnyUserSubscribedOnThisPlan(id)) {
+            return false;
+        }
 
-		Plan entity = optionalPlan.get();
+        planRepository.deleteById(id);
 
-		entity.setName(dto.getName());
-		entity.setDescription(dto.getDescription());
-		entity.setPrice(dto.getPrice());
-		entity.setDayDuration(dto.getDayDuration());
+        return true;
+    }
 
-		Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
-		entity.setCategories(categories);
+    public PlanDto update(UUID id, PlanDto dto) throws Exception {
+        Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
 
-		entity = planRepository.save(entity);
+        if (!optionalPlan.isPresent()) {
+            throw new EntityDoesNotExistException(Plan.class.getName(), dto.getId());
+        }
 
-		return planMapper.toDto(entity);
-	}
+        Plan entity = optionalPlan.get();
 
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+        entity.setDayDuration(dto.getDayDuration());
+
+        Set<Category> categories = new HashSet<>(categoryRepository.findAllById(dto.getCategoryIds()));
+        entity.setCategories(categories);
+
+        Optional<Rank> optionalRank = rankRepository.findById(dto.getRankId());
+
+        if (optionalRank.isEmpty()) {
+            throw new EntityDoesNotExistException(Rank.class.getName(), dto.getRankId());
+        }
+
+        Rank rank = optionalRank.get();
+        entity.setRank(rank);
+
+        entity = planRepository.save(entity);
+
+        return planMapper.toDto(entity);
+    }
+
+    private boolean isAnyUserSubscribedOnThisPlan(UUID planId) {
+        return this.subscriptionRepository.findByPurchasedPlanId(planId).isPresent();
+    }
 }

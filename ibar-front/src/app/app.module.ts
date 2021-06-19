@@ -69,6 +69,8 @@ import {TableModule} from 'primeng/table';
 import {InputNumberModule} from 'primeng/inputnumber';
 import {ChipModule} from 'primeng/chip';
 import {TagModule} from 'primeng/tag';
+import { PlanListComponent } from './components/plan-list/plan-list.component';
+import { PlanListElementComponent } from './components/plan-list-element/plan-list-element.component';
 
 @NgModule({
   declarations: [
@@ -99,6 +101,8 @@ import {TagModule} from 'primeng/tag';
     BookCreateComponent,
     ChangePasswordComponent,
     RankListComponent,
+    PlanListComponent,
+    PlanListElementComponent,
   ],
   imports: [
     BrowserModule,

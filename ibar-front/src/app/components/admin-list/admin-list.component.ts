@@ -1,12 +1,12 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 
-import {MessageService} from 'primeng/api';
+import { MessageService } from 'primeng/api';
 
-import {User} from 'src/app/core/model/user';
+import { User } from 'src/app/core/model/user';
 
-import {AdminService} from 'src/app/core/services/admin.service';
-import {TokenService} from 'src/app/core/services/token.service';
+import { AdminService } from 'src/app/core/services/admin.service';
+import { TokenService } from 'src/app/core/services/token.service';
 
 @Component({
   selector: 'app-admin',
@@ -70,20 +70,26 @@ export class AdminListComponent implements OnInit {
   saveAdmin(): void {
     if (!this.emailControl.valid) {
       this.messageService.add(
-        {id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Email is required.'}
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Email is required.' }
       );
+
+      return;
     }
 
     if (!this.firstNameControl.valid) {
       this.messageService.add(
-        {id: 'toast-container', severity: 'error', summary: 'Required', detail: 'First name is required.'}
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'First name is required.' }
       );
+
+      return;
     }
 
     if (!this.lastNameControl.valid) {
       this.messageService.add(
-        {id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Last name is required.'}
+        { id: 'toast-container', severity: 'error', summary: 'Required', detail: 'Last name is required.' }
       );
+
+      return;
     }
 
     const email = this.emailControl.value;
@@ -98,10 +104,10 @@ export class AdminListComponent implements OnInit {
     admin.userType = 0;
 
     this.adminService.create(admin).subscribe(res => {
-        this.admins.push(res);
+      this.admins.push(res);
 
-        this.showSuccessMessageOnUpdateOrCreateAdmin('Create');
-      },
+      this.showSuccessMessageOnUpdateOrCreateAdmin('Create');
+    },
       err => {
         this.showErrorMessageOnUpdateOrCreateAdmin('Create');
       });

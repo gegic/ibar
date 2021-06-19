@@ -13,7 +13,8 @@ export const ADMIN_NAVBAR: NavigationItem[] = [
   {routerLink: 'categories', icon: 'pi pi-table'},
   {routerLink: 'authors', icon: 'pi pi-id-card'},
   {routerLink: 'admins', icon: 'pi pi-users'},
-  {routerLink: 'ranks', icon: 'pi pi-shield'}
+  {routerLink: 'ranks', icon: 'pi pi-shield'},
+  {routerLink: 'plans', icon: 'pi pi-wallet'}
 
 ];
 
