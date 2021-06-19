@@ -4,19 +4,12 @@ import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.management.BadAttributeValueExpException;
-import javax.management.InvalidAttributeValueException;
 import javax.transaction.Transactional;
-import java.util.Date;
 import java.util.UUID;
 
 @Service

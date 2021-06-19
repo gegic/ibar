@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {NavigationItem} from '../model/navigation-item';
 import {BehaviorSubject} from 'rxjs';
 

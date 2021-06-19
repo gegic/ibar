@@ -1,20 +1,19 @@
 package com.sbnz.ibar.services;
 
 import com.sbnz.ibar.dto.ReadingListItemDto;
-import com.sbnz.ibar.dto.ReadingProgressDto;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.mapper.ReadingListItemMapper;
-import com.sbnz.ibar.mapper.ReadingProgressMapper;
-import com.sbnz.ibar.model.*;
+import com.sbnz.ibar.model.Book;
+import com.sbnz.ibar.model.Reader;
+import com.sbnz.ibar.model.ReadingListItem;
+import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.BookRepository;
 import com.sbnz.ibar.repositories.ReadingListItemRepository;
-import com.sbnz.ibar.repositories.ReadingProgressRepository;
 import com.sbnz.ibar.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import javax.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;

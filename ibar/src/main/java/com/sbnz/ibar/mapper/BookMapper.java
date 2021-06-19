@@ -1,13 +1,15 @@
 package com.sbnz.ibar.mapper;
 
 import com.sbnz.ibar.dto.BookDto;
-import com.sbnz.ibar.model.*;
+import com.sbnz.ibar.model.Author;
+import com.sbnz.ibar.model.Book;
+import com.sbnz.ibar.model.Reader;
+import com.sbnz.ibar.model.ReadingListItem;
 import com.sbnz.ibar.repositories.ReadingListItemRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 import java.util.stream.Collectors;
 

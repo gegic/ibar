@@ -1,6 +1,5 @@
 package com.sbnz.ibar.dto;
 
-import com.sbnz.ibar.model.Rank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

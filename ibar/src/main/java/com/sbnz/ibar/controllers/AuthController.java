@@ -6,8 +6,6 @@ import com.sbnz.ibar.dto.UserLoginDto;
 import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.services.AuthService;
-import com.sbnz.ibar.services.AuthorityService;
-import com.sbnz.ibar.services.MailService;
 import com.sbnz.ibar.services.UserService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

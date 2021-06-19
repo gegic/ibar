@@ -3,13 +3,20 @@ package com.sbnz.ibar.drools;
 import com.sbnz.ibar.model.Author;
 import com.sbnz.ibar.model.Book;
 import com.sbnz.ibar.model.Category;
+import com.sbnz.ibar.utils.Factory;
 import org.drools.template.DataProvider;
 import org.drools.template.DataProviderCompiler;
 import org.drools.template.objects.ArrayDataProvider;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.utils.KieHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,7 +25,13 @@ import java.util.*;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("classpath:test.properties")
 public class BookAuthorsNameSearchTest {
+
+    @Autowired
+    private Factory factory;
 
     @Test
     public void getBooksByAuthorsName() throws FileNotFoundException {
@@ -36,8 +49,8 @@ public class BookAuthorsNameSearchTest {
 
         KieSession kieSession = createKieSessionFromDRL(drl);
 
-        List<Author> authors = createAuthors();
-        List<Book> books = createBooks(authors);
+        List<Author> authors = factory.createAuthors();
+        List<Book> books = factory.createBooks(authors);
 
         for (Book book : books) {
             kieSession.insert(book);
@@ -68,8 +81,8 @@ public class BookAuthorsNameSearchTest {
 
         KieSession kieSession = createKieSessionFromDRL(drl);
 
-        List<Author> authors = createAuthors();
-        List<Book> books = createBooks(authors);
+        List<Author> authors = factory.createAuthors();
+        List<Book> books = factory.createBooks(authors);
 
         for (Book book : books) {
             kieSession.insert(book);
@@ -100,8 +113,8 @@ public class BookAuthorsNameSearchTest {
 
         KieSession kieSession = createKieSessionFromDRL(drl);
 
-        List<Author> authors = createAuthors();
-        List<Book> books = createBooks(authors);
+        List<Author> authors = factory.createAuthors();
+        List<Book> books = factory.createBooks(authors);
 
         for (Book book : books) {
             kieSession.insert(book);
@@ -124,70 +137,5 @@ public class BookAuthorsNameSearchTest {
         return kieHelper.build().newKieSession();
     }
 
-    private List<Author> createAuthors() {
-        List<Author> authors = new ArrayList<>();
 
-        authors.add(new Author(
-                UUID.randomUUID(),
-                "Fjodor Mihailovič Dostojevski",
-                "Some description",
-                null,
-                null,
-                3.8,
-                null));
-
-        authors.add(new Author(
-                UUID.randomUUID(),
-                "Momo Kapor",
-                "Some description",
-                null,
-                null,
-                1.8,
-                null));
-
-        return authors;
-    }
-
-    private List<Book> createBooks(List<Author> authors) {
-        List<Book> books = new ArrayList<>();
-
-        Category category = new Category(UUID.randomUUID(), "Category 1");
-        Author author1 = authors.get(0);
-        Author author2 = authors.get(1);
-
-        Set<Author> authors1 = new HashSet<Author>();
-        authors1.add(author1);
-
-        Set<Author> authors2 = new HashSet<Author>();
-        authors2.add(author1);
-        authors2.add(author2);
-
-        books.add(new Book(
-                UUID.randomUUID(),
-                "Book 1",
-                "Some description",
-                3.6,
-                0L,
-                null,
-                null,
-                300,
-                category,
-                authors1
-        ));
-
-        books.add(new Book(
-                UUID.randomUUID(),
-                "Book 2",
-                "Some description",
-                1.8,
-                0L,
-                null,
-                null,
-                300,
-                category,
-                authors2
-        ));
-
-        return books;
-    }
 }

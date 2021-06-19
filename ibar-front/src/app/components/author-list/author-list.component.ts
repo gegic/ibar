@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 
-import { MessageService } from 'primeng/api';
+import {MessageService} from 'primeng/api';
 
-import { Author } from 'src/app/core/model/author';
+import {Author} from 'src/app/core/model/author';
 
-import { AuthorService } from 'src/app/core/services/author.service';
+import {AuthorService} from 'src/app/core/services/author.service';
 
 @Component({
   selector: 'app-author',

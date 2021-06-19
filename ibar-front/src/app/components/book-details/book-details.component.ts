@@ -10,7 +10,6 @@ import {ReadingProgress} from '../../core/model/reading-progress';
 import {ConfirmationService} from 'primeng/api';
 import {BookService} from '../../core/services/book.service';
 import {ReadingListService} from '../../core/services/reading-list.service';
-import {ReadingListItem} from '../../core/model/reading-list-item';
 
 @Component({
   selector: 'app-book-details',

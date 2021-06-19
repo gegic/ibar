@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { User } from 'src/app/core/model/user';
-import { AdminService } from 'src/app/core/services/admin.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {User} from 'src/app/core/model/user';
+import {AdminService} from 'src/app/core/services/admin.service';
 
 @Component({
   selector: 'app-admin-list',

@@ -1,10 +1,8 @@
 package com.sbnz.ibar.controllers;
 
-import com.sbnz.ibar.dto.PlanDto;
 import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.model.Rank;
-import com.sbnz.ibar.services.PlanService;
 import com.sbnz.ibar.services.RankService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;

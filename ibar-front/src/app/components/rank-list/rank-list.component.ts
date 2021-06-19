@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RankService} from '../../core/services/rank.service';
 import {Rank} from '../../core/model/rank';
 import {ConfirmationService, MessageService} from 'primeng/api';

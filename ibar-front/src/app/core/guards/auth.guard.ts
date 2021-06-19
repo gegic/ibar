@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
-import {CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree, Router} from '@angular/router';
-import { Observable } from 'rxjs';
+import {Injectable} from '@angular/core';
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree} from '@angular/router';
+import {Observable} from 'rxjs';
 import {TokenService} from '../services/token.service';
 import {environment} from '../../../environments/environment';
 import {ADMIN, ADMIN_NAVBAR, READER, READER_NAVBAR} from '../utils/consts';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import {JwtHelperService} from '@auth0/angular-jwt';
 import {Authority} from '../model/authority';
 import {NavbarService} from '../services/navbar.service';
 

@@ -1,12 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { AuthToken } from '../model/auth-token';
-import { HttpClient } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { User } from '../model/user';
-import { Login } from '../model/login';
-import { Activation } from '../model/activation';
-import { ChangePassword } from '../model/changePassword';
+import {Injectable} from '@angular/core';
+import {Observable, of} from 'rxjs';
+import {AuthToken} from '../model/auth-token';
+import {HttpClient} from '@angular/common/http';
+import {catchError} from 'rxjs/operators';
+import {User} from '../model/user';
+import {Login} from '../model/login';
+import {Activation} from '../model/activation';
+import {ChangePassword} from '../model/changePassword';
 
 @Injectable({
   providedIn: 'root'

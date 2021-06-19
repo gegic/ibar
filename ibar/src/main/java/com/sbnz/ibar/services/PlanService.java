@@ -10,7 +10,6 @@ import com.sbnz.ibar.rto.RankCheckFact;
 import com.sbnz.ibar.rto.events.OnSubscribed;
 import lombok.AllArgsConstructor;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.rule.FactHandle;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 

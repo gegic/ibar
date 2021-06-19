@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, Validators} from '@angular/forms';
 
-import { MessageService } from 'primeng/api';
-import { DialogService } from 'primeng/dynamicdialog';
+import {MessageService} from 'primeng/api';
+import {DialogService} from 'primeng/dynamicdialog';
 
-import { Category } from 'src/app/core/model/category';
+import {Category} from 'src/app/core/model/category';
 
-import { CategoryService } from 'src/app/core/services/category.service';
+import {CategoryService} from 'src/app/core/services/category.service';
 
 @Component({
   selector: 'app-category',

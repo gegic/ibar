@@ -11,9 +11,7 @@ import com.sbnz.ibar.repositories.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityExistsException;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.List;

@@ -2,11 +2,18 @@ package com.sbnz.ibar.drools;
 
 import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.model.Author;
+import com.sbnz.ibar.utils.Factory;
 import org.drools.template.ObjectDataCompiler;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieSession;
 import org.kie.internal.utils.KieHelper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.stereotype.Component;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -17,7 +24,13 @@ import java.util.UUID;
 
 import static org.junit.Assert.assertEquals;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment=SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestPropertySource("classpath:test.properties")
 public class AuthorRatingSearchTest {
+
+    @Autowired
+    private Factory factory;
 
     @Test
     public void getAuthorsByRatingFrom1To2() throws FileNotFoundException {
@@ -35,7 +48,7 @@ public class AuthorRatingSearchTest {
 
         KieSession kieSession = createKieSessionFromDRL(drl);
 
-        List<Author> authors = createAuthors();
+        List<Author> authors = factory.createAuthors();
 
         for (Author author : authors) {
             kieSession.insert(author);
@@ -66,7 +79,7 @@ public class AuthorRatingSearchTest {
 
         KieSession kieSession = createKieSessionFromDRL(drl);
 
-        List<Author> authors = createAuthors();
+        List<Author> authors = factory.createAuthors();
 
         for (Author author : authors) {
             kieSession.insert(author);
@@ -97,7 +110,7 @@ public class AuthorRatingSearchTest {
 
         KieSession kieSession = createKieSessionFromDRL(drl);
 
-        List<Author> authors = createAuthors();
+        List<Author> authors = factory.createAuthors();
 
         for (Author author : authors) {
             kieSession.insert(author);
@@ -120,27 +133,5 @@ public class AuthorRatingSearchTest {
         return kieHelper.build().newKieSession();
     }
 
-    private List<Author> createAuthors() {
-        List<Author> authors = new ArrayList<>();
 
-        authors.add(new Author(
-                UUID.randomUUID(),
-                "Author 1",
-                "Some description",
-                null,
-                null,
-                3.8,
-                null));
-
-        authors.add(new Author(
-                UUID.randomUUID(),
-                "Author 1",
-                "Some description",
-                null,
-                null,
-                1.8,
-                null));
-
-        return authors;
-    }
 }

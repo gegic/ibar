@@ -363,7 +363,7 @@ rule "Movies recommended - sort responses"
         MoviesRecommended();
         $resultList: List($sz: size());
         $response: BookResponse($points: points);
-        eval($sz < recommendationThreshold);
+        eval($sz <= recommendationThreshold);
     then
         System.out.println("List has " + $sz + " elements");
         System.out.println("Rec threshold is " + recommendationThreshold);

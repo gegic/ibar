@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MessageService } from 'primeng/api';
-import { ChangePassword } from 'src/app/core/model/changePassword';
-import { AuthService } from 'src/app/core/services/auth.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MessageService} from 'primeng/api';
+import {ChangePassword} from 'src/app/core/model/changePassword';
+import {AuthService} from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-change-password',

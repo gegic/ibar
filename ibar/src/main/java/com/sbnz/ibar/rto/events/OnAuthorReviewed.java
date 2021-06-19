@@ -2,7 +2,6 @@ package com.sbnz.ibar.rto.events;
 
 import com.sbnz.ibar.model.Author;
 import com.sbnz.ibar.model.Review;
-import com.sbnz.ibar.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

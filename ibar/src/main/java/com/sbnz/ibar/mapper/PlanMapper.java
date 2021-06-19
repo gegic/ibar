@@ -3,7 +3,6 @@ package com.sbnz.ibar.mapper;
 import com.sbnz.ibar.dto.PlanDto;
 import com.sbnz.ibar.model.Category;
 import com.sbnz.ibar.model.Plan;
-import com.sbnz.ibar.model.Rank;
 import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;

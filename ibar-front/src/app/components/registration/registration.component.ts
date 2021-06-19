@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { User } from 'src/app/core/model/user';
-import { AuthService } from 'src/app/core/services/auth.service';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
+import {MessageService} from 'primeng/api';
+import {User} from 'src/app/core/model/user';
+import {AuthService} from 'src/app/core/services/auth.service';
 
 @Component({
   selector: 'app-registration',

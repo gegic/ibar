@@ -1,11 +1,9 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Observable, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Page} from '../model/page';
 import {Review} from '../model/review';
 import {ReviewNumber} from '../model/review-number-list';
-import {ReviewNumbers} from '../model/review-numbers';
-import {catchError, tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'

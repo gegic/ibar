@@ -3,7 +3,7 @@ import {READER_NAVBAR, RESPONSIVE_OPTIONS} from '../../core/utils/consts';
 import {Plan} from '../../core/model/plan';
 import {PlanService} from '../../core/services/plan.service';
 import {Router} from '@angular/router';
-import {Message, MessageService} from 'primeng/api';
+import {MessageService} from 'primeng/api';
 import {NavbarService} from '../../core/services/navbar.service';
 
 @Component({

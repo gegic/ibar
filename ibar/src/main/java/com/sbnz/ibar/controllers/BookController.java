@@ -1,8 +1,10 @@
 package com.sbnz.ibar.controllers;
 
-import com.sbnz.ibar.dto.*;
+import com.sbnz.ibar.dto.BookDto;
+import com.sbnz.ibar.dto.ContentFileDto;
+import com.sbnz.ibar.dto.CoverDto;
+import com.sbnz.ibar.dto.FilterDto;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
-import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.services.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;

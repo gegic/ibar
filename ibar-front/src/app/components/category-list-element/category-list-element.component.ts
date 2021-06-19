@@ -1,10 +1,10 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
-import { ConfirmationService, MessageService } from 'primeng/api';
+import {ConfirmationService, MessageService} from 'primeng/api';
 
-import { Category } from 'src/app/core/model/category';
+import {Category} from 'src/app/core/model/category';
 
-import { CategoryService } from 'src/app/core/services/category.service';
+import {CategoryService} from 'src/app/core/services/category.service';
 
 @Component({
   selector: 'app-category-list',

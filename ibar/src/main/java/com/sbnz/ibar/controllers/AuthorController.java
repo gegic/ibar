@@ -3,12 +3,9 @@ package com.sbnz.ibar.controllers;
 import com.sbnz.ibar.dto.AuthorDto;
 import com.sbnz.ibar.dto.RatingIntervalDto;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
-import com.sbnz.ibar.mapper.AuthorMapper;
-import com.sbnz.ibar.mapper.FileService;
 import com.sbnz.ibar.services.AuthorService;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +18,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/api/authors", produces = MediaType.APPLICATION_JSON_VALUE)

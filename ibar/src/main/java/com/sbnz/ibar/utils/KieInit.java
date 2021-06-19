@@ -2,12 +2,9 @@ package com.sbnz.ibar.utils;
 
 import com.sbnz.ibar.model.AgeClass;
 import com.sbnz.ibar.model.Rank;
-import com.sbnz.ibar.model.Reader;
-import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.AgeClassRepository;
 import com.sbnz.ibar.repositories.RankRepository;
 import com.sbnz.ibar.repositories.ReaderRepository;
-import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.services.KieService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

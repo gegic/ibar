@@ -1,10 +1,8 @@
 package com.sbnz.ibar.controllers;
 
 import com.sbnz.ibar.dto.ReadingListItemDto;
-import com.sbnz.ibar.dto.ReadingProgressDto;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.services.ReadingListService;
-import com.sbnz.ibar.services.ReadingProgressService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

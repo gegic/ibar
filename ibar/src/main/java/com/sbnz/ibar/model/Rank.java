@@ -2,7 +2,6 @@ package com.sbnz.ibar.model;
 
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
-import org.kie.api.definition.type.Position;
 
 import javax.persistence.*;
 import java.util.UUID;

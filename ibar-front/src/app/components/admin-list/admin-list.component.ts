@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 
 import {MessageService} from 'primeng/api';
-import {DialogService} from 'primeng/dynamicdialog';
 
 import {User} from 'src/app/core/model/user';
 

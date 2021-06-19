@@ -4,7 +4,6 @@ import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
 import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.model.Rank;
 import com.sbnz.ibar.model.Reader;
-import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.repositories.RankRepository;
 import com.sbnz.ibar.repositories.ReaderRepository;
 import lombok.AllArgsConstructor;

@@ -1,12 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import {SelectButton} from 'primeng/selectbutton';
+import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {BookService} from '../../core/services/book.service';
 import {CategoryService} from '../../core/services/category.service';
 import {Category} from '../../core/model/category';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Book} from '../../core/model/book';
-import {FileUpload} from 'primeng/fileupload';
 import {Cover} from '../../core/model/cover';
 import {MessageService} from 'primeng/api';
 import {ContentFile} from '../../core/model/content-file';

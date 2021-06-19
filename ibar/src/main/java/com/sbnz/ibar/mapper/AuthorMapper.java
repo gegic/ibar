@@ -4,7 +4,6 @@ import com.sbnz.ibar.dto.AuthorDto;
 import com.sbnz.ibar.model.Author;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Valid;
 import java.sql.Date;
 
 @Component

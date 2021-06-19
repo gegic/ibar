@@ -39,7 +39,11 @@
         </div>
         <div class="p-card-footer p-px-5">
           <div class="p-d-inline-block p-mr-auto p-ai-center" [style]="{width: '160px'}">
-            <a routerLink="/registration">Sign up</a>
+            <button class="p-d-inline-block p-button-text"
+                    label="Sign up"
+                    routerLink="/registration"
+                    pButton
+            ></button>
           </div>
           <button class="p-d-inline-block login-btn blue-button"
                   *ngIf="!loading; else loadingSpinner"

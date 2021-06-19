@@ -10,8 +10,6 @@ import com.sbnz.ibar.repositories.AuthorRepository;
 import lombok.AllArgsConstructor;
 import org.drools.template.ObjectDataCompiler;
 import org.kie.api.runtime.KieSession;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 

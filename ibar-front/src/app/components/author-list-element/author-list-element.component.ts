@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { Author } from 'src/app/core/model/author';
-import { AuthorService } from 'src/app/core/services/author.service';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ConfirmationService, MessageService} from 'primeng/api';
+import {Author} from 'src/app/core/model/author';
+import {AuthorService} from 'src/app/core/services/author.service';
 
 @Component({
   selector: 'app-author-list',

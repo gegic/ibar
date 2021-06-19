@@ -7,7 +7,6 @@ import org.drools.template.DataProvider;
 import org.drools.template.DataProviderCompiler;
 import org.drools.template.ObjectDataCompiler;
 import org.drools.template.objects.ArrayDataProvider;
-import org.drools.template.objects.ObjectDataProvider;
 import org.kie.api.io.ResourceType;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
@@ -19,7 +18,6 @@ import org.springframework.util.ResourceUtils;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Arrays;
 import java.util.Collections;
 
 @Service

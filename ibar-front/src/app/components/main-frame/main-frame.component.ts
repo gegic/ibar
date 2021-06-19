@@ -1,8 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import {TokenService} from '../../core/services/token.service';
-import {Router} from '@angular/router';
-import {MenuItem} from 'primeng/api';
-import {environment} from '../../../environments/environment';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'app-main-frame',

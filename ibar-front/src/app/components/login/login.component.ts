@@ -1,4 +1,4 @@
-import {Component, HostListener, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {TokenService} from '../../core/services/token.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {MessageService} from 'primeng/api';
@@ -6,7 +6,7 @@ import {Router} from '@angular/router';
 import {AuthToken} from '../../core/model/auth-token';
 import {AuthService} from '../../core/services/auth.service';
 import {Authority} from '../../core/model/authority';
-import {ADMIN, ADMIN_NAVBAR, READER, READER_NAVBAR} from '../../core/utils/consts';
+import {ADMIN, READER} from '../../core/utils/consts';
 import {NavbarService} from '../../core/services/navbar.service';
 
 @Component({

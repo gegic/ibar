@@ -1,11 +1,10 @@
-import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {BookDetailsService} from '../../core/services/book-details.service';
 import {Book} from '../../core/model/book';
 import {distinctUntilChanged} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {Title} from '@angular/platform-browser';
 import {ReadingProgress} from '../../core/model/reading-progress';
-import {NgxExtendedPdfViewerComponent} from 'ngx-extended-pdf-viewer';
 import {TokenService} from '../../core/services/token.service';
 
 @Component({

@@ -2,13 +2,8 @@ package com.sbnz.ibar.config;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ResourceUtils;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.List;
 
 @Configuration
 @AllArgsConstructor

@@ -1,4 +1,4 @@
-import { Authority } from './authority';
+import {Authority} from './authority';
 
 export enum UserType {
   ADMIN,
