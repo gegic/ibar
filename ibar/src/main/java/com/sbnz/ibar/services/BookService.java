@@ -238,11 +238,11 @@ public class BookService {
     public boolean delete(UUID id) throws IOException {
         Book existingBook = this.bookRepository.findById(id).orElseThrow(EntityNotFoundException::new);
 
-        if (this.doesExistReadingProgressContainingBookWithGivenId(id)) {
-            return false;
-        }
+        this.readingListItemRepository.deleteAllByBookId(id);
 
-        this.removeReviewAndReadingListEntitiesThatContainsBookWithGivenId(id);
+        this.readingProgressRepository.deleteAllByBookId(id);
+
+        this.reviewRepository.deleteAllByBookId(id);
 
         bookRepository.deleteById(id);
 
@@ -281,16 +281,6 @@ public class BookService {
 
     public Page<Book> findByCategoryIdAndNameContains(UUID id, String name, Pageable pageable) {
         return bookRepository.findByCategoryIdAndNameContainingIgnoreCase(id, name, pageable);
-    }
-
-    private boolean doesExistReadingProgressContainingBookWithGivenId(UUID id) {
-        return readingProgressRepository.countByBookId(id) > 0;
-    }
-
-    private void removeReviewAndReadingListEntitiesThatContainsBookWithGivenId(UUID id) {
-        reviewRepository.deleteAllByBookId(id);
-
-        readingListItemRepository.deleteAllByBookId(id);
     }
 
     private Set<Author> getAuthorsOfBook(Book entity) throws NotFoundException {

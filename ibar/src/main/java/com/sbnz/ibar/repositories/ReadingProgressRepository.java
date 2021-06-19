@@ -14,6 +14,8 @@ public interface ReadingProgressRepository extends JpaRepository<ReadingProgress
 
 	long countByBookId(UUID bookId);
 
+	int deleteAllByBookId(UUID bookId);
+
 	List<ReadingProgress> getByBookId(UUID bookId);
 
 	List<ReadingProgress> getByReaderId(UUID readerId);
