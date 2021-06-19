@@ -67,7 +67,7 @@ export class BookReviewsComponent implements OnInit {
         } else {
           addedReviews = reviewPage.content ?? [];
         }
-        this.reviews = this.reviews.concat(addedReviews);
+        this.reviews = addedReviews;
         this.page = reviewPage.pageable?.pageNumber ?? 0;
         this.totalPages = reviewPage?.totalPages ?? 0;
         this.isReviewsLoading = false;

@@ -11,30 +11,32 @@
         {{book.name}}
       </h2>
       <p class="p-text-light p-m-0 subscribed">
-        {{book.numRead}} people started reading.
+        {{book.authorNames?.join(' ')}}
       </p>
       <div>
-        <small class="p-mt-1 p-d-inline-flex">{{book.numReviews}} reviews.</small>
+        <small class="p-mt-1 p-d-inline-flex">{{book.numReviews === 0 ? 'No' : book.numReviews}} reviews.</small>
       </div>
     </div>
     <div class="p-col-12 p-sm-4 p-lg-3 p-text-right p-as-end">
-      <button *ngIf="!!book && !book.inReadingList; else removeFromReadingList"
-              class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
-              icon="pi pi-tag"
-              label="ADD TO READING LIST"
-              (click)="onClickAddToReadingList($event)"
-              [disabled]="readingListLoading"
-              pButton
-      ></button>
-      <ng-template #removeFromReadingList>
-        <button class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
+      <div *ngIf="!canModify">
+        <button *ngIf="!!book && !book.inReadingList; else removeFromReadingList"
+                class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
                 icon="pi pi-tag"
-                label="REMOVE FROM READING LIST"
-                (click)="onClickRemoveFromReadingList($event)"
+                label="ADD TO READING LIST"
+                (click)="onClickAddToReadingList($event)"
                 [disabled]="readingListLoading"
                 pButton
         ></button>
-      </ng-template>
+        <ng-template #removeFromReadingList>
+          <button class="p-button p-button-text p-button-plain p-d-inline-flex small-button"
+                  icon="pi pi-tag"
+                  label="REMOVE FROM READING LIST"
+                  (click)="onClickRemoveFromReadingList($event)"
+                  [disabled]="readingListLoading"
+                  pButton
+          ></button>
+        </ng-template>
+      </div>
       <div class="p-d-block p-mb-3">
         <div *ngIf="canModify; else subscribeButton">
           <button class="p-button p-button-rounded p-button-icon p-button-danger p-ml-3"
@@ -61,7 +63,7 @@
       </div>
       <div class="p-d-inline-block p-ml-auto">
         <i class="pi pi-star"></i>
-        <small class="p-ml-1 p-text-light review">{{book.averageRating}}</small>
+        <small class="p-ml-1 p-text-light review">{{book.averageRating == 0 ? 'Not rated' : book.averageRating}}</small>
       </div>
     </div>
   </div>

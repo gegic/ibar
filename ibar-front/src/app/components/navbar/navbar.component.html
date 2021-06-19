@@ -27,7 +27,7 @@
   <div class="p-col-2 p-justify-end p-ai-center p-col-align-center p-p-0">
     <div *ngIf="isLoggedIn(); else signIn">
       <div [style]="{float: 'right'}">
-        <p-chip [label]="userRankName" *ngIf="hasRank"></p-chip>
+        <p-chip [label]="userRankName" *ngIf="isReader"></p-chip>
         <p-menu class="user-menu" [model]="menuItems" [popup]="true" #menu></p-menu>
         <p-avatar class="ng-avatar p-ml-3"
                   [label]="initials"

@@ -10,14 +10,17 @@ import com.sbnz.ibar.rto.RankCheckFact;
 import com.sbnz.ibar.rto.events.OnSubscribed;
 import lombok.AllArgsConstructor;
 import org.kie.api.runtime.KieSession;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class PlanService {
 
@@ -41,7 +44,7 @@ public class PlanService {
 	public void subscribe(PlanDto dto) throws EntityAlreadyExistsException, EntityDoesNotExistException {
 		User u = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (subscriptionRepository.existsByBuyerId(u.getId())) {
-			throw new EntityAlreadyExistsException(Subscription.class.getName(), u.getId());
+			subscriptionRepository.deleteByBuyerId(u.getId());
 		}
 		Optional<Plan> optionalPlan = planRepository.findById(dto.getId());
 		if (optionalPlan.isEmpty()) {
