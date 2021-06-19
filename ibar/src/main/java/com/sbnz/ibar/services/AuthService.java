@@ -135,6 +135,7 @@ public class AuthService {
         reader = readerRepository.save(reader);
 
         kieService.getClassifySession().insert(reader);
+        kieService.getClassifySession().fireAllRules();
 
         return this.toReaderDto(reader);
     }
