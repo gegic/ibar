@@ -23,11 +23,11 @@ public class Rank {
 	private UUID id;
 
 	@NonNull
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	private String name;
 
 	@NonNull
-	@Column(nullable = false)
+	@Column(nullable = false, unique = true)
 	@EqualsAndHashCode.Exclude
 	private Long points;
 

@@ -115,7 +115,7 @@ insert into rank values ('00f335dd-42cb-4f0c-89d9-90a2d571e20e', 'Freshman',    
 insert into rank values ('98c5e7cf-874d-44f8-85c6-7007b315d80c', 'Newbie',       0,     '00f335dd-42cb-4f0c-89d9-90a2d571e20e');
 /*------------------------reader-----------------------------------------*/
 
-insert into "user" values ('b39f0709-574b-4e62-82b4-6dd98eca93a6',	'harry.gegic@gmail.com',	true,	'Haris',	'Gegic',	null,	'$2a$10$TfA5Evj/8pQr0GIrFmWeRe.w0jWZD.1zoFl5MkpyzPZmvbPYWJds.');
+insert into "user" values ('b39f0709-574b-4e62-82b4-6dd98eca93a6',	'haris.gegic@uns.ac.rs',	true,	'Haris',	'Gegic',	null,	'$2a$10$TfA5Evj/8pQr0GIrFmWeRe.w0jWZD.1zoFl5MkpyzPZmvbPYWJds.');
 insert into reader values (20,	true, 0, null,	'b39f0709-574b-4e62-82b4-6dd98eca93a6', '98c5e7cf-874d-44f8-85c6-7007b315d80c');
 insert into user_authority values ('b39f0709-574b-4e62-82b4-6dd98eca93a6',	1);
 

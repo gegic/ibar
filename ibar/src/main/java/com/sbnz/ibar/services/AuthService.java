@@ -5,11 +5,14 @@ import com.sbnz.ibar.dto.UserDto;
 import com.sbnz.ibar.dto.UserLoginDto;
 import com.sbnz.ibar.exceptions.EmailTemporarilyBlockedException;
 import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.exceptions.IpTemporarilyBlockedException;
 import com.sbnz.ibar.mapper.UserMapper;
 import com.sbnz.ibar.model.Authority;
+import com.sbnz.ibar.model.Rank;
 import com.sbnz.ibar.model.Reader;
 import com.sbnz.ibar.model.User;
+import com.sbnz.ibar.repositories.RankRepository;
 import com.sbnz.ibar.repositories.ReaderRepository;
 import com.sbnz.ibar.repositories.UserRepository;
 import com.sbnz.ibar.rto.EmailCheckFact;
@@ -56,6 +59,8 @@ public class AuthService {
     private final MailService mailService;
 
     private final UserMapper userMapper;
+    private final RankRepository rankRepository;
+
 
     public AuthTokenDto login(UserLoginDto loginDto) {
         KieSession loginSession = kieService.getLoginSession();
@@ -102,7 +107,7 @@ public class AuthService {
         );
     }
 
-    public UserDto registerNewUser(UserDto entity) throws EntityAlreadyExistsException {
+    public UserDto registerNewUser(UserDto entity) throws EntityAlreadyExistsException, EntityDoesNotExistException {
         Optional<User> user = userRepository.findByEmail(entity.getEmail());
 
         if (user.isPresent()) {
@@ -120,12 +125,16 @@ public class AuthService {
         String newPassword = grpService.generateRandomPassword();
         reader.setPassword(passwordEncoder.encode(newPassword));
 
+        Rank rank = rankRepository.findByPoints(0).orElseThrow(() -> new EntityDoesNotExistException(Rank.class.getName(), "points"));
+        reader.setRank(rank);
         reader.setLastPasswordResetDate(new Date().getTime());
 
         mailService.sendMail(reader.getEmail(), "Account activation", "You are now new user of IBAR. Congratulations!\n Your credentials are: \n\tEmail: " + reader.getEmail() +
                 "\n\tPassoword: " + newPassword);
 
         reader = readerRepository.save(reader);
+
+        kieService.getClassifySession().insert(reader);
 
         return this.toReaderDto(reader);
     }
@@ -146,6 +155,7 @@ public class AuthService {
 
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, oldPassword));
 
+        assert user != null;
         user.setPassword(new BCryptPasswordEncoder().encode(newPassword));
 
         userRepository.save(user);

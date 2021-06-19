@@ -4,6 +4,7 @@ import com.sbnz.ibar.dto.AuthTokenDto;
 import com.sbnz.ibar.dto.UserDto;
 import com.sbnz.ibar.dto.UserLoginDto;
 import com.sbnz.ibar.exceptions.EntityAlreadyExistsException;
+import com.sbnz.ibar.exceptions.EntityDoesNotExistException;
 import com.sbnz.ibar.model.User;
 import com.sbnz.ibar.services.AuthService;
 import com.sbnz.ibar.services.UserService;
@@ -37,7 +38,7 @@ public class AuthController {
 
     @PostMapping(value = "/sign-up", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> addUser(@Valid @RequestBody UserDto user)
-            throws EntityAlreadyExistsException {
+            throws EntityAlreadyExistsException, EntityDoesNotExistException {
         UserDto newUser = authService.registerNewUser(user);
 
         return ResponseEntity.ok(newUser);
